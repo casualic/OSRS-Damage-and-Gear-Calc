@@ -1,0 +1,221 @@
+#include <iostream>
+#include <map>
+#include <stdexcept>
+#include <random>
+#include "player.h"
+
+struct CombatStats{
+    int attack;
+    int strength;
+    int defence;
+    int ranged;
+    int magic;
+    int prayer;
+
+};
+
+std::map<std::string, int> enemyTypes = {
+    {"NPC", 1},
+    {"Player", 3}
+};
+
+int effectiveStrength(const CombatStats& stats,
+    const std::string enemy_type,
+    double strength_boost,
+    double prayer_modifier,
+    double void_modifier)// 'NPC' or 'Player', for now implement player only
+{
+
+
+
+    int effective_strength{};
+    effective_strength = (((stats.strength +strength_boost) * prayer_modifier)
+     + enemyTypes[enemy_type] + 8) * void_modifier;
+
+    
+    return effective_strength;
+
+};
+
+
+int maxHit(int effective_strength,
+     int equipment_strength_bonus,
+     double target_specific_gear_modifier)// for example 7/6 for slayer helm, salve vs undead 1.2
+     {
+        // for now PVP prayer effects are ignored.
+    int max_hit {};
+    max_hit = ((effective_strength * (equipment_strength_bonus +64) + 320) / 640 )
+     * target_specific_gear_modifier;
+
+    return max_hit;
+};
+
+int calculateEffectiveAttack(const CombatStats& stats,
+     int attack_level_boost,
+     double prayer_modifier,
+     double void_modifier,
+     const std::string enemy_type){
+
+    // int attack {stats.attack};
+    int effective_attack { };
+    effective_attack = ((stats.attack + attack_level_boost) * prayer_modifier + enemyTypes[enemy_type]
+                        + 8 ) * void_modifier;
+    
+
+    return effective_attack;
+};
+
+int attackRoll(int effective_attack,
+    int equipment_attack_bonus,
+    int target_specific_gear_bonus){
+
+    int attack_roll { effective_attack * (equipment_attack_bonus +64) };
+
+    return attack_roll;
+
+};
+
+void calculateEffectiveDefence(const CombatStats& stats, 
+    int defence_boost, int prayer_modifier,const std::string stance){// void for now as it is a pvp func
+
+    std::map<std::string, int> stances = {
+        {"Defensive", 3 },
+        {"Controlled", 1}
+    };
+
+    int effective_defence {(stats.defence + defence_boost)*prayer_modifier + stances[stance] +8 };
+
+};
+
+int defenceRoll(int target_defence_level, int target_style_defence_bonus, const std::string &enemy_type){
+
+    if (enemy_type == "Player"){
+        throw std::invalid_argument("Computations for PvP not supported yet \n");
+    }
+
+    int defence_roll {(target_defence_level + 9) *(target_style_defence_bonus + 64)};
+
+    return defence_roll;
+
+};
+
+double hitChance(int attack_roll, int defence_roll){
+    double hit_chance {};
+    double d = static_cast<double>(defence_roll);
+    double a = static_cast<double>(attack_roll);
+
+    if (attack_roll > defence_roll){
+        hit_chance = 1 - ((d + 2) / (2 * (a + 1)));
+    } else {
+        hit_chance = a / (2*(d + 1));
+    }
+
+    return hit_chance;
+}
+
+
+
+
+std::random_device rd;// gets a random seed from the device
+std::mt19937 gen(rd());// Create a random number generator seended with rd 
+
+
+int bernoulliTrial(double hit_chance){
+
+    double p {};
+    std::bernoulli_distribution dist(hit_chance);
+
+    return dist(gen) ? 1 : 0;
+}
+
+int randomTrial(int min_range, int max_range){
+
+    std::uniform_int_distribution<int> distr(min_range, max_range);
+    return distr(gen);
+}
+
+int damageRoll(double hit_chance, int max_hit){
+
+    int hit_success { bernoulliTrial(hit_chance) };
+    int damage_roll {randomTrial(0,max_hit)};
+    int damage {hit_success * damage_roll};
+    
+    return damage;
+}
+
+int main(){
+
+    CombatStats wolpistats = {91, 92, 93, 90, 85, 75};
+
+    std::cout << "My attack stats are " << wolpistats.attack;
+
+    int x = wolpistats.attack * 1.5;
+    std::cout << "My TEST modified attack stat is " << x << '\n';
+    
+
+    int wolpi_effective_strength { effectiveStrength(wolpistats, "NPC", 0, 1,1) };
+
+    std::cout << "My base effective strength is "<< wolpi_effective_strength << "\n";
+
+    int wolpi_max_hit { maxHit(wolpi_effective_strength,0,1) };
+
+    std::cout << "Raw max hit with base fists is " << wolpi_max_hit << '\n';
+
+    int effective_attack {calculateEffectiveAttack(wolpistats,0,1,1,"NPC")};
+
+    std::cout << "Effective attack is  " << effective_attack << '\n';
+
+    int attack_roll{attackRoll(effective_attack,10,10)};
+
+    std::cout << "Example attack roll is " << attack_roll << '\n';
+
+    int defence_roll {defenceRoll(60,60,"NPC")};
+
+    std::cout << "Defence Roll example is : " << defence_roll << '\n';
+
+    double hit_chance {hitChance(attack_roll,defence_roll)};
+
+    std::cout << "Hitchance is : " << hit_chance << '\n';
+
+    int bernoulli_sample {bernoulliTrial(hit_chance)};
+
+    std::cout << "Bernoulli sample is " << bernoulli_sample << '\n';
+
+    int hit_value {randomTrial(0,wolpi_max_hit)};
+
+    std::cout << "A rand integer in the max hit range is " << hit_value <<'\n';
+
+    int dmg_dealt {damageRoll(hit_chance,wolpi_max_hit)};
+
+    std::cout << " A random hit independent (of the above) hit is:  " << dmg_dealt << '\n';
+
+    std::cout << " Pritnintg a set of random damage rolls; \n";
+
+    for (int i = 0; i <5; i++){
+        std::cout << damageRoll(hit_chance,wolpi_max_hit) << " |";
+
+    }
+    std::cout << '\n';
+
+    Player myplayer{"wolpixd"};
+
+    std::string stats { };
+    stats = myplayer.fetchStats();
+    // std::map<std::string, int> { parseCSV(stats) };
+    myplayer.parseStats(stats);
+    std::cout << "Attack skill is" << myplayer.getStat("Attack");
+    
+    std::string test_skill {"Magic"};
+    std::cout << "Test skill 2 is" << myplayer.getStat(test_skill);
+
+    std::cout << "Break"; 
+
+    //parsed_stats { };
+
+
+
+
+
+
+    return 0;
+}

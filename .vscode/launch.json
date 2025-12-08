@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "C++ Debug",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${fileDirname}/${fileBasenameNoExtension}",  // Changed this
+            "args": [],
+            "stopAtEntry": false,// note that this will always stop at entry, change to false if only to stop at breakpoints
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "console":"integratedTerminal",
+            "MIMode": "lldb",
+            "preLaunchTask": "build"
+        }
+    ]
+}
