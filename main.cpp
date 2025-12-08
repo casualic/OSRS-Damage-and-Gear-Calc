@@ -2,7 +2,10 @@
 #include <map>
 #include <stdexcept>
 #include <random>
+#include <fstream>
 #include "player.h"
+#include "monster.h"
+#include "json.hpp"
 
 struct CombatStats{
     int attack;
@@ -206,12 +209,16 @@ int main(){
     std::cout << "Attack skill is" << myplayer.getStat("Attack");
     
     std::string test_skill {"Magic"};
-    std::cout << "Test skill 2 is" << myplayer.getStat(test_skill);
+    std::cout << "Test skill 2 is" << myplayer.getStat(test_skill) << std::endl;
 
-    std::cout << "Break"; 
+    std::cout << "Now testing monsters \n";
 
-    //parsed_stats { };
+    Monster test_monster{"Death spawn"};
+    test_monster.fetchStats();
 
+    std::cout << "Test stat is: " << test_monster.getStat<int>("max_hit");
+
+    
 
 
 
@@ -219,3 +226,24 @@ int main(){
 
     return 0;
 }
+
+// using json = nlohmann::json;
+
+// int main() {
+//     std::ifstream i("monsters-complete.json");
+//     json j;
+//     i >> j;
+
+//     // Iterate over all monsters and remove "drops"
+//     for (auto& [key, monster] : j.items()) {
+//         if (monster.contains("drops")) {
+//             monster.erase("drops");
+//         }
+//     }
+
+//     // Write back to a new file
+//     std::ofstream o("monsters-nodrops.json");
+//     o << std::setw(4) << j << std::endl;
+
+//     return 0;
+// }

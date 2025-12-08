@@ -8,16 +8,19 @@
                 "-std=c++20",
                 "-I./plog/include",
                 "-I/opt/homebrew/opt/openssl/include",
-                "-L/opt/homebrew/opt/openssl/lib",
-                "-lcurl",
-                "-lssl",
-                "-lcrypto",              // Add this line
+                // "-I/opt/homebrew/include",
                 "-fcolor-diagnostics",
                 "-fansi-escape-codes",
                 "-g",
-                "*.cpp", //changed from ${file}
+                "*.cpp",
                 "-o",
-                "${fileDirname}/${fileBasenameNoExtension}"
+                "${fileDirname}/${fileBasenameNoExtension}",
+                "-L/opt/homebrew/opt/openssl/lib",
+                "-L/opt/homebrew/lib",
+                "-lsimdjson",
+                "-lcurl",
+                "-lssl",
+                "-lcrypto"
             ],
             "presentation" : {
                 "reveal":"silent"
