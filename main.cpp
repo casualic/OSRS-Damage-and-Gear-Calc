@@ -214,9 +214,9 @@ int main(){
     std::cout << "Now testing monsters \n";
 
     Monster test_monster{"Death spawn"};
-    test_monster.fetchStats();
+    test_monster.loadFromJSON("monsters-nodrops.json");
 
-    std::cout << "Test stat is: " << test_monster.getStat<int>("max_hit");
+    std::cout << "Test stat is: " << test_monster.getInt("max_hit");
 
     
 
