@@ -32,13 +32,20 @@ int main() {
         std::string monsterName = "Vorkath";
         std::cout << "[4/5] Initializing Monster '" << monsterName << "'...\n";
         Monster monster(monsterName); 
+        
+        // Try loading from standard DB
         monster.loadFromJSON("monsters-nodrops.json");
         
+        // If not found (HP is 0), try bosses DB
+        if (monster.getCurrentHP() == 0) {
+             std::cout << "      Not found in standard DB, checking bosses DB...\n";
+             monster.loadFromJSON("bosses_complete.json");
+        }
+        
         // Verification check
-        try {
-             int hp = monster.getInt("hitpoints"); // Will throw if not loaded
-             std::cout << "      Found " << monsterName << " with " << hp << " HP.\n";
-        } catch (...) {
+        if (monster.getCurrentHP() > 0) {
+             std::cout << "      Found " << monsterName << " with " << monster.getCurrentHP() << " HP.\n";
+        } else {
             std::cerr << "      Warning: '" << monsterName << "' not found. Defaulting to 'Goblin'.\n";
             monster = Monster("Goblin");
             monster.loadFromJSON("monsters-nodrops.json");
@@ -47,6 +54,10 @@ int main() {
         // 5. Battle
         std::cout << "[5/5] Starting Battle Simulation...\n";
         Battle battle(player, monster);
+        
+        // Optimize Style before running
+        battle.optimizeAttackStyle();
+        
         battle.runSimulations(10000);
 
     } catch (const std::exception& e) {

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <numeric>
 #include <vector>
+#include <iomanip>
 
 Battle::Battle(Player& p, Monster& m) : player_(p), monster_(m) {
     std::random_device rd;
@@ -16,7 +17,11 @@ Battle::Battle(Player& p, Monster& m) : player_(p), monster_(m) {
         if (speed > 0) attack_speed_ = speed;
     }
 
-    determineStyle();
+    determineStyle(); // Initial guess
+    
+    // For now, defaulting to Accurate (+3 Attack)
+    stance_bonus_attack_ = 3;
+    stance_bonus_strength_ = 0;
 }
 
 void Battle::determineStyle() {
@@ -28,14 +33,12 @@ void Battle::determineStyle() {
     if (stab >= slash && stab >= crush) style_ = "stab";
     else if (slash >= stab && slash >= crush) style_ = "slash";
     else style_ = "crush";
-    
-    // std::cout << "Auto-detected style: " << style_ << "\n";
 }
 
 int Battle::effectiveStrength() {
-    // ((Strength + Boost) * Prayer + 8)
+    // ((Strength + Boost) * Prayer + 8 + Style)
     int str = player_.getEffectiveStat("Strength"); 
-    return str + 8;
+    return str + 8 + stance_bonus_strength_;
 }
 
 int Battle::maxHit() {
@@ -49,9 +52,9 @@ int Battle::maxHit() {
 }
 
 int Battle::effectiveAttack() {
-    // ((Attack + Boost) * Prayer + 8)
+    // ((Attack + Boost) * Prayer + 8 + Style)
     int att = player_.getEffectiveStat("Attack");
-    return att + 8;
+    return att + 8 + stance_bonus_attack_;
 }
 
 int Battle::attackRoll() {
@@ -105,6 +108,74 @@ int Battle::simulate() {
     return ticks;
 }
 
+double Battle::calculateDPS(const std::string& style, int stanceAtt, int stanceStr) {
+    // Temporarily apply settings
+    std::string oldStyle = style_;
+    int oldStanceAtt = stance_bonus_attack_;
+    int oldStanceStr = stance_bonus_strength_;
+    
+    style_ = style;
+    stance_bonus_attack_ = stanceAtt;
+    stance_bonus_strength_ = stanceStr;
+    
+    // Calc logic
+    int mHit = maxHit();
+    double chance = hitChance();
+    
+    // Restore settings
+    style_ = oldStyle;
+    stance_bonus_attack_ = oldStanceAtt;
+    stance_bonus_strength_ = oldStanceStr;
+    
+    // Average damage per hit = MaxHit * 0.5 * HitChance
+    double avgDmgPerHit = (double)mHit * 0.5 * chance;
+    double secondsPerHit = (double)attack_speed_ * 0.6;
+    
+    return avgDmgPerHit / secondsPerHit;
+}
+
+void Battle::optimizeAttackStyle() {
+    std::cout << "\n--- Optimizing Attack Style ---\n";
+    
+    struct Option {
+        std::string style;
+        std::string stanceName;
+        int stanceAtt;
+        int stanceStr;
+        double dps;
+    };
+    
+    std::vector<Option> options = {
+        {"stab", "Accurate (+3 Att)", 3, 0, 0.0},
+        {"stab", "Aggressive (+3 Str)", 0, 3, 0.0},
+        {"slash", "Accurate (+3 Att)", 3, 0, 0.0},
+        {"slash", "Aggressive (+3 Str)", 0, 3, 0.0},
+        {"crush", "Accurate (+3 Att)", 3, 0, 0.0},
+        {"crush", "Aggressive (+3 Str)", 0, 3, 0.0}
+    };
+    
+    Option bestOption = options[0];
+    bestOption.dps = -1.0;
+    
+    for (auto& opt : options) {
+        opt.dps = calculateDPS(opt.style, opt.stanceAtt, opt.stanceStr);
+        std::cout << std::left << std::setw(6) << opt.style 
+                  << " | " << std::setw(20) << opt.stanceName 
+                  << " | DPS: " << opt.dps << "\n";
+                  
+        if (opt.dps > bestOption.dps) {
+            bestOption = opt;
+        }
+    }
+    
+    // Apply best
+    style_ = bestOption.style;
+    stance_bonus_attack_ = bestOption.stanceAtt;
+    stance_bonus_strength_ = bestOption.stanceStr;
+    
+    std::cout << ">>> Selected Best: " << style_ << " (" << bestOption.stanceName << ")\n";
+}
+
 void Battle::runSimulations(int n) {
     long totalTicks = 0;
     for (int i=0; i<n; ++i) {
@@ -114,7 +185,7 @@ void Battle::runSimulations(int n) {
     double avgSeconds = avgTicks * 0.6;
     
     std::cout << "\n=== Battle Simulation (" << n << " runs) ===\n";
-    std::cout << "Player: " << player_.getEffectiveStat("Overall") << " (Placeholder name logic)\n"; 
+    std::cout << "Player: " << player_.getEffectiveStat("Overall") << "\n"; 
     
     std::cout << "Target: " << monster_.getStr("name") << " (HP: " << monster_.getInt("hitpoints") << ")\n";
     std::cout << "Combat Style: " << style_ << " | Attack Speed: " << attack_speed_ << " ticks\n";

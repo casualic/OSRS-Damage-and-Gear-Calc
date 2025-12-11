@@ -12,6 +12,9 @@ class Battle {
         
         std::string style_; // "stab", "slash", "crush"
         int attack_speed_;
+        
+        int stance_bonus_attack_ {0};
+        int stance_bonus_strength_ {0};
 
         // Formulas
         int effectiveStrength();
@@ -24,7 +27,10 @@ class Battle {
         int bernoulliTrial(double p);
         int randomDamage(int max);
 
-        void determineStyle();
+        void determineStyle(); // Default logic
+        
+        // Helper to calculate theoretical DPS for a given style/stance
+        double calculateDPS(const std::string& style, int stanceAtt, int stanceStr);
 
     public:
         Battle(Player& p, Monster& m);
@@ -34,4 +40,7 @@ class Battle {
         
         // Runs n simulations and prints average TTK
         void runSimulations(int n);
+        
+        // Tests styles and sets the best one
+        void optimizeAttackStyle(); 
 };
