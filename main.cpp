@@ -6,6 +6,7 @@
 #include "player.h"
 #include "monster.h"
 #include "json.hpp"
+#include "item.h"
 
 struct CombatStats{
     int attack;
@@ -146,6 +147,19 @@ int damageRoll(double hit_chance, int max_hit){
     return damage;
 }
 
+
+int main (){
+
+    Item test_item {"Bones"};
+    int fetched_price {test_item.fetchPrice()};
+    std::cout << "Sample price is : "<< fetched_price << std::endl;
+
+    std::cout << " price from attribute is: " << test_item.getPrice() << std::endl;
+
+    return 0;
+}
+
+/*
 int main(){
 
     CombatStats wolpistats = {91, 92, 93, 90, 85, 75};
@@ -216,7 +230,16 @@ int main(){
     Monster test_monster{"Death spawn"};
     test_monster.loadFromJSON("monsters-nodrops.json");
 
-    std::cout << "Test stat is: " << test_monster.getInt("max_hit");
+    std::cout << "Test stat is: " << test_monster.getInt("max_hit") << '\n';
+
+
+    std::cout << "Current hp is " <<test_monster.getCurrentHP() << std::endl ; 
+
+    test_monster.takeDMG(hit_value);
+
+    std::cout << "HP after hitting for : " << hit_value << " is : " << test_monster.getCurrentHP();
+
+
 
     
 
@@ -226,6 +249,7 @@ int main(){
 
     return 0;
 }
+*/
 
 // using json = nlohmann::json;
 

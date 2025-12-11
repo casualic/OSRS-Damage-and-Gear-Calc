@@ -17,7 +17,11 @@ void Monster::loadFromJSON(const std::string &filepath){
         if (monster["name"] == name_){
             for (auto& [key, value] : monster.items()){
                 if (value.is_number_integer()){
+                    int v = value.get<int>();
                     stats_int_[key] = value;
+                    if (key == "hitpoints") {
+                        current_hp_ += v;
+                    }
                 } else if (value.is_string()){
                     stats_str_[key] = value;
                 } else if (value.is_boolean()){
