@@ -19,4 +19,6 @@ class Item {
         int getInt(std::string key) { return stats_int_[key];}
         bool getBool(std::string key) { return stats_bool_[key];}
         std::string getStr(std::string key) { return stats_str_[key];}
+        void fetchGear(); // fetches gear from player via the RuneLite websocket connection
+        
 };

@@ -12,6 +12,7 @@ public:
     std::string fetchStats();
     void parseStats(std::string csv_str);
     int getStat(const std::string& skill){return stats_[skill];}
+    void fetchGear();
 
 };
 

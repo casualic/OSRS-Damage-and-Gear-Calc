@@ -77,5 +77,12 @@ void Player::parseStats(std::string raw_stats_response){
     stats_ = parseCSV(raw_stats_response);
 }
 
-
+void Player::fetchGear(){
+    // fetch gear from player via the RuneLite websocket connection
+    // we need to connect to the RuneLite websocket server
+    // and send a message to the server to fetch the gear
+    // the server will respond with the gear
+    // we need to parse the gear and store it in the player object
+    // we need to return the gear
+}
 

@@ -155,12 +155,46 @@ int damageRoll(double hit_chance, int max_hit){
 
 
 int main(){
+    std::cout << "Running main class" << std::endl;
+
     namespace beast = boost::beast;
     namespace websocket = beast::websocket;
     namespace net = boost::asio;
     using tcp = net::ip::tcp;
 
-    net
+    net::io_context ioc;
+    tcp::resolver resolver{ioc};
+    websocket::stream<tcp::socket> ws{ioc};
+
+    //4 . Resolver hostane or ip[];
+    auto results = resolver.resolve("localhost", "37767");
+
+    //5. TCP connect
+    net::connect(ws.next_layer(), results);
+
+    //6. Websocket handshae (HTTP upgrade)
+    bool connected { false };
+    for (int port = 37767; port <= 37776; port++){
+        try{
+            auto results = resolver.resolve("localhost", std::to_string(port));
+            net::connect(ws.next_layer(), results);
+            connected = true;
+            std::cout << "Connected to WikiSync on :" << port << std::endl;
+            break;
+        } catch (...) {
+            continue;
+        }
+    }
+
+    if (!connected) {
+        std::cerr << "Could not connect to WikiSync" << std::endl;
+    }
+
+    std::cout << "finished running main class" << std::endl;
+
+
+
+    return 0;
 
 
 
