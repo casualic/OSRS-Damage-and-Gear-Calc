@@ -8,6 +8,12 @@
 #include "json.hpp"
 #include "item.h"
 
+#include <boost/beast/core.hpp>
+#include <boost/beast/websocket.hpp>
+#include <boost/asio/connect.hpp>
+#include <boost/asio/ip/tcp.hpp>
+
+
 struct CombatStats{
     int attack;
     int strength;
@@ -148,6 +154,20 @@ int damageRoll(double hit_chance, int max_hit){
 }
 
 
+int main(){
+    namespace beast = boost::beast;
+    namespace websocket = beast::websocket;
+    namespace net = boost::asio;
+    using tcp = net::ip::tcp;
+
+    net
+
+
+
+}
+
+
+/*
 int main (){
 
     Item test_item {"Bones"};
@@ -170,7 +190,7 @@ int main (){
 
     return 0;
 }
-
+*/
 /*
 int main(){
 
