@@ -156,6 +156,18 @@ int main (){
 
     std::cout << " price from attribute is: " << test_item.getPrice() << std::endl;
 
+    Item test_weapon {"Rune longsword"};
+    test_weapon.fetchStats("items-complete.json");
+
+    int test_stab {test_weapon.getInt("attack_stab")};
+
+    std::cout << "Test stab statistic is" << test_stab << std::endl;
+    // lets test attack_speed and weapon_type
+
+    std::cout << "Test attack_speed is : " << test_weapon.getInt("attack_speed") << std::endl;
+    std::cout << "Test weapon_type is : " << test_weapon.getStr("weapon_type") << std::endl;
+
+
     return 0;
 }
 

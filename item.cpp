@@ -5,6 +5,7 @@
 #include "cpp-httplib/httplib.h"
 #include "json.hpp"
 #include <fstream>
+#include "json.hpp"
 
 using json = nlohmann::json;
 
@@ -78,4 +79,42 @@ int Item::fetchPrice(){
 
     return mid;
     
+};
+
+void Item::fetchStats(const std::string &filepath){
+    std::ifstream file(filepath);
+    json items = json::parse(file);
+
+    for (auto& [id, item] : items.items()){
+        if (item["name"] == name_){
+            auto itemStats {item["equipment"]};
+            for (auto& [key,value] : itemStats.items()){
+                if (value.is_number_integer()){
+                    int v = value.get<int>();
+                    stats_int_[key] = value;
+                } else if (value.is_string()){
+                    std::string v = value.get<std::string>();
+                    stats_str_[key] = v;
+                } else if (value.is_boolean()){
+                    bool v = value.get<bool>();
+                    stats_bool_[key] = v;
+                }
+            }
+            auto itemDetails {item["weapon"]};
+            for (auto& [key,value]: itemDetails.items()){
+                if (value.is_number_integer()){
+                    int v = value.get<int>();
+                    stats_int_[key] = v;
+                } else if (value.is_string()){
+                    std::string v = value.get<std::string>();
+                    stats_str_[key] = v;
+                } else if (value.is_boolean()){
+                    bool v = value.get<bool>();
+                    stats_bool_[key] = v;
+                }
+            }
+            break;
+        }
+    }
+
 }
