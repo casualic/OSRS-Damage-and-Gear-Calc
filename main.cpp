@@ -1,5 +1,5 @@
-#include <iostream>
-#include <map>
+#include <thread>
+#include <chrono>
 #include <stdexcept>
 #include <random>
 #include <fstream>
@@ -7,6 +7,8 @@
 #include "monster.h"
 #include "json.hpp"
 #include "item.h"
+#include <iostream>
+#include <map>
 
 #include <boost/beast/core.hpp>
 #include <boost/beast/websocket.hpp>
@@ -151,13 +153,16 @@ int damageRoll(double hit_chance, int max_hit){
     int damage {hit_success * damage_roll};
     
     return damage;
+
+
 }
 
 
-int main(){
-    std::cout << "Running main class" << std::endl;
+// ... includes ...
 
+void run_wikisync_client() {
     namespace beast = boost::beast;
+    namespace http = beast::http;
     namespace websocket = beast::websocket;
     namespace net = boost::asio;
     using tcp = net::ip::tcp;
@@ -166,33 +171,97 @@ int main(){
     tcp::resolver resolver{ioc};
     websocket::stream<tcp::socket> ws{ioc};
 
-    //4 . Resolver hostane or ip[];
-    auto results = resolver.resolve("localhost", "37767");
-
-    //5. TCP connect
-    net::connect(ws.next_layer(), results);
-
-    //6. Websocket handshae (HTTP upgrade)
-    bool connected { false };
-    for (int port = 37767; port <= 37776; port++){
-        try{
+    // 1. Port Loop
+    bool connected = false;
+    for (int port = 37767; port <= 37776; ++port) {
+        try {
             auto results = resolver.resolve("localhost", std::to_string(port));
             net::connect(ws.next_layer(), results);
             connected = true;
-            std::cout << "Connected to WikiSync on :" << port << std::endl;
-            break;
+            std::cout << "Connected to WikiSync on port " << port << std::endl;
+            break; 
         } catch (...) {
-            continue;
+            continue; // Try next port
         }
     }
 
     if (!connected) {
-        std::cerr << "Could not connect to WikiSync" << std::endl;
+        std::cerr << "Could not connect to WikiSync." << std::endl;
+        return;
     }
 
-    std::cout << "finished running main class" << std::endl;
+    // 2. Handshake with Headers
+    // The "Origin" header is critical for the plugin to accept us
+    ws.set_option(websocket::stream_base::decorator(
+        [](websocket::request_type& req) {
+            req.set(http::field::origin, "https://tools.runescape.wiki");
+            req.set(http::field::user_agent, "Mozilla/5.0 ...");
+        }
+    ));
 
+    ws.handshake("localhost", "/");
 
+    // 3. Send Discovery Requests
+    std::vector<std::string> requests = {
+        "{\"type\":\"REQUEST_PLAYER_DATA\"}", 
+        "{\"type\":\"GET_PLAYER\"}",
+        "{\"type\":\"EQUIPMENT\"}",
+        "{\"action\":\"get_equipment\"}",
+        "{\"_wsType\":\"GetPlayer\"}"
+    };
+
+    for (const auto& req : requests) {
+        std::cout << "Sending: " << req << std::endl;
+        ws.write(net::buffer(req));
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    }
+
+    // 4. Listen for Responses
+    beast::flat_buffer buffer;
+    std::cout << "Listening for responses..." << std::endl;
+    
+    int max_messages = 10;
+    int message_count = 0;
+    
+    while(message_count < max_messages) {
+        try {
+            ws.read(buffer);
+            std::string received = beast::buffers_to_string(buffer.data());
+            
+            // Print preview
+            std::cout << "\n[Received]: " << (received.length() > 200 ? received.substr(0, 200) + "..." : received) << std::endl;
+            
+            // Check for player data
+            if (received.find("\"_wsType\":\"GetPlayer\"") != std::string::npos || 
+                received.find("\"_wsType\": \"GetPlayer\"") != std::string::npos) {
+                
+                std::cout << "✓ Found Player Data! Saving to file..." << std::endl;
+                std::ofstream outfile("wikisync_data.json");
+                outfile << received;
+                outfile.close();
+                std::cout << "Saved to wikisync_data.json" << std::endl;
+                
+                // Exit the loop after saving
+                break;
+            }
+            
+            buffer.consume(buffer.size()); 
+            message_count++;
+        } catch (const std::exception& e) {
+            std::cerr << "Error reading: " << e.what() << std::endl;
+            break;
+        }
+    }
+    
+    try {
+        ws.close(websocket::close_code::normal);
+    } catch(...) {}
+}
+
+int main(){
+    std::cout << "Running main class" << std::endl;
+
+    run_wikisync_client();
 
     return 0;
 
