@@ -1,0 +1,48 @@
+=== OSRS DPS Calculator ===
+[0/6] Loading Databases...
+      Loading items-complete.json... Done (28747 items)
+      Loading latest_prices.json... Done
+[1/6] Initializing Player 'WolpiXD'...
+[2/6] Fetching Skills from HiScores...
+      Attack: 99 | Strength: 99
+[3/6] Fetching Gear from WikiSync...
+      Loading Gear Stats from DB...
+Loaded Honourable blessing (ID: 20229) into slot ammo
+Loaded Mixed hide top (ID: 29280) into slot body
+Loaded Fire cape (ID: 6570) into slot cape
+Loaded Dragon boots (ID: 11840) into slot feet
+Loaded Barrows gloves (ID: 7462) into slot hands
+Loaded Neitiznot faceguard (ID: 24271) into slot head
+Loaded Mixed hide legs (ID: 29283) into slot legs
+Loaded Salve amulet(ei) (ID: 12018) into slot neck
+Loaded Berserker ring (i) (ID: 11773) into slot ring
+Loaded Dragon defender (ID: 12954) into slot shield
+Loaded Osmumten's fang (ID: 26219) into slot weapon
+[4/6] Initializing Monster 'Vorkath'...
+      Not found in standard DB, checking bosses DB...
+Loaded stats for 'Vorkath (Dragon Slayer II)' from bosses_complete.json
+      Found Vorkath with 460 HP.
+[5/6] Starting Battle Simulation...
+
+--- Optimizing Attack Style ---
+>>> Selected Best: stab (Aggressive (+3 Str)) | DPS: 5.96622
+
+=== Battle Simulation (10000 runs) ===
+Player: 99
+Target: Vorkath (Dragon Slayer II) (HP: 460)
+Combat Style: stab | Attack Speed: 5 ticks
+Max Hit: 43
+Hit Chance: 83.2496%
+Avg TTK: 80.7258s (134.543 ticks)
+DPS: 5.6983
+=======================================
+
+--- DEBUG: Salve Amulet (ei) Check ---
+Equipped: Salve amulet(ei)
+Base DPS (Fury?): 5.96622
+Salve (ei) DPS:   5.96622
+-> Salve is WORSE/SAME
+
+[6/6] Generating Next Best Item Suggestions...
+Calculating upgrades... (Current DPS: 5.96622)
+Scanning items: 1000/28747Scanning items: 2000/28747Scanning items: 3000/28747Scanning items: 4000/28747Scanning items: 5000/28747Scanning items: 6000/28747Scanning items: 7000/28747Scanning items: 8000/28747Scanning items: 9000/28747Scanning items: 10000/28747Scanning items: 11000/28747Scanning items: 12000/28747Scanning items: 13000/28747Scanning items: 14000/28747Scanning items: 15000/28747Scanning items: 16000/28747Scanning items: 17000/28747Scanning items: 18000/28747Scanning items: 19000/28747Scanning items: 20000/28747Scanning items: 21000/28747Scanning items: 22000/28747Scanning items: 23000/28747Scanning items: 24000/28747Scanning items: 25000/28747Scanning items: 26000/28747Scanning items: 27000/28747Scanning items: 28000/28747

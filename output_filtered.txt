@@ -1,0 +1,111 @@
+=== OSRS DPS Calculator ===
+[0/6] Loading Databases...
+      Loading items-complete.json... Done (28747 items)
+      Loading latest_prices.json... Done
+[1/6] Initializing Player 'WolpiXD'...
+[2/6] Fetching Skills from HiScores...
+      Attack: 92 | Strength: 92
+[3/6] Fetching Gear from WikiSync...
+Connected to WikiSync on port 37767
+Sending: {"type":"REQUEST_PLAYER_DATA"}
+Sending: {"type":"GET_PLAYER"}
+Sending: {"type":"EQUIPMENT"}
+Sending: {"action":"get_equipment"}
+Sending: {"_wsType":"GetPlayer"}
+Listening for responses...
+✓ Found Player Data! Saving to file...
+Saved to wikisync_data.json
+      Loading Gear Stats from DB...
+Loaded Honourable blessing (ID: 20229) into slot ammo
+Loaded Bandos chestplate (ID: 11832) into slot body
+Loaded Fire cape (ID: 6570) into slot cape
+Loaded Boots of brimstone (ID: 22951) into slot feet
+Loaded Barrows gloves (ID: 7462) into slot hands
+Loaded Neitiznot faceguard (ID: 24271) into slot head
+Loaded Obsidian platelegs (ID: 21304) into slot legs
+Loaded Salve amulet(ei) (ID: 12018) into slot neck
+Loaded Berserker ring (i) (ID: 11773) into slot ring
+Loaded Dragon defender (ID: 12954) into slot shield
+Loaded Osmumten's fang (ID: 26219) into slot weapon
+[4/6] Initializing Monster 'Vorkath'...
+      Not found in standard DB, checking bosses DB...
+Loaded stats for 'Vorkath (Dragon Slayer II)' from bosses_complete.json
+      Found Vorkath with 460 HP.
+[5/6] Starting Battle Simulation...
+
+--- Optimizing Attack Style ---
+>>> Selected Best: stab (Accurate (+3 Att)) | DPS: 5.27989
+
+=== Battle Simulation (10000 runs) ===
+Player: 1876
+Target: Vorkath (Dragon Slayer II) (HP: 460)
+Combat Style: stab | Attack Speed: 5 ticks
+Max Hit: 39
+Hit Chance: 81.229%
+Avg TTK: 91.5396s (152.566 ticks)
+DPS: 5.02515
+=======================================
+
+--- DEBUG: Salve Amulet (ei) Check ---
+Equipped: Salve amulet(ei)
+Base DPS (Fury?): 5.27989
+Salve (ei) DPS:   5.27989
+-> Salve is WORSE/SAME
+
+[6/6] Generating Next Best Item Suggestions...
+Calculating upgrades... (Current DPS: 5.27989)
+Scanning items: 1000/28747Scanning items: 2000/28747Scanning items: 3000/28747Scanning items: 4000/28747Scanning items: 5000/28747Scanning items: 6000/28747Scanning items: 7000/28747Scanning items: 8000/28747Scanning items: 9000/28747Scanning items: 10000/28747Scanning items: 11000/28747Scanning items: 12000/28747Scanning items: 13000/28747Scanning items: 14000/28747Scanning items: 15000/28747Scanning items: 16000/28747Scanning items: 17000/28747Scanning items: 18000/28747Scanning items: 19000/28747Scanning items: 20000/28747Scanning items: 21000/28747Scanning items: 22000/28747Scanning items: 23000/28747Scanning items: 24000/28747Scanning items: 25000/28747Scanning items: 26000/28747Scanning items: 27000/28747Scanning items: 28000/28747Scanning items: Done!              
+Analyzing single upgrades...
+Analyzing duo upgrades...
+
+=== Top 10 SINGLE Upgrades (Efficiency) ===
+Item Name                                          | Slot                 | Price      | +DPS       | DPS/1M GP
+-------------------------------------------------------------------------------------------------------------------
+Climbing boots                                     | feet                 | 562        | 0.020      | 36.327
+Adamant boots                                      | feet                 | 1663       | 0.020      | 12.277
+Spiked boots                                       | feet                 | 3546       | 0.020      | 5.757
+Rune boots                                         | feet                 | 7460       | 0.020      | 2.737
+Mixed hide boots                                   | feet                 | 16462      | 0.020      | 1.240
+Climbing boots (g)                                 | feet                 | 43944      | 0.020      | 0.465
+Granite boots                                      | feet                 | 160053     | 0.020      | 0.128
+Dragonstone boots                                  | feet                 | 201014     | 0.020      | 0.102
+Dragon boots                                       | feet                 | 407735     | 0.020      | 0.050
+Spiked manacles                                    | feet                 | 580707     | 0.020      | 0.035
+
+=== Top 10 DUO Upgrades (Efficiency) ===
+Item Name                                          | Slot                 | Price      | +DPS       | DPS/1M GP
+-------------------------------------------------------------------------------------------------------------------
+Climbing boots + Mixed hide legs                   | feet+legs            | 27686      | 0.059      | 2.137
+Spiked boots + Mixed hide legs                     | feet+legs            | 30670      | 0.059      | 1.929
+Rune boots + Mixed hide legs                       | feet+legs            | 34584      | 0.059      | 1.711
+Mixed hide boots + Mixed hide legs                 | feet+legs            | 43586      | 0.059      | 1.358
+Climbing boots (g) + Mixed hide legs               | feet+legs            | 71068      | 0.059      | 0.833
+Mixed hide top + Granite boots                     | body+feet            | 176344     | 0.072      | 0.407
+Granite boots + Mixed hide legs                    | feet+legs            | 187177     | 0.059      | 0.316
+Dragonstone boots + Mixed hide legs                | feet+legs            | 228138     | 0.059      | 0.259
+Mixed hide top + Mixed hide legs                   | body+legs            | 43415      | 0.008      | 0.181
+Mixed hide top + Dragon boots                      | body+feet            | 424026     | 0.072      | 0.169
+
+=== Top 10 SINGLE Upgrades (Max DPS) ===
+Avernic defender                                   | shield               | 45036816   | 0.120      | 0.003
+Torva full helm                                    | head                 | 231461050  | 0.059      | 0.000
+Torva full helm (damaged)                          | head                 | 217283000  | 0.059      | 0.000
+Torva platebody                                    | body                 | 204389998  | 0.059      | 0.000
+Torva platebody (damaged)                          | body                 | 180331064  | 0.059      | 0.000
+Torva platelegs                                    | legs                 | 153519572  | 0.059      | 0.000
+Torva platelegs (damaged)                          | legs                 | 131643289  | 0.059      | 0.000
+Ultor ring                                         | ring                 | 116057648  | 0.059      | 0.001
+Oathplate legs                                     | legs                 | 91774999   | 0.059      | 0.001
+Bandos tassets                                     | legs                 | 16216518   | 0.059      | 0.004
+
+=== Top 10 DUO Upgrades (Max DPS) ===
+Primordial boots + Avernic defender                | feet+shield          | 70013922   | 0.378      | 0.005
+Torva platelegs + Ultor ring                       | legs+ring            | 269577220  | 0.326      | 0.001
+Torva platelegs (damaged) + Ultor ring             | legs+ring            | 247700937  | 0.326      | 0.001
+Primordial boots + Torva platelegs                 | feet+legs            | 178496678  | 0.313      | 0.002
+Primordial boots + Ultor ring                      | feet+ring            | 141034754  | 0.313      | 0.002
+Primordial boots + Torva platelegs (damaged)       | feet+legs            | 156620395  | 0.313      | 0.002
+Primordial boots + Torva full helm                 | feet+head            | 256438156  | 0.313      | 0.001
+Primordial boots + Torva full helm (damaged)       | feet+head            | 242260106  | 0.313      | 0.001
+Torva platebody + Primordial boots                 | body+feet            | 229367104  | 0.313      | 0.001
+Torva platebody (damaged) + Primordial boots       | body+feet            | 205308170  | 0.313      | 0.002

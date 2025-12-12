@@ -74,9 +74,13 @@ std::vector<UpgradeSuggestion> UpgradeAdvisor::suggestUpgrades() {
     // Store candidates by slot
     std::map<std::string, std::vector<Candidate>> candidatesBySlot;
 
+    // To track single upgrades for duo filtering
+    std::map<int, double> singleUpgradeDps; // ItemID -> DPS
+
     // 2. Iterate all items to gather candidates
     int processed = 0;
     int total = itemDb_.size();
+    int potentialCandidates = 0;
 
     for (auto& [idStr, itemData] : itemDb_.items()) {
         processed++;
@@ -148,8 +152,9 @@ std::vector<UpgradeSuggestion> UpgradeAdvisor::suggestUpgrades() {
         if (price <= 0) continue;
 
         candidatesBySlot[targetSlot].push_back({candidate, price, targetSlot, rawSlot});
+        potentialCandidates++;
     }
-    std::cout << "\rScanning items: Done!              \n";
+    std::cout << "\rScanning items: Done! Candidates found: " << potentialCandidates << "       \n";
 
     // Helper lambda to simulate a set of items
     auto simulate = [&](const std::vector<Candidate>& items) -> double {
@@ -176,15 +181,30 @@ std::vector<UpgradeSuggestion> UpgradeAdvisor::suggestUpgrades() {
         return simBattle.solveOptimalDPS();
     };
 
-    // 3. Phase 2: Single Item Analysis
+    // 3. Phase 2: Single Item Analysis & Filtering
     std::cout << "Analyzing single upgrades...\n";
+    
+    // We will build a new map of filtered candidates that actually increase DPS
+    std::map<std::string, std::vector<Candidate>> usefulCandidatesBySlot;
+    int usefulCount = 0;
+
     for (const auto& [slot, candidates] : candidatesBySlot) {
         for (const auto& cand : candidates) {
+            
             double newDps = simulate({cand});
-             if (newDps > currentDps) {
+            
+             // Threshold for "significant" increase to avoid floating point noise with useless items
+             // Also filters out items that don't increase DPS at all (like ammo when meleeing)
+             if (newDps > currentDps + 0.001) {
                 double increase = newDps - currentDps;
                 double efficiency = (increase / cand.price) * 1000000.0; // DPS increase per 1M GP
                 
+                singleUpgradeDps[cand.item.getID()] = newDps;
+
+                // Add to useful candidates for Duo check
+                usefulCandidatesBySlot[slot].push_back(cand);
+                usefulCount++;
+
                 suggestions.push_back({
                     {cand.item.getName()},
                     {cand.item.getID()},
@@ -198,11 +218,12 @@ std::vector<UpgradeSuggestion> UpgradeAdvisor::suggestUpgrades() {
             }
         }
     }
+    std::cout << "Filtered Candidates for Duo Analysis: " << usefulCount << " (from " << potentialCandidates << ")\n";
 
     // 4. Phase 3: Duo Item Analysis
     std::cout << "Analyzing duo upgrades...\n";
     std::vector<std::string> slots;
-    for (auto const& [slot, _] : candidatesBySlot) {
+    for (auto const& [slot, _] : usefulCandidatesBySlot) {
         slots.push_back(slot);
     }
     
@@ -212,8 +233,8 @@ std::vector<UpgradeSuggestion> UpgradeAdvisor::suggestUpgrades() {
             std::string slotA = slots[i];
             std::string slotB = slots[j];
             
-            const auto& candsA = candidatesBySlot[slotA];
-            const auto& candsB = candidatesBySlot[slotB];
+            const auto& candsA = usefulCandidatesBySlot[slotA];
+            const auto& candsB = usefulCandidatesBySlot[slotB];
             
             for (const auto& cA : candsA) {
                 for (const auto& cB : candsB) {
@@ -225,21 +246,36 @@ std::vector<UpgradeSuggestion> UpgradeAdvisor::suggestUpgrades() {
                     // Run Sim
                     double newDps = simulate({cA, cB});
                     
-                    if (newDps > currentDps) {
-                        double increase = newDps - currentDps;
-                        int totalPrice = cA.price + cB.price;
-                        double efficiency = (increase / totalPrice) * 1000000.0;
+                    // Filter: Duo DPS must be > current DPS
+                    if (newDps > currentDps + 0.001) {
                         
-                        suggestions.push_back({
-                            {cA.item.getName(), cB.item.getName()},
-                            {cA.item.getID(), cB.item.getID()},
-                            {cA.rawSlot, cB.rawSlot},
-                            totalPrice,
-                            currentDps,
-                            newDps,
-                            increase,
-                            efficiency
-                        });
+                        // STRICT FILTER:
+                        // Duo DPS must be significantly better than EITHER single upgrade alone.
+                        // If Duo(A, B) == Single(A), then B is useless. Discard duo.
+                        // If Duo(A, B) == Single(B), then A is useless. Discard duo.
+                        
+                        double dpsA = (singleUpgradeDps.count(cA.item.getID())) ? singleUpgradeDps[cA.item.getID()] : currentDps;
+                        double dpsB = (singleUpgradeDps.count(cB.item.getID())) ? singleUpgradeDps[cB.item.getID()] : currentDps;
+                        
+                        // Allow small floating point epsilon
+                        double maxSingle = std::max(dpsA, dpsB);
+                        
+                        if (newDps > maxSingle + 0.001) {
+                            double increase = newDps - currentDps;
+                            int totalPrice = cA.price + cB.price;
+                            double efficiency = (increase / totalPrice) * 1000000.0;
+                            
+                            suggestions.push_back({
+                                {cA.item.getName(), cB.item.getName()},
+                                {cA.item.getID(), cB.item.getID()},
+                                {cA.rawSlot, cB.rawSlot},
+                                totalPrice,
+                                currentDps,
+                                newDps,
+                                increase,
+                                efficiency
+                            });
+                        }
                     }
                 }
             }
