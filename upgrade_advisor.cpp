@@ -10,6 +10,10 @@ UpgradeAdvisor::UpgradeAdvisor(Player& p, Monster& m, const json& items, const j
     // Manual Price Proxies for Untradeables
     // Item ID -> Tradeable Component ID (for price)
     priceProxies_[22322] = 22477; // Avernic defender -> Avernic defender hilt
+    
+    // Fixed Price Proxies (e.g. 1gp for untradeables to force suggestion)
+    // Item ID -> Price
+    fixedPriceProxies_[12018] = 1; // Salve amulet(ei)
 }
 
 bool UpgradeAdvisor::isPotentialUpgrade(const Item& candidate, const Item& current) {
@@ -32,7 +36,8 @@ bool UpgradeAdvisor::isPotentialUpgrade(const Item& candidate, const Item& curre
         name.find("Osmumten's fang") != std::string::npos || 
         name.find("Scythe of vitur") != std::string::npos ||
         name.find("Twisted bow") != std::string::npos || 
-        name.find("Dragon hunter crossbow") != std::string::npos) {
+        name.find("Dragon hunter crossbow") != std::string::npos ||
+        name.find("Salve amulet") != std::string::npos) {
         return true;
     }
 
@@ -70,8 +75,9 @@ std::vector<UpgradeSuggestion> UpgradeAdvisor::suggestUpgrades() {
         
         // Special check for price proxies (allow if in proxy list)
         bool hasProxy = (priceProxies_.find(id) != priceProxies_.end());
+        bool hasFixedProxy = (fixedPriceProxies_.find(id) != fixedPriceProxies_.end());
         
-        if (!isTradeable && !hasProxy) continue;
+        if (!isTradeable && !hasProxy && !hasFixedProxy) continue;
         if (!itemData.value("equipable_by_player", false)) continue;
         
         // Create Item object
@@ -105,20 +111,25 @@ std::vector<UpgradeSuggestion> UpgradeAdvisor::suggestUpgrades() {
 
         // Get Price
         int price = 0;
-        int priceId = id;
         
-        // Use proxy ID if available
-        if (priceProxies_.count(id)) {
-            priceId = priceProxies_.at(id);
-        }
-        
-        std::string idKey = std::to_string(priceId);
-        if (priceDb_["data"].contains(idKey)) {
-             int high = priceDb_["data"][idKey].value("high", 0);
-             int low = priceDb_["data"][idKey].value("low", 0);
-             if (high > 0 && low > 0) price = (high + low) / 2;
-             else if (high > 0) price = high;
-             else price = low;
+        // 1. Check Fixed Price Proxy
+        if (fixedPriceProxies_.count(id)) {
+            price = fixedPriceProxies_.at(id);
+        } else {
+            // 2. Check Item/Component Price
+            int priceId = id;
+            if (priceProxies_.count(id)) {
+                priceId = priceProxies_.at(id);
+            }
+            
+            std::string idKey = std::to_string(priceId);
+            if (priceDb_["data"].contains(idKey)) {
+                 int high = priceDb_["data"][idKey].value("high", 0);
+                 int low = priceDb_["data"][idKey].value("low", 0);
+                 if (high > 0 && low > 0) price = (high + low) / 2;
+                 else if (high > 0) price = high;
+                 else price = low;
+            }
         }
         
         // Filter out absurdly cheap items (junk) or unpriced items if we want strictness

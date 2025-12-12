@@ -30,6 +30,7 @@ private:
     const json& itemDb_;
     const json& priceDb_;
     std::map<int, int> priceProxies_;
+    std::map<int, int> fixedPriceProxies_;
 
     // Helper to check if item is a potential upgrade
     bool isPotentialUpgrade(const Item& candidate, const Item& current);

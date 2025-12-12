@@ -1,0 +1,70 @@
+=== OSRS DPS Calculator ===
+[0/6] Loading Databases...
+      Loading items-complete.json... Done (28744 items)
+      Loading latest_prices.json... Done
+[1/6] Initializing Player 'WolpiXD'...
+[2/6] Fetching Skills from HiScores...
+      Attack: 99 | Strength: 99
+[3/6] Fetching Gear from WikiSync...
+      Loading Gear Stats from DB...
+Loaded Honourable blessing (ID: 20229) into slot ammo
+Loaded Bandos chestplate (ID: 11832) into slot body
+Loaded Fire cape (ID: 6570) into slot cape
+Loaded Boots of brimstone (ID: 22951) into slot feet
+Loaded Barrows gloves (ID: 7462) into slot hands
+Loaded Neitiznot faceguard (ID: 24271) into slot head
+Loaded Mixed hide legs (ID: 29283) into slot legs
+Loaded Amulet of fury (ID: 6585) into slot neck
+Loaded Berserker ring (i) (ID: 11773) into slot ring
+Loaded Dragon defender (ID: 12954) into slot shield
+Loaded Osmumten's fang (ID: 26219) into slot weapon
+[4/6] Initializing Monster 'Vorkath'...
+      Not found in standard DB, checking bosses DB...
+Loaded stats for 'Vorkath (Dragon Slayer II)' from bosses_complete.json
+      Found Vorkath with 460 HP.
+[5/6] Starting Battle Simulation...
+
+--- Optimizing Attack Style ---
+>>> Selected Best: stab (Aggressive (+3 Str)) | DPS: 4.79694
+
+=== Battle Simulation (10000 runs) ===
+Player: 99
+Target: Vorkath (Dragon Slayer II) (HP: 460)
+Combat Style: stab | Attack Speed: 5 ticks
+Max Hit: 37
+Hit Chance: 77.7883%
+Avg TTK: 100.641s (167.734 ticks)
+DPS: 4.57072
+=======================================
+
+[6/6] Generating Next Best Item Suggestions...
+Calculating upgrades... (Current DPS: 4.79694)
+Scanning items: 1000/28744Scanning items: 2000/28744Scanning items: 3000/28744Scanning items: 4000/28744Scanning items: 5000/28744Scanning items: 6000/28744Scanning items: 7000/28744Scanning items: 8000/28744Scanning items: 9000/28744Scanning items: 10000/28744Scanning items: 11000/28744Scanning items: 12000/28744Scanning items: 13000/28744Scanning items: 14000/28744Scanning items: 15000/28744Scanning items: 16000/28744Scanning items: 17000/28744Scanning items: 18000/28744Scanning items: 19000/28744Scanning items: 20000/28744Scanning items: 21000/28744Scanning items: 22000/28744Scanning items: 23000/28744Scanning items: 24000/28744Scanning items: 25000/28744Scanning items: 26000/28744Scanning items: 27000/28744Scanning items: 28000/28744Scanning items: Done!              
+
+=== Top 10 Cost-Effective Upgrades ===
+Item Name                      | Slot       | Price      | +DPS       | DPS/1M GP
+-------------------------------------------------------------------------------------
+Mixed hide top                 | body       | 16291      | 0.048      | 2.937
+Dragon boots                   | feet       | 407735     | 0.091      | 0.223
+Spiked manacles                | feet       | 580707     | 0.091      | 0.157
+Aranea boots                   | feet       | 4050354    | 0.091      | 0.022
+Amulet of rancour              | neck       | 60780555   | 0.301      | 0.005
+Primordial boots               | feet       | 24977106   | 0.117      | 0.005
+Amulet of torture              | neck       | 17965852   | 0.059      | 0.003
+Avernic defender               | shield     | 45036816   | 0.059      | 0.001
+Ultor ring                     | ring       | 116057648  | 0.130      | 0.001
+Torva platelegs (damaged)      | legs       | 131643289  | 0.091      | 0.001
+
+=== Top 10 Highest DPS Upgrades ===
+Item Name                      | Slot       | Price      | +DPS       | DPS/1M GP
+-------------------------------------------------------------------------------------
+Amulet of rancour              | neck       | 60780555   | 0.301      | 0.005
+Ultor ring                     | ring       | 116057648  | 0.130      | 0.001
+Primordial boots               | feet       | 24977106   | 0.117      | 0.005
+Dragon boots                   | feet       | 407735     | 0.091      | 0.223
+Spiked manacles                | feet       | 580707     | 0.091      | 0.157
+Aranea boots                   | feet       | 4050354    | 0.091      | 0.022
+Torva platelegs (damaged)      | legs       | 131643289  | 0.091      | 0.001
+Torva platelegs                | legs       | 153519572  | 0.091      | 0.001
+Amulet of torture              | neck       | 17965852   | 0.059      | 0.003
+Avernic defender               | shield     | 45036816   | 0.059      | 0.001

@@ -91,6 +91,32 @@ int main() {
         battle.optimizeAttackStyle();
         battle.runSimulations(10000);
 
+        // DEBUG: Check Salve (ei)
+        int salveId = 12018; // Salve amulet(ei)
+        if (itemDb.contains(std::to_string(salveId))) {
+             std::cout << "\n--- DEBUG: Salve Amulet (ei) Check ---\n";
+             Item salve(salveId);
+             salve.fetchStats(salveId, itemDb);
+             
+             Player p4 = player;
+             p4.equip("neck", salve);
+             
+             // Check stats for sanity
+             std::cout << "Equipped: " << salve.getName() << "\n";
+             
+             Battle b4(p4, monster);
+             double dpsSalve = b4.solveOptimalDPS();
+             
+             // Base DPS (current loadout, assuming Fury)
+             double dpsBase = battle.solveOptimalDPS();
+             
+             std::cout << "Base DPS (Fury?): " << dpsBase << "\n";
+             std::cout << "Salve (ei) DPS:   " << dpsSalve << "\n";
+             
+             if (dpsSalve > dpsBase) std::cout << "-> Salve is BETTER (+ " << (dpsSalve - dpsBase) << ")\n";
+             else std::cout << "-> Salve is WORSE/SAME\n";
+        }
+
         // 6. Upgrade Advisor
         std::cout << "\n[6/6] Generating Next Best Item Suggestions...\n";
         if (priceDb.empty() || itemDb.empty()) {
