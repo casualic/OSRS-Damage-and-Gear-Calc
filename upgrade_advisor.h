@@ -8,10 +8,10 @@
 using json = nlohmann::json;
 
 struct UpgradeSuggestion {
-    std::string itemName;
-    int itemId;
-    std::string slot;
-    int price;
+    std::vector<std::string> itemNames;
+    std::vector<int> itemIds;
+    std::vector<std::string> slots;
+    int price; // Total price
     double oldDps;
     double newDps;
     double dpsIncrease;
@@ -30,6 +30,7 @@ private:
     const json& itemDb_;
     const json& priceDb_;
     std::map<int, int> priceProxies_;
+    std::map<int, int> fixedPriceProxies_;
 
     // Helper to check if item is a potential upgrade
     bool isPotentialUpgrade(const Item& candidate, const Item& current);
@@ -39,4 +40,3 @@ public:
     
     std::vector<UpgradeSuggestion> suggestUpgrades();
 };
-

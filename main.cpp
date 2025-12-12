@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <iomanip>
 #include "player.h"
 #include "monster.h"
 #include "battle.h"
@@ -91,6 +92,32 @@ int main() {
         battle.optimizeAttackStyle();
         battle.runSimulations(10000);
 
+        // DEBUG: Check Salve (ei)
+        int salveId = 12018; // Salve amulet(ei)
+        if (itemDb.contains(std::to_string(salveId))) {
+             std::cout << "\n--- DEBUG: Salve Amulet (ei) Check ---\n";
+             Item salve(salveId);
+             salve.fetchStats(salveId, itemDb);
+             
+             Player p4 = player;
+             p4.equip("neck", salve);
+             
+             // Check stats for sanity
+             std::cout << "Equipped: " << salve.getName() << "\n";
+             
+             Battle b4(p4, monster);
+             double dpsSalve = b4.solveOptimalDPS();
+             
+             // Base DPS (current loadout, assuming Fury)
+             double dpsBase = battle.solveOptimalDPS();
+             
+             std::cout << "Base DPS (Fury?): " << dpsBase << "\n";
+             std::cout << "Salve (ei) DPS:   " << dpsSalve << "\n";
+             
+             if (dpsSalve > dpsBase) std::cout << "-> Salve is BETTER (+ " << (dpsSalve - dpsBase) << ")\n";
+             else std::cout << "-> Salve is WORSE/SAME\n";
+        }
+
         // 6. Upgrade Advisor
         std::cout << "\n[6/6] Generating Next Best Item Suggestions...\n";
         if (priceDb.empty() || itemDb.empty()) {
@@ -98,45 +125,87 @@ int main() {
         } else {
             UpgradeAdvisor advisor(player, monster, itemDb, priceDb);
             auto suggestions = advisor.suggestUpgrades();
-            
-            std::cout << "\n=== Top 10 Cost-Effective Upgrades ===\n";
-            std::cout << std::left << std::setw(30) << "Item Name" 
-                      << " | " << std::setw(10) << "Slot"
+
+            // Split into Singles and Duos
+            std::vector<UpgradeSuggestion> singles;
+            std::vector<UpgradeSuggestion> duos;
+            for(const auto& s : suggestions) {
+                if(s.itemNames.size() > 1) duos.push_back(s);
+                else singles.push_back(s);
+            }
+
+            // --- Singles ---
+            std::cout << "\n=== Top 10 SINGLE Upgrades (Efficiency) ===\n";
+            std::cout << std::left << std::setw(50) << "Item Name" 
+                      << " | " << std::setw(20) << "Slot"
                       << " | " << std::setw(10) << "Price"
                       << " | " << std::setw(10) << "+DPS"
                       << " | " << "DPS/1M GP" << "\n";
-            std::cout << std::string(85, '-') << "\n";
+            std::cout << std::string(115, '-') << "\n";
             
+            std::sort(singles.begin(), singles.end()); // Efficient sort
             int count = 0;
-            for (const auto& sug : suggestions) {
+            for (const auto& sug : singles) {
                 if (count++ >= 10) break;
-                
-                std::cout << std::left << std::setw(30) << sug.itemName.substr(0, 29)
-                          << " | " << std::setw(10) << sug.slot
+                std::cout << std::left << std::setw(50) << sug.itemNames[0].substr(0, 49)
+                          << " | " << std::setw(20) << sug.slots[0]
                           << " | " << std::setw(10) << sug.price
                           << " | " << std::setw(10) << std::fixed << std::setprecision(3) << sug.dpsIncrease
                           << " | " << std::fixed << std::setprecision(3) << sug.dpsPerMillionGP << "\n";
             }
 
-            // Also show top absolute DPS upgrades
-            std::sort(suggestions.begin(), suggestions.end(), [](const UpgradeSuggestion& a, const UpgradeSuggestion& b) {
-                return a.dpsIncrease > b.dpsIncrease;
-            });
-
-            std::cout << "\n=== Top 10 Highest DPS Upgrades ===\n";
-             std::cout << std::left << std::setw(30) << "Item Name" 
-                      << " | " << std::setw(10) << "Slot"
+            // --- Duos ---
+            std::cout << "\n=== Top 10 DUO Upgrades (Efficiency) ===\n";
+            std::cout << std::left << std::setw(50) << "Item Name" 
+                      << " | " << std::setw(20) << "Slot"
                       << " | " << std::setw(10) << "Price"
                       << " | " << std::setw(10) << "+DPS"
                       << " | " << "DPS/1M GP" << "\n";
-            std::cout << std::string(85, '-') << "\n";
+            std::cout << std::string(115, '-') << "\n";
             
+            std::sort(duos.begin(), duos.end()); // Efficient sort
             count = 0;
-            for (const auto& sug : suggestions) {
+            for (const auto& sug : duos) {
                 if (count++ >= 10) break;
-                
-                std::cout << std::left << std::setw(30) << sug.itemName.substr(0, 29)
-                          << " | " << std::setw(10) << sug.slot
+                std::string nameStr = sug.itemNames[0] + " + " + sug.itemNames[1];
+                std::string slotStr = sug.slots[0] + "+" + sug.slots[1];
+
+                std::cout << std::left << std::setw(50) << nameStr.substr(0, 49)
+                          << " | " << std::setw(20) << slotStr
+                          << " | " << std::setw(10) << sug.price
+                          << " | " << std::setw(10) << std::fixed << std::setprecision(3) << sug.dpsIncrease
+                          << " | " << std::fixed << std::setprecision(3) << sug.dpsPerMillionGP << "\n";
+            }
+            
+            // --- Highest DPS Singles ---
+            std::sort(singles.begin(), singles.end(), [](const UpgradeSuggestion& a, const UpgradeSuggestion& b) {
+                return a.dpsIncrease > b.dpsIncrease;
+            });
+            std::cout << "\n=== Top 10 SINGLE Upgrades (Max DPS) ===\n";
+            // ... (print loop similar to above)
+            count = 0;
+            for (const auto& sug : singles) {
+                if (count++ >= 10) break;
+                std::cout << std::left << std::setw(50) << sug.itemNames[0].substr(0, 49)
+                          << " | " << std::setw(20) << sug.slots[0]
+                          << " | " << std::setw(10) << sug.price
+                          << " | " << std::setw(10) << std::fixed << std::setprecision(3) << sug.dpsIncrease
+                          << " | " << std::fixed << std::setprecision(3) << sug.dpsPerMillionGP << "\n";
+            }
+
+
+            // --- Highest DPS Duos ---
+             std::sort(duos.begin(), duos.end(), [](const UpgradeSuggestion& a, const UpgradeSuggestion& b) {
+                return a.dpsIncrease > b.dpsIncrease;
+            });
+            std::cout << "\n=== Top 10 DUO Upgrades (Max DPS) ===\n";
+             count = 0;
+            for (const auto& sug : duos) {
+                if (count++ >= 10) break;
+                std::string nameStr = sug.itemNames[0] + " + " + sug.itemNames[1];
+                std::string slotStr = sug.slots[0] + "+" + sug.slots[1];
+                std::cout << std::left << std::setw(50) << nameStr.substr(0, 49)
+                          << " | " << std::setw(20) << slotStr
                           << " | " << std::setw(10) << sug.price
                           << " | " << std::setw(10) << std::fixed << std::setprecision(3) << sug.dpsIncrease
                           << " | " << std::fixed << std::setprecision(3) << sug.dpsPerMillionGP << "\n";
