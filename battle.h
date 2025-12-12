@@ -12,6 +12,14 @@ class Battle {
         
         std::string style_; // "stab", "slash", "crush"
         int attack_speed_;
+        bool isFang_ {false};
+        bool isDHL_ {false};
+        bool isDragon_ {false};
+        bool isUndead_ {false};
+        bool hasSalve_ {false};
+        bool hasSalveE_ {false};
+        bool hasSalveI_ {false};
+        bool hasSalveEI_ {false};
         
         int stance_bonus_attack_ {0};
         int stance_bonus_strength_ {0};
@@ -43,4 +51,8 @@ class Battle {
         
         // Tests styles and sets the best one
         void optimizeAttackStyle(); 
+        
+        // Returns the max theoretical DPS achievable with current gear
+        double solveOptimalDPS();
 };
+

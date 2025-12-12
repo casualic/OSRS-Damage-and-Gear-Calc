@@ -11,6 +11,7 @@ class Monster {
         std::map<std::string, int> stats_int_;
         std::map<std::string, std::string> stats_str_;
         std::map<std::string, bool> stats_bool_;
+        std::vector<std::string> attributes_;
         int current_hp_ {0};
     public:
         Monster(std::string n);
@@ -21,6 +22,7 @@ class Monster {
         int getInt(const std::string& key) const {return stats_int_.at(key);}
         std::string getStr(const std::string& key) const {return stats_str_.at(key);}
         bool getBool(const std::string& key) const {return stats_bool_.at(key);}
+        bool hasAttribute(const std::string& attr) const;
         int getCurrentHP() const { return current_hp_; }
         void takeDMG(int a) { current_hp_ -= a; }
 

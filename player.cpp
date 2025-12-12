@@ -183,7 +183,7 @@ void Player::fetchGearFromClient() {
     } catch(...) {}
 }
 
-void Player::loadGearStats(const std::string& itemDbPath) {
+void Player::loadGearStats(const json& itemDb) {
     std::ifstream ifs("wikisync_data.json");
     if (!ifs.is_open()) {
         std::cerr << "Could not open wikisync_data.json. Run fetchGearFromClient first.\n";
@@ -195,20 +195,6 @@ void Player::loadGearStats(const std::string& itemDbPath) {
         wsData = json::parse(ifs);
     } catch (const std::exception& e) {
         std::cerr << "Error parsing wikisync_data.json: " << e.what() << "\n";
-        return;
-    }
-
-    std::ifstream dbIfs(itemDbPath);
-    if (!dbIfs.is_open()) {
-        std::cerr << "Could not open " << itemDbPath << "\n";
-        return;
-    }
-    
-    json itemDb;
-    try {
-        itemDb = json::parse(dbIfs);
-    } catch(const std::exception& e) {
-        std::cerr << "Error parsing item DB: " << e.what() << "\n";
         return;
     }
 
@@ -226,12 +212,40 @@ void Player::loadGearStats(const std::string& itemDbPath) {
                 Item item(id);
                 item.fetchStats(id, itemDb);
                 gear_.emplace(slot, item);
+                // Silent load for performance when scanning upgrades, or keep verbose?
+                // Keeping verbose for now as this is usually called once for main player
                 std::cout << "Loaded " << item.getName() << " (ID: " << id << ") into slot " << slot << "\n";
             }
         }
     } else {
         std::cerr << "Invalid wikisync_data.json structure.\n";
     }
+}
+
+void Player::loadGearStats(const std::string& itemDbPath) {
+    std::ifstream dbIfs(itemDbPath);
+    if (!dbIfs.is_open()) {
+        std::cerr << "Could not open " << itemDbPath << "\n";
+        return;
+    }
+    
+    json itemDb;
+    try {
+        itemDb = json::parse(dbIfs);
+    } catch(const std::exception& e) {
+        std::cerr << "Error parsing item DB: " << e.what() << "\n";
+        return;
+    }
+    
+    loadGearStats(itemDb);
+}
+
+void Player::equip(const std::string& slot, const Item& item) {
+    gear_[slot] = item;
+}
+
+void Player::unequip(const std::string& slot) {
+    gear_.erase(slot);
 }
 
 int Player::getEffectiveStat(const std::string& stat) {

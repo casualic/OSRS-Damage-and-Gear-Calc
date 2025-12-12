@@ -16,6 +16,7 @@
     "defence_crush": null,
     "defence_magic": null,
     "defence_ranged": null,
+    "attributes": [],
     "attack_style": "",
     "aggressive": null,
     "poisonous": "",
@@ -41,6 +42,7 @@
     "defence_crush": null,
     "defence_magic": null,
     "defence_ranged": null,
+    "attributes": [],
     "attack_style": "",
     "aggressive": null,
     "poisonous": "",
@@ -66,6 +68,7 @@
     "defence_crush": null,
     "defence_magic": null,
     "defence_ranged": null,
+    "attributes": [],
     "attack_style": "",
     "aggressive": null,
     "poisonous": "",
@@ -91,6 +94,7 @@
     "defence_crush": null,
     "defence_magic": null,
     "defence_ranged": null,
+    "attributes": [],
     "attack_style": "",
     "aggressive": null,
     "poisonous": "",
@@ -116,6 +120,9 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [
+      "demon"
+    ],
     "attack_style": "Crush, Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -140,6 +147,7 @@
     "defence_crush": 60,
     "defence_magic": 100,
     "defence_ranged": 100,
+    "attributes": [],
     "attack_style": "Crush, Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -164,6 +172,9 @@
     "defence_crush": 117,
     "defence_magic": 73,
     "defence_ranged": null,
+    "attributes": [
+      "spectral"
+    ],
     "attack_style": "Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -188,6 +199,9 @@
     "defence_crush": 120,
     "defence_magic": 10,
     "defence_ranged": 60,
+    "attributes": [
+      "|xpbonus ="
+    ],
     "attack_style": "Slash, Magic, Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -212,6 +226,9 @@
     "defence_crush": 150,
     "defence_magic": 150,
     "defence_ranged": 45,
+    "attributes": [
+      "dragon"
+    ],
     "attack_style": "Ranged, Magic",
     "aggressive": "Yes",
     "poisonous": "Yes",
@@ -237,6 +254,9 @@
     "defence_crush": 150,
     "defence_magic": 150,
     "defence_ranged": 45,
+    "attributes": [
+      "dragon"
+    ],
     "attack_style": "Ranged, Magic",
     "aggressive": "Yes",
     "poisonous": "Yes",
@@ -262,6 +282,9 @@
     "defence_crush": 150,
     "defence_magic": 150,
     "defence_ranged": 45,
+    "attributes": [
+      "dragon"
+    ],
     "attack_style": "Ranged, Magic",
     "aggressive": "Yes",
     "poisonous": "Yes",
@@ -287,6 +310,9 @@
     "defence_crush": 150,
     "defence_magic": 150,
     "defence_ranged": 45,
+    "attributes": [
+      "dragon"
+    ],
     "attack_style": "Ranged, Magic",
     "aggressive": "Yes",
     "poisonous": "Yes",
@@ -312,6 +338,9 @@
     "defence_crush": 40,
     "defence_magic": 100,
     "defence_ranged": null,
+    "attributes": [
+      "spectral"
+    ],
     "attack_style": "Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -336,6 +365,9 @@
     "defence_crush": null,
     "defence_magic": null,
     "defence_ranged": null,
+    "attributes": [
+      "|xpbonus = 67.5"
+    ],
     "attack_style": "",
     "aggressive": "Yes",
     "poisonous": "Yes (venom)",
@@ -361,6 +393,9 @@
     "defence_crush": null,
     "defence_magic": null,
     "defence_ranged": null,
+    "attributes": [
+      "|xpbonus = 67.5"
+    ],
     "attack_style": "Crush,{{CiteReddit|author=Mod Blossom|url=https://www.reddit.com/r/2007scape/comments/1fe6y5o/araxxor_cas_poll_82_updates_more/lml7bwo/|title=Araxxor CAs, Poll 82 Updates & More!|quote=Hey :) he's using Crush. Hope that helps!|date=11/09/2024|archiveurl=https://archive.md/NMWUt|archivedate=11/09/2024|notes=|name=",
     "aggressive": "Yes",
     "poisonous": "Yes (venom)",
@@ -386,6 +421,7 @@
     "defence_crush": 35,
     "defence_magic": 200,
     "defence_ranged": 200,
+    "attributes": [],
     "attack_style": "Slash, Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -410,6 +446,7 @@
     "defence_crush": 110,
     "defence_magic": 0,
     "defence_ranged": 40,
+    "attributes": [],
     "attack_style": "Crush, Magic, Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -434,6 +471,7 @@
     "defence_crush": 2,
     "defence_magic": 2,
     "defence_ranged": 2,
+    "attributes": [],
     "attack_style": "Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -459,6 +497,7 @@
     "defence_crush": null,
     "defence_magic": null,
     "defence_ranged": null,
+    "attributes": [],
     "attack_style": "Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -484,6 +523,7 @@
     "defence_crush": 40,
     "defence_magic": 15,
     "defence_ranged": 10,
+    "attributes": [],
     "attack_style": "Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -509,6 +549,7 @@
     "defence_crush": 2,
     "defence_magic": 2,
     "defence_ranged": 2,
+    "attributes": [],
     "attack_style": "Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -534,6 +575,7 @@
     "defence_crush": null,
     "defence_magic": null,
     "defence_ranged": null,
+    "attributes": [],
     "attack_style": "Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -559,6 +601,7 @@
     "defence_crush": 10,
     "defence_magic": 40,
     "defence_ranged": 15,
+    "attributes": [],
     "attack_style": "Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -584,6 +627,7 @@
     "defence_crush": 2,
     "defence_magic": 2,
     "defence_ranged": 2,
+    "attributes": [],
     "attack_style": "Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -609,6 +653,7 @@
     "defence_crush": null,
     "defence_magic": null,
     "defence_ranged": null,
+    "attributes": [],
     "attack_style": "Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -634,6 +679,7 @@
     "defence_crush": 15,
     "defence_magic": 10,
     "defence_ranged": 40,
+    "attributes": [],
     "attack_style": "Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -659,6 +705,9 @@
     "defence_crush": 240,
     "defence_magic": 280,
     "defence_ranged": null,
+    "attributes": [
+      "|xpbonus ="
+    ],
     "attack_style": "Crush, Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -683,6 +732,7 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [],
     "attack_style": "Crush, Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -707,6 +757,7 @@
     "defence_crush": 18,
     "defence_magic": 1000,
     "defence_ranged": 1000,
+    "attributes": [],
     "attack_style": "Crush",
     "aggressive": "Not until spoken to.",
     "poisonous": "No",
@@ -731,6 +782,9 @@
     "defence_crush": 0,
     "defence_magic": 10,
     "defence_ranged": null,
+    "attributes": [
+      "demon"
+    ],
     "attack_style": "Slash",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -756,6 +810,9 @@
     "defence_crush": 0,
     "defence_magic": 5,
     "defence_ranged": null,
+    "attributes": [
+      "demon"
+    ],
     "attack_style": "Slash",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -781,6 +838,9 @@
     "defence_crush": 0,
     "defence_magic": 10,
     "defence_ranged": null,
+    "attributes": [
+      "demon"
+    ],
     "attack_style": "Slash",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -806,6 +866,9 @@
     "defence_crush": 0,
     "defence_magic": 10,
     "defence_ranged": null,
+    "attributes": [
+      "demon"
+    ],
     "attack_style": "Slash",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -831,6 +894,9 @@
     "defence_crush": 1,
     "defence_magic": 300,
     "defence_ranged": 300,
+    "attributes": [
+      "golem"
+    ],
     "attack_style": "Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -855,6 +921,7 @@
     "defence_crush": 100,
     "defence_magic": 500,
     "defence_ranged": 500,
+    "attributes": [],
     "attack_style": "Typeless slash",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -879,6 +946,7 @@
     "defence_crush": 0,
     "defence_magic": 500,
     "defence_ranged": 500,
+    "attributes": [],
     "attack_style": "Typeless slash",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -903,6 +971,9 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [
+      "demon"
+    ],
     "attack_style": "Stab",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -927,6 +998,7 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [],
     "attack_style": "Stab",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -951,6 +1023,9 @@
     "defence_crush": 0,
     "defence_magic": 700,
     "defence_ranged": null,
+    "attributes": [
+      "fiery"
+    ],
     "attack_style": "Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -975,6 +1050,7 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [],
     "attack_style": "Crush, Magic",
     "aggressive": "Yes",
     "poisonous": "Yes (8) (Members worlds only)",
@@ -999,6 +1075,7 @@
     "defence_crush": 125,
     "defence_magic": 0,
     "defence_ranged": 50,
+    "attributes": [],
     "attack_style": "Crush, Magic, Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -1023,6 +1100,9 @@
     "defence_crush": 10,
     "defence_magic": 198,
     "defence_ranged": 211,
+    "attributes": [
+      "undead"
+    ],
     "attack_style": "Slash, Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -1048,6 +1128,9 @@
     "defence_crush": 10,
     "defence_magic": 198,
     "defence_ranged": 211,
+    "attributes": [
+      "undead"
+    ],
     "attack_style": "Slash, Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -1073,6 +1156,9 @@
     "defence_crush": 25,
     "defence_magic": 65,
     "defence_ranged": null,
+    "attributes": [
+      "demon"
+    ],
     "attack_style": "Stab, Ranged, Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -1097,6 +1183,7 @@
     "defence_crush": 70,
     "defence_magic": 70,
     "defence_ranged": 70,
+    "attributes": [],
     "attack_style": "Magic, Ranged, Melee (Crush?)",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -1121,6 +1208,7 @@
     "defence_crush": 250,
     "defence_magic": 280,
     "defence_ranged": null,
+    "attributes": [],
     "attack_style": "Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -1145,6 +1233,9 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [
+      "demon"
+    ],
     "attack_style": "Slash",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -1169,6 +1260,7 @@
     "defence_crush": 100,
     "defence_magic": 100,
     "defence_ranged": null,
+    "attributes": [],
     "attack_style": "Crush, Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -1193,6 +1285,7 @@
     "defence_crush": 100,
     "defence_magic": 150,
     "defence_ranged": null,
+    "attributes": [],
     "attack_style": "Crush, Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -1217,6 +1310,7 @@
     "defence_crush": 20,
     "defence_magic": 20,
     "defence_ranged": 20,
+    "attributes": [],
     "attack_style": "Magic, Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -1241,6 +1335,9 @@
     "defence_crush": 3,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [
+      "vampyre1"
+    ],
     "attack_style": "Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -1265,6 +1362,7 @@
     "defence_crush": 30,
     "defence_magic": 250,
     "defence_ranged": 250,
+    "attributes": [],
     "attack_style": "Ranged, Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -1289,6 +1387,7 @@
     "defence_crush": 20,
     "defence_magic": 20,
     "defence_ranged": 20,
+    "attributes": [],
     "attack_style": "Magic, Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -1313,6 +1412,7 @@
     "defence_crush": 10,
     "defence_magic": 10,
     "defence_ranged": 10,
+    "attributes": [],
     "attack_style": "Melee, Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -1337,6 +1437,7 @@
     "defence_crush": 40,
     "defence_magic": 200,
     "defence_ranged": 200,
+    "attributes": [],
     "attack_style": "Crush",
     "aggressive": "No",
     "poisonous": "No",
@@ -1361,6 +1462,7 @@
     "defence_crush": 255,
     "defence_magic": 255,
     "defence_ranged": 10,
+    "attributes": [],
     "attack_style": "Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -1385,6 +1487,7 @@
     "defence_crush": 255,
     "defence_magic": 10,
     "defence_ranged": 255,
+    "attributes": [],
     "attack_style": "Slash",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -1409,6 +1512,7 @@
     "defence_crush": 10,
     "defence_magic": 255,
     "defence_ranged": 550,
+    "attributes": [],
     "attack_style": "Ranged",
     "aggressive": "Yes",
     "poisonous": "Yes",
@@ -1433,6 +1537,7 @@
     "defence_crush": 150,
     "defence_magic": 50,
     "defence_ranged": 50,
+    "attributes": [],
     "attack_style": "Melee, Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -1457,6 +1562,7 @@
     "defence_crush": 60,
     "defence_magic": 60,
     "defence_ranged": 60,
+    "attributes": [],
     "attack_style": "Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -1482,6 +1588,7 @@
     "defence_crush": 100,
     "defence_magic": 80,
     "defence_ranged": 120,
+    "attributes": [],
     "attack_style": "Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -1507,6 +1614,7 @@
     "defence_crush": null,
     "defence_magic": null,
     "defence_ranged": null,
+    "attributes": [],
     "attack_style": "",
     "aggressive": null,
     "poisonous": "",
@@ -1531,6 +1639,7 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [],
     "attack_style": "Crush",
     "aggressive": "No",
     "poisonous": "No",
@@ -1555,6 +1664,7 @@
     "defence_crush": 50,
     "defence_magic": 300,
     "defence_ranged": 300,
+    "attributes": [],
     "attack_style": "Ranged, Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -1579,6 +1689,7 @@
     "defence_crush": 150,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [],
     "attack_style": "Crush, Magic,",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -1603,6 +1714,9 @@
     "defence_crush": 150,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [
+      "vampyre1"
+    ],
     "attack_style": "Crush, Magic, Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -1627,6 +1741,9 @@
     "defence_crush": 244,
     "defence_magic": 11,
     "defence_ranged": null,
+    "attributes": [
+      "spectral"
+    ],
     "attack_style": "Slash",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -1651,6 +1768,9 @@
     "defence_crush": 60,
     "defence_magic": 160,
     "defence_ranged": null,
+    "attributes": [
+      "demon"
+    ],
     "attack_style": "Melee, Magic, Ranged",
     "aggressive": "Yes",
     "poisonous": "Yes (venom)",
@@ -1676,6 +1796,9 @@
     "defence_crush": 60,
     "defence_magic": 160,
     "defence_ranged": null,
+    "attributes": [
+      "demon"
+    ],
     "attack_style": "Melee, Magic, Ranged",
     "aggressive": "Yes",
     "poisonous": "Yes (venom)",
@@ -1701,6 +1824,9 @@
     "defence_crush": 60,
     "defence_magic": 160,
     "defence_ranged": null,
+    "attributes": [
+      "demon"
+    ],
     "attack_style": "Melee, Magic, Ranged",
     "aggressive": "Yes",
     "poisonous": "Yes (venom)",
@@ -1726,6 +1852,9 @@
     "defence_crush": 60,
     "defence_magic": 160,
     "defence_ranged": null,
+    "attributes": [
+      "demon"
+    ],
     "attack_style": "Melee, Magic, Ranged",
     "aggressive": "Yes",
     "poisonous": "Yes (venom)",
@@ -1751,6 +1880,9 @@
     "defence_crush": 60,
     "defence_magic": 160,
     "defence_ranged": null,
+    "attributes": [
+      "demon"
+    ],
     "attack_style": "Melee, Magic, Ranged",
     "aggressive": "Yes",
     "poisonous": "Yes (venom)",
@@ -1776,6 +1908,9 @@
     "defence_crush": 60,
     "defence_magic": 160,
     "defence_ranged": null,
+    "attributes": [
+      "demon"
+    ],
     "attack_style": "Melee, Magic, Ranged",
     "aggressive": "Yes",
     "poisonous": "Yes (venom)",
@@ -1801,6 +1936,9 @@
     "defence_crush": 60,
     "defence_magic": 160,
     "defence_ranged": null,
+    "attributes": [
+      "demon"
+    ],
     "attack_style": "Melee, Magic, Ranged",
     "aggressive": "Yes",
     "poisonous": "Yes (venom)",
@@ -1826,6 +1964,9 @@
     "defence_crush": 60,
     "defence_magic": 160,
     "defence_ranged": null,
+    "attributes": [
+      "demon"
+    ],
     "attack_style": "Melee, Magic, Ranged",
     "aggressive": "Yes",
     "poisonous": "Yes (venom)",
@@ -1851,6 +1992,9 @@
     "defence_crush": 60,
     "defence_magic": 160,
     "defence_ranged": null,
+    "attributes": [
+      "demon"
+    ],
     "attack_style": "Melee, Magic, Ranged",
     "aggressive": "Yes",
     "poisonous": "Yes (venom)",
@@ -1876,6 +2020,9 @@
     "defence_crush": 190,
     "defence_magic": 440,
     "defence_ranged": null,
+    "attributes": [
+      "demon"
+    ],
     "attack_style": "Magic, Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -1901,6 +2048,9 @@
     "defence_crush": 190,
     "defence_magic": 440,
     "defence_ranged": null,
+    "attributes": [
+      "demon"
+    ],
     "attack_style": "Magic, Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -1926,6 +2076,9 @@
     "defence_crush": 190,
     "defence_magic": 440,
     "defence_ranged": null,
+    "attributes": [
+      "demon"
+    ],
     "attack_style": "Magic, Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -1951,6 +2104,9 @@
     "defence_crush": null,
     "defence_magic": null,
     "defence_ranged": null,
+    "attributes": [
+      "golem"
+    ],
     "attack_style": "Slash {{CiteReddit|author=Mod Kieren|url=https://www.reddit.com/r/2007scape/comments/79pzu8/grotesque_guardians_feedback_tweaks/dp3w45d/|title=Grotesque Guardians: Feedback Tweaks|quote=So, this is the code that's live now: [https://archive.is/aasWC] (...)|date=30 October 2017|archiveurl=https://archive.is/xItkA|archivedate=11 August 2023|name=script",
     "aggressive": "No",
     "poisonous": "No",
@@ -1976,6 +2132,9 @@
     "defence_crush": null,
     "defence_magic": null,
     "defence_ranged": null,
+    "attributes": [
+      "golem"
+    ],
     "attack_style": "",
     "aggressive": "No",
     "poisonous": "No",
@@ -2001,6 +2160,7 @@
     "defence_crush": 100,
     "defence_magic": 500,
     "defence_ranged": 500,
+    "attributes": [],
     "attack_style": "Typeless slash",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -2026,6 +2186,7 @@
     "defence_crush": 100,
     "defence_magic": 500,
     "defence_ranged": 500,
+    "attributes": [],
     "attack_style": "Typeless slash",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -2051,6 +2212,9 @@
     "defence_crush": 0,
     "defence_magic": 700,
     "defence_ranged": null,
+    "attributes": [
+      "|xpbonus = 22.5"
+    ],
     "attack_style": "Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -2075,6 +2239,9 @@
     "defence_crush": 70,
     "defence_magic": 30,
     "defence_ranged": 70,
+    "attributes": [
+      "|xpbonus = 5"
+    ],
     "attack_style": "Melee, Ranged, Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -2100,6 +2267,9 @@
     "defence_crush": 70,
     "defence_magic": 30,
     "defence_ranged": 70,
+    "attributes": [
+      "|xpbonus = 5"
+    ],
     "attack_style": "Melee, Ranged, Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -2125,6 +2295,7 @@
     "defence_crush": 40,
     "defence_magic": 30,
     "defence_ranged": 20,
+    "attributes": [],
     "attack_style": "Slash, Magic, Dragonfire",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -2149,6 +2320,9 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [
+      "spectral"
+    ],
     "attack_style": "Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -2173,6 +2347,7 @@
     "defence_crush": 100,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [],
     "attack_style": "Slash, Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -2197,6 +2372,7 @@
     "defence_crush": 5,
     "defence_magic": 5,
     "defence_ranged": 50,
+    "attributes": [],
     "attack_style": "Crush, Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -2221,6 +2397,7 @@
     "defence_crush": 10,
     "defence_magic": 10,
     "defence_ranged": 10,
+    "attributes": [],
     "attack_style": "Crush",
     "aggressive": "No",
     "poisonous": "No",
@@ -2245,6 +2422,10 @@
     "defence_crush": 140,
     "defence_magic": 280,
     "defence_ranged": 86,
+    "attributes": [
+      "dragon",
+      "fiery"
+    ],
     "attack_style": "Slash, Ranged, Magic, Dragonfire",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -2270,6 +2451,10 @@
     "defence_crush": 140,
     "defence_magic": 280,
     "defence_ranged": 86,
+    "attributes": [
+      "dragon",
+      "fiery"
+    ],
     "attack_style": "Slash, Ranged, Magic, Dragonfire",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -2295,6 +2480,10 @@
     "defence_crush": 140,
     "defence_magic": 280,
     "defence_ranged": 86,
+    "attributes": [
+      "dragon",
+      "fiery"
+    ],
     "attack_style": "Slash, Ranged, Magic, Dragonfire",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -2320,6 +2509,10 @@
     "defence_crush": 140,
     "defence_magic": 280,
     "defence_ranged": 86,
+    "attributes": [
+      "dragon",
+      "fiery"
+    ],
     "attack_style": "Slash, Ranged, Magic, Dragonfire",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -2345,6 +2538,7 @@
     "defence_crush": 150,
     "defence_magic": 50,
     "defence_ranged": 50,
+    "attributes": [],
     "attack_style": "Ranged, Magic, Stab",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -2369,6 +2563,7 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": null,
+    "attributes": [],
     "attack_style": "Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -2393,6 +2588,7 @@
     "defence_crush": 90,
     "defence_magic": 298,
     "defence_ranged": 90,
+    "attributes": [],
     "attack_style": "Crush, Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -2417,6 +2613,7 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [],
     "attack_style": "Slash",
     "aggressive": "Yes, after killing [[Bouncer]] and talked to.",
     "poisonous": "No",
@@ -2441,6 +2638,7 @@
     "defence_crush": 100,
     "defence_magic": 80,
     "defence_ranged": null,
+    "attributes": [],
     "attack_style": "Crush",
     "aggressive": "No",
     "poisonous": "No",
@@ -2465,6 +2663,7 @@
     "defence_crush": 0,
     "defence_magic": 150,
     "defence_ranged": 0,
+    "attributes": [],
     "attack_style": "Crush, Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -2489,6 +2688,9 @@
     "defence_crush": 99,
     "defence_magic": 159,
     "defence_ranged": null,
+    "attributes": [
+      "kalphite"
+    ],
     "attack_style": "Stab, Ranged",
     "aggressive": "Yes",
     "poisonous": "Yes (9)",
@@ -2513,6 +2715,7 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [],
     "attack_style": "Crush, Ranged",
     "aggressive": "Yes",
     "poisonous": "Yes (9)",
@@ -2537,6 +2740,7 @@
     "defence_crush": 130,
     "defence_magic": 125,
     "defence_ranged": null,
+    "attributes": [],
     "attack_style": "Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -2561,6 +2765,7 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [],
     "attack_style": "Crush, Ranged, Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -2585,6 +2790,10 @@
     "defence_crush": 200,
     "defence_magic": 200,
     "defence_ranged": 50,
+    "attributes": [
+      "dragon",
+      "xerician"
+    ],
     "attack_style": "Magic, Ranged",
     "aggressive": "Yes",
     "poisonous": "Yes",
@@ -2610,6 +2819,10 @@
     "defence_crush": 200,
     "defence_magic": 200,
     "defence_ranged": 50,
+    "attributes": [
+      "dragon",
+      "xerician"
+    ],
     "attack_style": "Magic, Ranged",
     "aggressive": "Yes",
     "poisonous": "Yes",
@@ -2635,6 +2848,9 @@
     "defence_crush": 300,
     "defence_magic": 300,
     "defence_ranged": 300,
+    "attributes": [
+      "golem"
+    ],
     "attack_style": "Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -2659,6 +2875,9 @@
     "defence_crush": 241,
     "defence_magic": 11,
     "defence_ranged": null,
+    "attributes": [
+      "spectral"
+    ],
     "attack_style": "Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -2683,6 +2902,7 @@
     "defence_crush": 60,
     "defence_magic": 80,
     "defence_ranged": 80,
+    "attributes": [],
     "attack_style": "Ranged, Magic",
     "aggressive": "Yes",
     "poisonous": "Yes (4)",
@@ -2707,6 +2927,7 @@
     "defence_crush": 45,
     "defence_magic": 2000,
     "defence_ranged": 2000,
+    "attributes": [],
     "attack_style": "Crush, Magic, Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -2731,6 +2952,10 @@
     "defence_crush": 110,
     "defence_magic": 40,
     "defence_ranged": null,
+    "attributes": [
+      "demon",
+      "xerician"
+    ],
     "attack_style": "Ranged, Magic",
     "aggressive": "No",
     "poisonous": "No",
@@ -2756,6 +2981,10 @@
     "defence_crush": 110,
     "defence_magic": 40,
     "defence_ranged": null,
+    "attributes": [
+      "demon",
+      "xerician"
+    ],
     "attack_style": "Ranged, Magic",
     "aggressive": "No",
     "poisonous": "No",
@@ -2781,6 +3010,9 @@
     "defence_crush": 40,
     "defence_magic": 600,
     "defence_ranged": 600,
+    "attributes": [
+      "demon"
+    ],
     "attack_style": "Magic (Fire Waves), Melee",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -2805,6 +3037,9 @@
     "defence_crush": 0,
     "defence_magic": 50,
     "defence_ranged": 0,
+    "attributes": [
+      "demon"
+    ],
     "attack_style": "Slash, Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -2829,6 +3064,9 @@
     "defence_crush": 80,
     "defence_magic": 80,
     "defence_ranged": null,
+    "attributes": [
+      "demon"
+    ],
     "attack_style": "Slash, Magic",
     "aggressive": "Yes",
     "poisonous": "Yes (16)",
@@ -2853,6 +3091,9 @@
     "defence_crush": 100,
     "defence_magic": 10,
     "defence_ranged": 10,
+    "attributes": [
+      "kalphite"
+    ],
     "attack_style": "Stab, Ranged, Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -2878,6 +3119,9 @@
     "defence_crush": 10,
     "defence_magic": 100,
     "defence_ranged": 100,
+    "attributes": [
+      "kalphite"
+    ],
     "attack_style": "Stab, Ranged, Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -2903,6 +3147,7 @@
     "defence_crush": 35,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [],
     "attack_style": "Melee, Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -2927,6 +3172,7 @@
     "defence_crush": 150,
     "defence_magic": 150,
     "defence_ranged": 150,
+    "attributes": [],
     "attack_style": "Magic, Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -2951,6 +3197,9 @@
     "defence_crush": 90,
     "defence_magic": 106,
     "defence_ranged": null,
+    "attributes": [
+      "spectral"
+    ],
     "attack_style": "Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -2975,6 +3224,9 @@
     "defence_crush": 100,
     "defence_magic": 200,
     "defence_ranged": null,
+    "attributes": [
+      "kalphite"
+    ],
     "attack_style": "Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -2999,6 +3251,10 @@
     "defence_crush": 90,
     "defence_magic": 80,
     "defence_ranged": null,
+    "attributes": [
+      "dragon",
+      "fiery"
+    ],
     "attack_style": "Stab, Dragonfire",
     "aggressive": "Yes",
     "poisonous": "Yes (8)",
@@ -3023,6 +3279,7 @@
     "defence_crush": 20,
     "defence_magic": 20,
     "defence_ranged": 20,
+    "attributes": [],
     "attack_style": "Slash",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -3047,6 +3304,7 @@
     "defence_crush": 0,
     "defence_magic": 130,
     "defence_ranged": 300,
+    "attributes": [],
     "attack_style": "Typeless Magic",
     "aggressive": "No",
     "poisonous": "No",
@@ -3072,6 +3330,7 @@
     "defence_crush": 0,
     "defence_magic": 130,
     "defence_ranged": 300,
+    "attributes": [],
     "attack_style": "Typeless Magic",
     "aggressive": "No",
     "poisonous": "No",
@@ -3097,6 +3356,9 @@
     "defence_crush": 180,
     "defence_magic": 200,
     "defence_ranged": null,
+    "attributes": [
+      "flying"
+    ],
     "attack_style": "Ranged, Ranged magic, Magical melee",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -3121,6 +3383,7 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [],
     "attack_style": "Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -3146,6 +3409,7 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [],
     "attack_style": "Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -3171,6 +3435,7 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [],
     "attack_style": "Magic, Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -3195,6 +3460,7 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [],
     "attack_style": "Crush, Magical melee",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -3219,6 +3485,7 @@
     "defence_crush": 50,
     "defence_magic": 50,
     "defence_ranged": 50,
+    "attributes": [],
     "attack_style": "Crush, Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -3243,6 +3510,9 @@
     "defence_crush": 60,
     "defence_magic": 75,
     "defence_ranged": 0,
+    "attributes": [
+      "xerician"
+    ],
     "attack_style": "Melee, Ranged, Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -3268,6 +3538,9 @@
     "defence_crush": 60,
     "defence_magic": 75,
     "defence_ranged": 0,
+    "attributes": [
+      "xerician"
+    ],
     "attack_style": "Melee, Ranged, Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -3293,6 +3566,9 @@
     "defence_crush": 50,
     "defence_magic": 60,
     "defence_ranged": 0,
+    "attributes": [
+      "xerician"
+    ],
     "attack_style": "Melee, Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -3318,6 +3594,9 @@
     "defence_crush": 50,
     "defence_magic": 60,
     "defence_ranged": 0,
+    "attributes": [
+      "xerician"
+    ],
     "attack_style": "Melee, Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -3343,6 +3622,7 @@
     "defence_crush": 60,
     "defence_magic": 300,
     "defence_ranged": null,
+    "attributes": [],
     "attack_style": "Magic, Ranged, Crush",
     "aggressive": "Yes",
     "poisonous": "Yes (8)",
@@ -3367,6 +3647,9 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [
+      "demon"
+    ],
     "attack_style": "Slash, Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -3391,6 +3674,7 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [],
     "attack_style": "Stab, Magic, Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -3416,6 +3700,7 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [],
     "attack_style": "Stab, Magic, Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -3441,6 +3726,7 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [],
     "attack_style": "Stab, Magic, Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -3466,6 +3752,7 @@
     "defence_crush": 45,
     "defence_magic": 20,
     "defence_ranged": 20,
+    "attributes": [],
     "attack_style": "Crush, Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -3490,6 +3777,7 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [],
     "attack_style": "Melee, Single and multi-target Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -3514,6 +3802,9 @@
     "defence_crush": 10,
     "defence_magic": 600,
     "defence_ranged": 800,
+    "attributes": [
+      "undead"
+    ],
     "attack_style": "Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -3539,6 +3830,9 @@
     "defence_crush": 40,
     "defence_magic": 600,
     "defence_ranged": 800,
+    "attributes": [
+      "undead"
+    ],
     "attack_style": "Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -3564,6 +3858,9 @@
     "defence_crush": 40,
     "defence_magic": 600,
     "defence_ranged": 800,
+    "attributes": [
+      "undead"
+    ],
     "attack_style": "Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -3589,6 +3886,9 @@
     "defence_crush": 120,
     "defence_magic": 34,
     "defence_ranged": 261,
+    "attributes": [
+      "spectral"
+    ],
     "attack_style": "Stab",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -3614,6 +3914,9 @@
     "defence_crush": 120,
     "defence_magic": 437,
     "defence_ranged": 56,
+    "attributes": [
+      "spectral"
+    ],
     "attack_style": "Ranged, Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -3639,6 +3942,9 @@
     "defence_crush": 120,
     "defence_magic": 437,
     "defence_ranged": 56,
+    "attributes": [
+      "spectral"
+    ],
     "attack_style": "Ranged, Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -3664,6 +3970,9 @@
     "defence_crush": 120,
     "defence_magic": 437,
     "defence_ranged": 56,
+    "attributes": [
+      "spectral"
+    ],
     "attack_style": "Ranged, Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -3689,6 +3998,9 @@
     "defence_crush": 120,
     "defence_magic": 437,
     "defence_ranged": 56,
+    "attributes": [
+      "spectral"
+    ],
     "attack_style": "Typeless",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -3714,6 +4026,7 @@
     "defence_crush": 40,
     "defence_magic": 600,
     "defence_ranged": 600,
+    "attributes": [],
     "attack_style": "Slash, Ranged, Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -3738,6 +4051,10 @@
     "defence_crush": 188,
     "defence_magic": 101,
     "defence_ranged": 231,
+    "attributes": [
+      "undead",
+      "spectral"
+    ],
     "attack_style": "Ranged, Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -3762,6 +4079,7 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [],
     "attack_style": "Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -3786,6 +4104,7 @@
     "defence_crush": 10,
     "defence_magic": 150,
     "defence_ranged": 300,
+    "attributes": [],
     "attack_style": "Melee, Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -3810,6 +4129,7 @@
     "defence_crush": 284,
     "defence_magic": 44,
     "defence_ranged": 284,
+    "attributes": [],
     "attack_style": "Stab",
     "aggressive": "Yes",
     "poisonous": "Yes (20)",
@@ -3834,6 +4154,9 @@
     "defence_crush": 20,
     "defence_magic": 10,
     "defence_ranged": 20,
+    "attributes": [
+      "rat"
+    ],
     "attack_style": "Magic, Ranged, Melee",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -3859,6 +4182,9 @@
     "defence_crush": 20,
     "defence_magic": 10,
     "defence_ranged": 20,
+    "attributes": [
+      "rat"
+    ],
     "attack_style": "Magic, Ranged, Melee",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -3884,6 +4210,7 @@
     "defence_crush": 40,
     "defence_magic": 40,
     "defence_ranged": 0,
+    "attributes": [],
     "attack_style": "Crush, Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -3908,6 +4235,9 @@
     "defence_crush": 40,
     "defence_magic": 100,
     "defence_ranged": null,
+    "attributes": [
+      ""
+    ],
     "attack_style": "Melee, Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -3932,6 +4262,7 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [],
     "attack_style": "Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -3956,6 +4287,7 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [],
     "attack_style": "Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -3980,6 +4312,7 @@
     "defence_crush": 45,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [],
     "attack_style": "Slash",
     "aggressive": "No",
     "poisonous": "No",
@@ -4004,6 +4337,9 @@
     "defence_crush": 80,
     "defence_magic": 80,
     "defence_ranged": null,
+    "attributes": [
+      "demon"
+    ],
     "attack_style": "Stab, Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -4028,6 +4364,7 @@
     "defence_crush": 5,
     "defence_magic": 5,
     "defence_ranged": 50,
+    "attributes": [],
     "attack_style": "Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -4052,6 +4389,9 @@
     "defence_crush": 30,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [
+      "undead"
+    ],
     "attack_style": "Ranged, Crush",
     "aggressive": "Yes",
     "poisonous": "Disease (15)",
@@ -4076,6 +4416,7 @@
     "defence_crush": 30,
     "defence_magic": 99,
     "defence_ranged": 99,
+    "attributes": [],
     "attack_style": "Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -4100,6 +4441,7 @@
     "defence_crush": 30,
     "defence_magic": 750,
     "defence_ranged": 825,
+    "attributes": [],
     "attack_style": "Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -4124,6 +4466,7 @@
     "defence_crush": 30,
     "defence_magic": 10,
     "defence_ranged": 120,
+    "attributes": [],
     "attack_style": "Crush, Magic",
     "aggressive": "No",
     "poisonous": "No",
@@ -4149,6 +4492,7 @@
     "defence_crush": 70,
     "defence_magic": 30,
     "defence_ranged": 150,
+    "attributes": [],
     "attack_style": "Crush, Magic",
     "aggressive": "No",
     "poisonous": "No",
@@ -4174,6 +4518,7 @@
     "defence_crush": 70,
     "defence_magic": 30,
     "defence_ranged": 150,
+    "attributes": [],
     "attack_style": "Crush, Magic",
     "aggressive": "No",
     "poisonous": "No",
@@ -4199,6 +4544,7 @@
     "defence_crush": 10,
     "defence_magic": 205,
     "defence_ranged": 103,
+    "attributes": [],
     "attack_style": "Stab, Magic, Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -4223,6 +4569,9 @@
     "defence_crush": 180,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [
+      "xerician"
+    ],
     "attack_style": "Stab, Slash, Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -4248,6 +4597,9 @@
     "defence_crush": 180,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [
+      "xerician"
+    ],
     "attack_style": "Stab, Slash, Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -4273,6 +4625,9 @@
     "defence_crush": 105,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [
+      "xerician"
+    ],
     "attack_style": "Stab, Slash, Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -4298,6 +4653,9 @@
     "defence_crush": 105,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [
+      "xerician"
+    ],
     "attack_style": "Stab, Slash, Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -4323,6 +4681,9 @@
     "defence_crush": 100,
     "defence_magic": 500,
     "defence_ranged": 500,
+    "attributes": [
+      "undead"
+    ],
     "attack_style": "Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -4347,6 +4708,7 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [],
     "attack_style": "Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -4371,6 +4733,9 @@
     "defence_crush": 0,
     "defence_magic": 200,
     "defence_ranged": null,
+    "attributes": [
+      "dragon"
+    ],
     "attack_style": "Melee, Magic, Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -4396,6 +4761,9 @@
     "defence_crush": 0,
     "defence_magic": 200,
     "defence_ranged": null,
+    "attributes": [
+      "dragon"
+    ],
     "attack_style": "Melee, Magic, Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -4421,6 +4789,9 @@
     "defence_crush": 0,
     "defence_magic": 200,
     "defence_ranged": null,
+    "attributes": [
+      "dragon"
+    ],
     "attack_style": "Melee, Magic, Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -4446,6 +4817,7 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [],
     "attack_style": "Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -4470,6 +4842,7 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [],
     "attack_style": "Crush, Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -4494,6 +4867,7 @@
     "defence_crush": 230,
     "defence_magic": 280,
     "defence_ranged": null,
+    "attributes": [],
     "attack_style": "Melee, Ranged, Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -4519,6 +4893,7 @@
     "defence_crush": 230,
     "defence_magic": 280,
     "defence_ranged": null,
+    "attributes": [],
     "attack_style": "Melee, Ranged, Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -4544,6 +4919,7 @@
     "defence_crush": 180,
     "defence_magic": 220,
     "defence_ranged": null,
+    "attributes": [],
     "attack_style": "Melee, Ranged, Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -4569,6 +4945,7 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [],
     "attack_style": "Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -4594,6 +4971,7 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [],
     "attack_style": "Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -4619,6 +4997,7 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [],
     "attack_style": "Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -4644,6 +5023,7 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [],
     "attack_style": "Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -4669,6 +5049,7 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [],
     "attack_style": "Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -4694,6 +5075,7 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [],
     "attack_style": "Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -4719,6 +5101,7 @@
     "defence_crush": 150,
     "defence_magic": 30,
     "defence_ranged": 145,
+    "attributes": [],
     "attack_style": "Crush, Magic",
     "aggressive": "No",
     "poisonous": "No",
@@ -4743,6 +5126,7 @@
     "defence_crush": 40,
     "defence_magic": 600,
     "defence_ranged": 600,
+    "attributes": [],
     "attack_style": "Slash, Ranged, Magic",
     "aggressive": "No",
     "poisonous": "No",
@@ -4767,6 +5151,7 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [],
     "attack_style": "Crush",
     "aggressive": "No",
     "poisonous": "No",
@@ -4791,6 +5176,7 @@
     "defence_crush": 220,
     "defence_magic": 10,
     "defence_ranged": 300,
+    "attributes": [],
     "attack_style": "All",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -4816,6 +5202,7 @@
     "defence_crush": 220,
     "defence_magic": 10,
     "defence_ranged": 300,
+    "attributes": [],
     "attack_style": "All",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -4841,6 +5228,7 @@
     "defence_crush": 220,
     "defence_magic": 10,
     "defence_ranged": 300,
+    "attributes": [],
     "attack_style": "All",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -4866,6 +5254,7 @@
     "defence_crush": 9,
     "defence_magic": 800,
     "defence_ranged": 900,
+    "attributes": [],
     "attack_style": "Typeless Magical ranged",
     "aggressive": "No",
     "poisonous": "No",
@@ -4890,6 +5279,7 @@
     "defence_crush": 0,
     "defence_magic": 50,
     "defence_ranged": 50,
+    "attributes": [],
     "attack_style": "Slash, Ranged",
     "aggressive": "Yes",
     "poisonous": "Yes",
@@ -4914,6 +5304,9 @@
     "defence_crush": 222,
     "defence_magic": 0,
     "defence_ranged": null,
+    "attributes": [
+      "spectral"
+    ],
     "attack_style": "Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -4938,6 +5331,10 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [
+      "undead",
+      "spectral"
+    ],
     "attack_style": "Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -4962,6 +5359,10 @@
     "defence_crush": 5,
     "defence_magic": 5,
     "defence_ranged": 5,
+    "attributes": [
+      "spectral",
+      "undead"
+    ],
     "attack_style": "Ranged, Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -4986,6 +5387,7 @@
     "defence_crush": 70,
     "defence_magic": 30,
     "defence_ranged": 70,
+    "attributes": [],
     "attack_style": "Melee, Ranged, Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -5011,6 +5413,7 @@
     "defence_crush": 70,
     "defence_magic": 30,
     "defence_ranged": 70,
+    "attributes": [],
     "attack_style": "Melee, Ranged, Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -5036,6 +5439,7 @@
     "defence_crush": null,
     "defence_magic": null,
     "defence_ranged": null,
+    "attributes": [],
     "attack_style": "",
     "aggressive": null,
     "poisonous": "",
@@ -5061,6 +5465,7 @@
     "defence_crush": null,
     "defence_magic": null,
     "defence_ranged": null,
+    "attributes": [],
     "attack_style": "",
     "aggressive": null,
     "poisonous": "",
@@ -5086,6 +5491,7 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [],
     "attack_style": "Stab, Magic, Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -5110,6 +5516,9 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [
+      "undead"
+    ],
     "attack_style": "Slash",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -5134,6 +5543,9 @@
     "defence_crush": 400,
     "defence_magic": 110,
     "defence_ranged": 50,
+    "attributes": [
+      "xerician"
+    ],
     "attack_style": "Magic",
     "aggressive": null,
     "poisonous": "No",
@@ -5159,6 +5571,9 @@
     "defence_crush": null,
     "defence_magic": null,
     "defence_ranged": null,
+    "attributes": [
+      "xerician"
+    ],
     "attack_style": "Magic",
     "aggressive": null,
     "poisonous": "No",
@@ -5184,6 +5599,9 @@
     "defence_crush": 150,
     "defence_magic": 20,
     "defence_ranged": 400,
+    "attributes": [
+      "xerician"
+    ],
     "attack_style": "Melee",
     "aggressive": null,
     "poisonous": "No",
@@ -5209,6 +5627,9 @@
     "defence_crush": 150,
     "defence_magic": 20,
     "defence_ranged": 400,
+    "attributes": [
+      "xerician"
+    ],
     "attack_style": "Melee",
     "aggressive": null,
     "poisonous": "No",
@@ -5234,6 +5655,9 @@
     "defence_crush": 1,
     "defence_magic": 1,
     "defence_ranged": null,
+    "attributes": [
+      "xerician"
+    ],
     "attack_style": "None",
     "aggressive": null,
     "poisonous": "No",
@@ -5259,6 +5683,9 @@
     "defence_crush": 100,
     "defence_magic": 400,
     "defence_ranged": 300,
+    "attributes": [
+      "xerician"
+    ],
     "attack_style": "Ranged",
     "aggressive": null,
     "poisonous": "No",
@@ -5284,6 +5711,9 @@
     "defence_crush": 100,
     "defence_magic": 400,
     "defence_ranged": 300,
+    "attributes": [
+      "xerician"
+    ],
     "attack_style": "Ranged",
     "aggressive": null,
     "poisonous": "No",
@@ -5309,6 +5739,7 @@
     "defence_crush": null,
     "defence_magic": null,
     "defence_ranged": null,
+    "attributes": [],
     "attack_style": "",
     "aggressive": null,
     "poisonous": "",
@@ -5334,6 +5765,7 @@
     "defence_crush": null,
     "defence_magic": null,
     "defence_ranged": null,
+    "attributes": [],
     "attack_style": "",
     "aggressive": null,
     "poisonous": "",
@@ -5359,6 +5791,7 @@
     "defence_crush": null,
     "defence_magic": null,
     "defence_ranged": null,
+    "attributes": [],
     "attack_style": "",
     "aggressive": null,
     "poisonous": "",
@@ -5384,6 +5817,9 @@
     "defence_crush": 40,
     "defence_magic": 400,
     "defence_ranged": null,
+    "attributes": [
+      "xerician"
+    ],
     "attack_style": "Magic, Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -5409,6 +5845,9 @@
     "defence_crush": 40,
     "defence_magic": 400,
     "defence_ranged": null,
+    "attributes": [
+      "xerician"
+    ],
     "attack_style": "Magic, Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -5434,6 +5873,7 @@
     "defence_crush": 10,
     "defence_magic": 300,
     "defence_ranged": 150,
+    "attributes": [],
     "attack_style": "Stab, Magic, Ranged",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -5458,6 +5898,9 @@
     "defence_crush": 221,
     "defence_magic": 0,
     "defence_ranged": 225,
+    "attributes": [
+      "spectral"
+    ],
     "attack_style": "Stab",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -5482,6 +5925,7 @@
     "defence_crush": 10,
     "defence_magic": 10,
     "defence_ranged": 10,
+    "attributes": [],
     "attack_style": "Magic",
     "aggressive": null,
     "poisonous": "No",
@@ -5507,6 +5951,7 @@
     "defence_crush": 40,
     "defence_magic": 40,
     "defence_ranged": 180,
+    "attributes": [],
     "attack_style": "Crush, Magic, Ranged",
     "aggressive": null,
     "poisonous": "No",
@@ -5532,6 +5977,7 @@
     "defence_crush": 30,
     "defence_magic": 60,
     "defence_ranged": 100,
+    "attributes": [],
     "attack_style": "Typeless Crush, Magic, Ranged",
     "aggressive": null,
     "poisonous": "No",
@@ -5557,6 +6003,10 @@
     "defence_crush": 0,
     "defence_magic": 70,
     "defence_ranged": null,
+    "attributes": [
+      "xerician",
+      "flying"
+    ],
     "attack_style": "Ranged <br/> Typeless",
     "aggressive": "No",
     "poisonous": "Yes (20)",
@@ -5582,6 +6032,10 @@
     "defence_crush": 0,
     "defence_magic": 70,
     "defence_ranged": null,
+    "attributes": [
+      "xerician",
+      "flying"
+    ],
     "attack_style": "Ranged <br/> Typeless",
     "aggressive": "No",
     "poisonous": "Yes (20)",
@@ -5607,6 +6061,9 @@
     "defence_crush": 10,
     "defence_magic": 250,
     "defence_ranged": 270,
+    "attributes": [
+      "undead"
+    ],
     "attack_style": "Slash, Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -5632,6 +6089,9 @@
     "defence_crush": 10,
     "defence_magic": 250,
     "defence_ranged": 270,
+    "attributes": [
+      "undead"
+    ],
     "attack_style": "Slash, Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -5657,6 +6117,11 @@
     "defence_crush": 126,
     "defence_magic": 204,
     "defence_ranged": 80,
+    "attributes": [
+      "dragon",
+      "undead",
+      "fiery"
+    ],
     "attack_style": "Slash, Magic, Ranged, Dragonfire",
     "aggressive": "No",
     "poisonous": "Yes (venom)",
@@ -5682,6 +6147,11 @@
     "defence_crush": 108,
     "defence_magic": 240,
     "defence_ranged": 26,
+    "attributes": [
+      "dragon",
+      "undead",
+      "fiery"
+    ],
     "attack_style": "Slash, Magic, Ranged, Dragonfire",
     "aggressive": "No",
     "poisonous": "Yes (venom)",
@@ -5707,6 +6177,9 @@
     "defence_crush": 300,
     "defence_magic": 300,
     "defence_ranged": 300,
+    "attributes": [
+      "golem"
+    ],
     "attack_style": "Crush",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -5731,6 +6204,7 @@
     "defence_crush": 180,
     "defence_magic": 260,
     "defence_ranged": 30,
+    "attributes": [],
     "attack_style": "Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -5755,6 +6229,7 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 100,
+    "attributes": [],
     "attack_style": "Typeless Ranged, Poison",
     "aggressive": "Yes",
     "poisonous": "Yes",
@@ -5779,6 +6254,9 @@
     "defence_crush": 333,
     "defence_magic": 30,
     "defence_ranged": null,
+    "attributes": [
+      "demon"
+    ],
     "attack_style": "Melee (Slash), Ranged, Magic",
     "aggressive": "Yes",
     "poisonous": "Yes (20)",
@@ -5804,6 +6282,9 @@
     "defence_crush": 449,
     "defence_magic": null,
     "defence_ranged": null,
+    "attributes": [
+      "demon"
+    ],
     "attack_style": "Melee (Slash), Ranged, Magic",
     "aggressive": "Yes",
     "poisonous": "Yes (20)",
@@ -5829,6 +6310,7 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [],
     "attack_style": "Various",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -5854,6 +6336,7 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": 0,
+    "attributes": [],
     "attack_style": "N/A",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -5879,6 +6362,9 @@
     "defence_crush": 260,
     "defence_magic": 200,
     "defence_ranged": 110,
+    "attributes": [
+      "|xpbonus1 = 62.5"
+    ],
     "attack_style": "Melee, Ranged, Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -5904,6 +6390,9 @@
     "defence_crush": 260,
     "defence_magic": 200,
     "defence_ranged": 110,
+    "attributes": [
+      "|xpbonus1 = 62.5"
+    ],
     "attack_style": "Melee, Ranged, Magic",
     "aggressive": "Yes",
     "poisonous": "No",
@@ -5929,6 +6418,7 @@
     "defence_crush": 0,
     "defence_magic": 0,
     "defence_ranged": null,
+    "attributes": [],
     "attack_style": "Typeless",
     "aggressive": "Yes",
     "poisonous": "Yes (venom)",
@@ -5954,6 +6444,7 @@
     "defence_crush": 0,
     "defence_magic": 45,
     "defence_ranged": null,
+    "attributes": [],
     "attack_style": "Ranged",
     "aggressive": "Yes",
     "poisonous": "Yes (venom)",
@@ -5979,6 +6470,7 @@
     "defence_crush": 0,
     "defence_magic": 300,
     "defence_ranged": null,
+    "attributes": [],
     "attack_style": "Magic, Ranged",
     "aggressive": "Yes",
     "poisonous": "Yes (venom)",

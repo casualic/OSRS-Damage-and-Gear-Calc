@@ -20,6 +20,7 @@ class Item {
         void parseItemJSON(const json& item);
 
     public:
+        Item() = default;
         Item(std::string n);
         Item(int id);
         

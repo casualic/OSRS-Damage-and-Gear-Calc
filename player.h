@@ -19,6 +19,9 @@ public:
     // WikiSync & Gear
     void fetchGearFromClient(); // Connects to WikiSync and saves wikisync_data.json
     void loadGearStats(const std::string& itemDbPath); // Loads IDs from json and fetches stats
+    void loadGearStats(const json& itemDb); // Overload for pre-loaded DB
+    void equip(const std::string& slot, const Item& item);
+    void unequip(const std::string& slot);
     
     // Combat
     int getEffectiveStat(const std::string& stat); // Base stat + gear bonuses

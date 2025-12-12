@@ -39,6 +39,14 @@ void Monster::loadFromJSON(const std::string &filepath){
                 stats_str_[key] = value.get<std::string>();
             } else if (value.is_boolean()){
                 stats_bool_[key] = value.get<bool>();
+            } else if (key == "attributes" && value.is_array()) {
+                // Parse attributes array
+                attributes_.clear();
+                for (const auto& attr : value) {
+                    if (attr.is_string()) {
+                        attributes_.push_back(attr.get<std::string>());
+                    }
+                }
             }
         }
     };
@@ -72,4 +80,12 @@ void Monster::loadFromJSON(const std::string &filepath){
             }
         }
     }
+}
+
+bool Monster::hasAttribute(const std::string& attr) const {
+    for (const auto& a : attributes_) {
+        // Case insensitive comparison? For now assume exact or standard lowercase
+        if (a == attr) return true;
+    }
+    return false;
 }
