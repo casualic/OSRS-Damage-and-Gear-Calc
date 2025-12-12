@@ -1,0 +1,78 @@
+=== OSRS DPS Calculator ===
+[0/6] Loading Databases...
+      Loading items-complete.json... Done (28747 items)
+      Loading latest_prices.json... Done
+[1/6] Initializing Player 'WolpiXD'...
+[2/6] Fetching Skills from HiScores...
+      Attack: 92 | Strength: 92
+[3/6] Fetching Gear from WikiSync...
+Connected to WikiSync on port 37767
+Sending: {"type":"REQUEST_PLAYER_DATA"}
+Sending: {"type":"GET_PLAYER"}
+Sending: {"type":"EQUIPMENT"}
+Sending: {"action":"get_equipment"}
+Sending: {"_wsType":"GetPlayer"}
+Listening for responses...
+✓ Found Player Data! Saving to file...
+Saved to wikisync_data.json
+      Loading Gear Stats from DB...
+Loaded Honourable blessing (ID: 20229) into slot ammo
+Loaded Mixed hide top (ID: 29280) into slot body
+Loaded Fire cape (ID: 6570) into slot cape
+Loaded Dragon boots (ID: 11840) into slot feet
+Loaded Barrows gloves (ID: 7462) into slot hands
+Loaded Neitiznot faceguard (ID: 24271) into slot head
+Loaded Mixed hide legs (ID: 29283) into slot legs
+Loaded Salve amulet(ei) (ID: 12018) into slot neck
+Loaded Berserker ring (i) (ID: 11773) into slot ring
+Loaded Dragon defender (ID: 12954) into slot shield
+Loaded Osmumten's fang (ID: 26219) into slot weapon
+[4/6] Initializing Monster 'Vorkath'...
+      Not found in standard DB, checking bosses DB...
+Loaded stats for 'Vorkath (Dragon Slayer II)' from bosses_complete.json
+      Found Vorkath with 460 HP.
+[5/6] Starting Battle Simulation...
+
+--- Optimizing Attack Style ---
+>>> Selected Best: stab (Aggressive (+3 Str)) | DPS: 5.38822
+
+=== Battle Simulation (10000 runs) ===
+Player: 1876
+Target: Vorkath (Dragon Slayer II) (HP: 460)
+Combat Style: stab | Attack Speed: 5 ticks
+Max Hit: 40
+Hit Chance: 80.8234%
+Avg TTK: 87.3081s (145.513 ticks)
+DPS: 5.2687
+=======================================
+
+--- DEBUG: Salve Amulet (ei) Check ---
+Equipped: Salve amulet(ei)
+Base DPS (Fury?): 5.38822
+Salve (ei) DPS:   5.38822
+-> Salve is WORSE/SAME
+
+[6/6] Generating Next Best Item Suggestions...
+Calculating upgrades... (Current DPS: 5.38822)
+Scanning items: 1000/28747Scanning items: 2000/28747Scanning items: 3000/28747Scanning items: 4000/28747Scanning items: 5000/28747Scanning items: 6000/28747Scanning items: 7000/28747Scanning items: 8000/28747Scanning items: 9000/28747Scanning items: 10000/28747Scanning items: 11000/28747Scanning items: 12000/28747Scanning items: 13000/28747Scanning items: 14000/28747Scanning items: 15000/28747Scanning items: 16000/28747Scanning items: 17000/28747Scanning items: 18000/28747Scanning items: 19000/28747Scanning items: 20000/28747Scanning items: 21000/28747Scanning items: 22000/28747Scanning items: 23000/28747Scanning items: 24000/28747Scanning items: 25000/28747Scanning items: 26000/28747Scanning items: 27000/28747Scanning items: 28000/28747Scanning items: Done! Candidates found: 1025       
+Analyzing single upgrades...
+Filtered Candidates for Duo Analysis: 2 (from 1025)
+Analyzing duo upgrades...
+
+=== Top 10 SINGLE Upgrades (Efficiency) ===
+Item Name                                          | Slot                 | Price      | +DPS       | DPS/1M GP
+-------------------------------------------------------------------------------------------------------------------
+Avernic defender                                   | shield               | 45036816   | 0.058      | 0.001
+Primordial boots                                   | feet                 | 24977106   | 0.024      | 0.001
+
+=== Top 10 DUO Upgrades (Efficiency) ===
+Item Name                                          | Slot                 | Price      | +DPS       | DPS/1M GP
+-------------------------------------------------------------------------------------------------------------------
+Primordial boots + Avernic defender                | feet+shield          | 70013922   | 0.080      | 0.001
+
+=== Top 10 SINGLE Upgrades (Max DPS) ===
+Avernic defender                                   | shield               | 45036816   | 0.058      | 0.001
+Primordial boots                                   | feet                 | 24977106   | 0.024      | 0.001
+
+=== Top 10 DUO Upgrades (Max DPS) ===
+Primordial boots + Avernic defender                | feet+shield          | 70013922   | 0.080      | 0.001

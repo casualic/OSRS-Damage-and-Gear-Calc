@@ -5,13 +5,22 @@
             "name": "C++ Debug",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${fileDirname}/${fileBasenameNoExtension}",  // Changed this
+            "program": "${workspaceFolder}/main",  // Changed this
             "args": [],
             "stopAtEntry": false,// note that this will always stop at entry, change to false if only to stop at breakpoints
-            "cwd": "${fileDirname}",
+            "cwd": "${workspaceFolder}",
             "environment": [],
             "console":"integratedTerminal",
             "MIMode": "lldb",
+            "preLaunchTask": "build"
+        },
+        {
+            "name": "C++ Debug (Cursor)",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/main",
+            "args": [],
+            "cwd": "${workspaceFolder}",
             "preLaunchTask": "build"
         }
     ]
