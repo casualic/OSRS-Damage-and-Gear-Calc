@@ -2,7 +2,7 @@
 
 This plan addresses the requirements to move WikiSync logic to the Player class, implement gear stats, and create a Battle simulator.
 
-## 1. Refactor Item Class (`item.h`, `item.cpp`)
+## 1. Refactor Item Class (`item.h`, `item.cpp`) [COMPLETED]
 
 -   **Goal**: Add ID-based lookup functionality while preserving existing name-based lookup.
 -   **Changes**:
@@ -13,7 +13,7 @@ This plan addresses the requirements to move WikiSync logic to the Player class,
         -   If `id` is invalid but `name` is set: Iterate JSON to find matching name (O(N)) (preserve existing behavior).
     -   Ensure methods exist to retrieve specific combat stats (Slash Bonus, Melee Strength, etc.).
 
-## 2. Refactor Player Class (`player.h`, `player.cpp`)
+## 2. Refactor Player Class (`player.h`, `player.cpp`) [COMPLETED]
 
 -   **Goal**: Integrate WikiSync networking and gear management to modify player stats.
 -   **Changes**:
@@ -32,7 +32,7 @@ This plan addresses the requirements to move WikiSync logic to the Player class,
         -   Iterate through `gear` and add relevant bonuses (e.g., `item.getInt("strength_bonus")`).
         -   Return total.
 
-## 3. Create Battle Class (`battle.h`, `battle.cpp`)
+## 3. Create Battle Class (`battle.h`, `battle.cpp`) [COMPLETED]
 
 -   **Goal**: Encapsulate combat formulas and simulation loop.
 -   **Structure**:
@@ -43,7 +43,7 @@ This plan addresses the requirements to move WikiSync logic to the Player class,
         -   `simulate()`: Runs the fight loop (ticks) until monster dies. Returns ticks/time taken.
         -   `runSimulations(int n)`: Runs `n` fights and returns average TTK.
 
-## 4. Main Integration (`main.cpp`)
+## 4. Main Integration (`main.cpp`) [COMPLETED]
 
 -   **Goal**: Execute the full flow.
 -   **Flow**:
@@ -54,6 +54,7 @@ This plan addresses the requirements to move WikiSync logic to the Player class,
     5.  Initialize `Battle` with player and monster.
     6.  Run simulation and print TTK.
 
-## 5. Cleanup
+## 5. Cleanup [COMPLETED]
 
 -   Remove the standalone combat functions and WikiSync logic from `main.cpp`.
+-   Verified clean compilation and execution.

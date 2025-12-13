@@ -1,6 +1,8 @@
 #pragma once
 #include <iostream>
 #include <map>
+#include <variant>
+#include <vector>
 
 using MonsterValue = std::variant<std::string, int, double, bool>;
 
