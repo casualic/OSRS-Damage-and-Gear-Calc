@@ -31,10 +31,10 @@ fi
 
 # Copy data files
 echo "[3/3] Copying data files..."
-cp items-complete.json web/data/ 2>/dev/null || echo "  Warning: items-complete.json not found"
-cp monsters-nodrops.json web/data/ 2>/dev/null || echo "  Warning: monsters-nodrops.json not found"
-cp bosses_complete.json web/data/ 2>/dev/null || echo "  Warning: bosses_complete.json not found"
-cp latest_prices.json web/data/ 2>/dev/null || echo "  Warning: latest_prices.json not found"
+cp data/items-complete.json web/data/ 2>/dev/null || echo "  Warning: items-complete.json not found"
+cp data/monsters-nodrops.json web/data/ 2>/dev/null || echo "  Warning: monsters-nodrops.json not found"
+cp data/bosses_complete.json web/data/ 2>/dev/null || echo "  Warning: bosses_complete.json not found"
+cp data/latest_prices.json web/data/ 2>/dev/null || echo "  Warning: latest_prices.json not found"
 
 echo ""
 echo "=== Build Complete! ==="
