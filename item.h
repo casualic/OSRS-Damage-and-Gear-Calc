@@ -10,11 +10,10 @@ class Item {
     private:
         int id_ {-1};
         std::string name_;
-        std::map<std::string, int> stats_;
         std::map<std::string, int> stats_int_;
         std::map<std::string, std::string> stats_str_;
         std::map<std::string, bool> stats_bool_;
-        int price_;
+        int price_ {0};
         
         // Helper to parse stats from a JSON object
         void parseItemJSON(const json& item);
@@ -24,26 +23,36 @@ class Item {
         Item(std::string n);
         Item(int id);
         
-        int fetchPrice();
         void fetchStats(const std::string &filepath);
-        void fetchStats(int id, const json& allItems); // New overload
+        void fetchStats(int id, const json& allItems);
         
+        // Setters for WASM
+        void setInt(const std::string& key, int value) { stats_int_[key] = value; }
+        void setStr(const std::string& key, const std::string& value) { stats_str_[key] = value; }
+        void setBool(const std::string& key, bool value) { stats_bool_[key] = value; }
+        void setName(const std::string& n) { name_ = n; }
+        void setID(int id) { id_ = id; }
+        void setPrice(int price) { price_ = price; }
+        
+        // Getters
         int getPrice() const { return price_; }
         int getID() const { return id_; }
         std::string getName() const { return name_; }
 
-        int getInt(std::string key) { 
-            if (stats_int_.find(key) != stats_int_.end()) return stats_int_[key];
-            return 0;
+        int getInt(const std::string& key) const { 
+            auto it = stats_int_.find(key);
+            return (it != stats_int_.end()) ? it->second : 0;
         }
-        bool getBool(std::string key) { 
-            if (stats_bool_.find(key) != stats_bool_.end()) return stats_bool_[key];
-            return false;
+        bool getBool(const std::string& key) const { 
+            auto it = stats_bool_.find(key);
+            return (it != stats_bool_.end()) ? it->second : false;
         }
-        std::string getStr(std::string key) { 
-            if (stats_str_.find(key) != stats_str_.end()) return stats_str_[key];
-            return "";
+        std::string getStr(const std::string& key) const { 
+            auto it = stats_str_.find(key);
+            return (it != stats_str_.end()) ? it->second : "";
         }
         
-        // Removed fetchGear() as it's now in Player
+#ifndef __EMSCRIPTEN__
+        int fetchPrice();
+#endif
 };
