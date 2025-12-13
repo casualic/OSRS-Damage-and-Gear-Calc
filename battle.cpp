@@ -115,17 +115,27 @@ void Battle::determineStyle() {
 int Battle::effectiveStrength() {
     if (isRanged_) {
         // ((Ranged + Boost) * Prayer + 8 + Style)
-        int rng = player_.getEffectiveStat("Ranged");
+        int rng = player_.getBoostedLevel("Ranged");
+        
+        // Apply Prayer (Rigour gives +23% Ranged Str)
+        if (player_.isRigourActive()) {
+            rng = static_cast<int>(rng * 1.23);
+        }
+        
         int str = rng + 8 + stance_bonus_strength_;
         
         // Void Range logic if needed (usually 10% or 12.5% for Elite)
-        // Not implemented in Remote's snippet for Melee either (Remote had Melee Void).
         // I'll leave Ranged Void for now as not explicitly in conflicts.
         return str;
     }
 
     // ((Strength + Boost) * Prayer + 8 + Style)
-    int str = player_.getEffectiveStat("Strength"); 
+    int str = player_.getBoostedLevel("Strength");
+    
+    // Apply Prayer (Piety gives +23% Strength)
+    if (player_.isPietyActive()) {
+        str = static_cast<int>(str * 1.23);
+    }
     
     // Void Melee
     if (activeSet_ == "Void Melee" || activeSet_ == "Elite Void Melee") {
@@ -137,12 +147,23 @@ int Battle::effectiveStrength() {
 
 int Battle::effectiveAttack() {
     if (isRanged_) {
-        int rng = player_.getEffectiveStat("Ranged");
+        int rng = player_.getBoostedLevel("Ranged");
+        
+        // Apply Prayer (Rigour gives +20% Ranged Attack)
+        if (player_.isRigourActive()) {
+            rng = static_cast<int>(rng * 1.20);
+        }
+        
         // Void Range could apply here too
         return rng + 8 + stance_bonus_attack_;
     }
 
-    int att = player_.getEffectiveStat("Attack");
+    int att = player_.getBoostedLevel("Attack");
+    
+    // Apply Prayer (Piety gives +20% Attack)
+    if (player_.isPietyActive()) {
+        att = static_cast<int>(att * 1.20);
+    }
     
     // Void Melee
     if (activeSet_ == "Void Melee" || activeSet_ == "Elite Void Melee") {

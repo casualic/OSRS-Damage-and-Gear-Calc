@@ -144,6 +144,36 @@ function initializeUI() {
     
     // Modal item search
     document.getElementById('modal-item-search').addEventListener('input', (e) => searchItemsForSlot(e.target.value));
+
+    // Buffs - Initialize and Add Listeners
+    const pietyCb = document.getElementById('prayer-piety');
+    const rigourCb = document.getElementById('prayer-rigour');
+    const scCb = document.getElementById('potion-super-combat');
+    
+    // Reset to unchecked on load to match default player state
+    if (pietyCb) pietyCb.checked = false;
+    if (rigourCb) rigourCb.checked = false;
+    if (scCb) scCb.checked = false;
+
+    if (pietyCb) pietyCb.addEventListener('change', (e) => updateBuff('piety', e.target.checked));
+    if (rigourCb) rigourCb.addEventListener('change', (e) => updateBuff('rigour', e.target.checked));
+    if (scCb) scCb.addEventListener('change', (e) => updateBuff('superCombat', e.target.checked));
+}
+
+// Update buff status
+function updateBuff(buff, active) {
+    if (!state.player) return;
+    
+    try {
+        if (buff === 'piety') state.player.setPiety(active);
+        else if (buff === 'rigour') state.player.setRigour(active);
+        else if (buff === 'superCombat') state.player.setSuperCombat(active);
+        
+        // If super combat is toggled, it affects internal calculations but not the displayed base stat
+        // We could trigger a recalc if we wanted live updates
+    } catch (e) {
+        console.error('Error updating buff:', e);
+    }
 }
 
 // Update player stat
