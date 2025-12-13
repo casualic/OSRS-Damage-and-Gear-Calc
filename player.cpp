@@ -1,27 +1,25 @@
-#include <iostream>
-// #include <math>
+// player.cpp
 #include "player.h"
-#include <format>
-// #include "httplib.h"
-#define CPPHTTPLIB_OPENSSL_SUPPORT
-// #include "cpp-httplib/httplib.h"
-#include <curl/curl.h>
-#include <map>
 #include <sstream>
 #include <vector>
-#include <regex>
 #include <fstream>
+#include <iostream>
+
+#ifndef __EMSCRIPTEN__
+#include <format>
+#include <curl/curl.h>
+#include <regex>
 #include <thread>
 #include <chrono>
-
 #include <boost/beast/core.hpp>
 #include <boost/beast/websocket.hpp>
 #include <boost/asio/connect.hpp>
 #include <boost/asio/ip/tcp.hpp>
+#endif
+
 #include "json.hpp"
 
 using json = nlohmann::json;
-
 
 std::string skills[24] {
     "Overall", "Attack", "Defence", "Strength", "Hitpoints", "Ranged",
@@ -30,11 +28,8 @@ std::string skills[24] {
     "Thieving", "Slayer", "Farming", "Runecraft", "Hunter", "Construction"
 };
 
-// Correct
 std::map<std::string, int> parseCSV(std::string csv_str) {
-
-    std::map<std::string, int> res{{"test", 1}};
-
+    std::map<std::string, int> res;
     std::stringstream ss(csv_str);
     std::string line;
     int i = 0;
@@ -43,24 +38,165 @@ std::map<std::string, int> parseCSV(std::string csv_str) {
         std::stringstream line_ss(line);
         std::string skip, level;
         
-        std::getline(line_ss, skip, ',');   // skip rank
-        std::getline(line_ss, level, ',');  // get level
+        std::getline(line_ss, skip, ',');
+        std::getline(line_ss, level, ',');
         
-        res[skills[i]] = std::stoi(level);
+        try {
+            res[skills[i]] = std::stoi(level);
+        } catch (...) {
+            res[skills[i]] = 1;
+        }
         i++;
-    };
+    }
 
     return res;
 }
 
+Player::Player(std::string n) : username(std::move(n)) {
+    // Initialize default stats
+    for (const auto& skill : skills) {
+        stats_[skill] = 1;
+    }
+    currentHP_ = 99;
+    maxHP_ = 99;
+}
+
+void Player::parseStats(std::string raw_stats_response) {
+    auto parsed = parseCSV(raw_stats_response);
+    for (const auto& [key, value] : parsed) {
+        stats_[key] = value;
+    }
+    if (stats_.count("Hitpoints")) {
+        maxHP_ = stats_["Hitpoints"];
+        currentHP_ = maxHP_;
+    }
+}
+
+void Player::equip(const std::string& slot, const Item& item) {
+    gear_[slot] = item;
+}
+
+void Player::unequip(const std::string& slot) {
+    gear_.erase(slot);
+}
+
+Item Player::getEquippedItem(const std::string& slot) const {
+    auto it = gear_.find(slot);
+    if (it != gear_.end()) {
+        return it->second;
+    }
+    return Item();
+}
+
+bool Player::hasEquipped(const std::string& itemName) const {
+    for (const auto& [slot, item] : gear_) {
+        if (item.getName() == itemName) return true;
+    }
+    return false;
+}
+
+int Player::getEffectiveStat(const std::string& stat) {
+    if (stats_.count(stat)) {
+        return stats_.at(stat);
+    }
+    return 1;
+}
+
+int Player::getEquipmentBonus(const std::string& bonus) {
+    int total = 0;
+    for (auto& [slot, item] : gear_) {
+        total += item.getInt(bonus);
+    }
+    return total;
+}
+
+std::string Player::getActiveSet() {
+    bool hasHead = gear_.count("head");
+    bool hasBody = gear_.count("body");
+    bool hasLegs = gear_.count("legs");
+    bool hasHands = gear_.count("hands");
+    
+    if (!hasHead || !hasBody || !hasLegs) return "";
+    
+    std::string head = gear_.at("head").getName();
+    std::string body = gear_.at("body").getName();
+    std::string legs = gear_.at("legs").getName();
+    std::string hands = hasHands ? gear_.at("hands").getName() : "";
+    
+    // Check Void
+    if (hasHands && hands.find("Void knight gloves") != std::string::npos) {
+        bool isEliteTop = body.find("Elite void top") != std::string::npos;
+        bool isEliteLegs = legs.find("Elite void robe") != std::string::npos;
+        bool isVoidTop = body.find("Void knight top") != std::string::npos;
+        bool isVoidLegs = legs.find("Void knight robe") != std::string::npos;
+        
+        if ((isVoidTop || isEliteTop) && (isVoidLegs || isEliteLegs)) {
+            bool isElite = isEliteTop && isEliteLegs;
+            
+            if (head.find("Void melee helm") != std::string::npos) {
+                return isElite ? "Elite Void Melee" : "Void Melee";
+            }
+            if (head.find("Void ranger helm") != std::string::npos) {
+                return isElite ? "Elite Void Range" : "Void Range";
+            }
+            if (head.find("Void mage helm") != std::string::npos) {
+                return isElite ? "Elite Void Mage" : "Void Mage";
+            }
+        }
+    }
+    
+    // Check Crystal
+    if (head.find("Crystal helm") != std::string::npos &&
+        body.find("Crystal body") != std::string::npos &&
+        legs.find("Crystal legs") != std::string::npos) {
+        return "Crystal";
+    }
+    
+    // Check Inquisitor
+    if (head.find("Inquisitor's great helm") != std::string::npos &&
+        body.find("Inquisitor's hauberk") != std::string::npos &&
+        legs.find("Inquisitor's plateskirt") != std::string::npos) {
+        return "Inquisitor";
+    }
+    
+    // Check Obsidian
+    if (head.find("Obsidian helmet") != std::string::npos &&
+        body.find("Obsidian platebody") != std::string::npos &&
+        legs.find("Obsidian platelegs") != std::string::npos) {
+        return "Obsidian";
+    }
+    
+    // Check Dharok
+    bool hasWeapon = gear_.count("weapon");
+    if (hasWeapon) {
+        std::string weapon = gear_.at("weapon").getName();
+        if (head.find("Dharok's helm") != std::string::npos &&
+            body.find("Dharok's platebody") != std::string::npos &&
+            legs.find("Dharok's platelegs") != std::string::npos &&
+            weapon.find("Dharok's greataxe") != std::string::npos) {
+            return "Dharok";
+        }
+    }
+    
+    return "";
+}
+
+int Player::countCrystalPieces() {
+    int count = 0;
+    if (gear_.count("head") && gear_.at("head").getName().find("Crystal helm") != std::string::npos) count++;
+    if (gear_.count("body") && gear_.at("body").getName().find("Crystal body") != std::string::npos) count++;
+    if (gear_.count("legs") && gear_.at("legs").getName().find("Crystal legs") != std::string::npos) count++;
+    return count;
+}
+
+#ifndef __EMSCRIPTEN__
+// Native-only implementations
 
 size_t WriteCallback(void* contents, size_t size, size_t nmemb, std::string* output) {
     output->append((char*)contents, size * nmemb);
     return size * nmemb;
 }
 
-
-Player::Player(std::string n) : username(std::move(n)) {}
 std::string Player::fetchStats() {
     CURL* curl = curl_easy_init();
     std::string response;
@@ -71,23 +207,14 @@ std::string Player::fetchStats() {
         curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
-
-        // Getting Header Data as well
-        curl_easy_setopt(curl,CURLOPT_HEADERFUNCTION, WriteCallback);
-        curl_easy_setopt(curl,CURLOPT_HEADERDATA, &headers);
+        curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, WriteCallback);
+        curl_easy_setopt(curl, CURLOPT_HEADERDATA, &headers);
         
         curl_easy_perform(curl);
         curl_easy_cleanup(curl);
-        
-        // std::cout << response << std::endl;
     }
     return response;
 }
-
-void Player::parseStats(std::string raw_stats_response){
-    stats_ = parseCSV(raw_stats_response);
-}
-
 
 void Player::fetchGearFromClient() {
     namespace beast = boost::beast;
@@ -100,7 +227,6 @@ void Player::fetchGearFromClient() {
     tcp::resolver resolver{ioc};
     websocket::stream<tcp::socket> ws{ioc};
 
-    // 1. Port Loop
     bool connected = false;
     for (int port = 37767; port <= 37776; ++port) {
         try {
@@ -110,7 +236,7 @@ void Player::fetchGearFromClient() {
             std::cout << "Connected to WikiSync on port " << port << std::endl;
             break; 
         } catch (...) {
-            continue; // Try next port
+            continue;
         }
     }
 
@@ -119,17 +245,15 @@ void Player::fetchGearFromClient() {
         return;
     }
 
-    // 2. Handshake with Headers
     ws.set_option(websocket::stream_base::decorator(
         [](websocket::request_type& req) {
             req.set(http::field::origin, "https://tools.runescape.wiki");
-            req.set(http::field::user_agent, "Mozilla/5.0 ...");
+            req.set(http::field::user_agent, "Mozilla/5.0");
         }
     ));
 
     ws.handshake("localhost", "/");
 
-    // 3. Send Discovery Requests
     std::vector<std::string> requests = {
         "{\"type\":\"REQUEST_PLAYER_DATA\"}", 
         "{\"type\":\"GET_PLAYER\"}",
@@ -144,7 +268,6 @@ void Player::fetchGearFromClient() {
         std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }
 
-    // 4. Listen for Responses
     beast::flat_buffer buffer;
     std::cout << "Listening for responses..." << std::endl;
     
@@ -156,17 +279,14 @@ void Player::fetchGearFromClient() {
             ws.read(buffer);
             std::string received = beast::buffers_to_string(buffer.data());
             
-            // Check for player data
             if (received.find("\"_wsType\":\"GetPlayer\"") != std::string::npos || 
                 received.find("\"_wsType\": \"GetPlayer\"") != std::string::npos) {
                 
-                std::cout << "✓ Found Player Data! Saving to file..." << std::endl;
+                std::cout << "Found Player Data! Saving to file..." << std::endl;
                 std::ofstream outfile("wikisync_data.json");
                 outfile << received;
                 outfile.close();
                 std::cout << "Saved to wikisync_data.json" << std::endl;
-                
-                // Exit the loop after saving
                 break;
             }
             
@@ -198,7 +318,6 @@ void Player::loadGearStats(const json& itemDb) {
         return;
     }
 
-    // Traverse JSON safely
     if (wsData.contains("payload") && 
         wsData["payload"].contains("loadouts") && 
         !wsData["payload"]["loadouts"].empty() &&
@@ -212,8 +331,6 @@ void Player::loadGearStats(const json& itemDb) {
                 Item item(id);
                 item.fetchStats(id, itemDb);
                 gear_.emplace(slot, item);
-                // Silent load for performance when scanning upgrades, or keep verbose?
-                // Keeping verbose for now as this is usually called once for main player
                 std::cout << "Loaded " << item.getName() << " (ID: " << id << ") into slot " << slot << "\n";
             }
         }
@@ -240,27 +357,4 @@ void Player::loadGearStats(const std::string& itemDbPath) {
     loadGearStats(itemDb);
 }
 
-void Player::equip(const std::string& slot, const Item& item) {
-    gear_[slot] = item;
-}
-
-void Player::unequip(const std::string& slot) {
-    gear_.erase(slot);
-}
-
-int Player::getEffectiveStat(const std::string& stat) {
-    // This assumes 'stat' refers to a Base Skill (e.g., "Strength")
-    // Use getEquipmentBonus for gear stats
-    if (stats_.count(stat)) {
-        return stats_.at(stat);
-    }
-    return 0;
-}
-
-int Player::getEquipmentBonus(const std::string& bonus) {
-    int total = 0;
-    for (auto& [slot, item] : gear_) {
-        total += item.getInt(bonus);
-    }
-    return total;
-}
+#endif // __EMSCRIPTEN__

@@ -64,7 +64,7 @@ int main() {
         player.loadGearStats(itemDb);
         
         // 4. Setup Monster
-        std::string monsterName = "Vorkath";
+        std::string monsterName = "Vorkath (Post-quest)";
         std::cout << "[4/6] Initializing Monster '" << monsterName << "'...\n";
         Monster monster(monsterName); 
         
@@ -91,6 +91,9 @@ int main() {
         Battle battle(player, monster);
         battle.optimizeAttackStyle();
         battle.runSimulations(10000);
+        
+        std::cout << "      Debug: Accuracy=" << battle.getHitChance()
+                  << " | Max Hit=" << battle.getMaxHit() << "\n";
 
         // 6. Upgrade Advisor
         std::cout << "\n[6/6] Generating Next Best Item Suggestions...\n";

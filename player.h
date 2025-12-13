@@ -9,25 +9,52 @@ private:
     std::string username;
     std::map<std::string, int> stats_;
     std::map<std::string, Item> gear_; // Stores equipped items by slot (e.g., "head", "body")
+    
+    // State flags
+    bool onSlayerTask_ {false};
+    int currentHP_ {99};
+    int maxHP_ {99};
 
 public:
-    Player(std::string n);
-    std::string fetchStats();
+    Player(std::string n = "");
     void parseStats(std::string csv_str);
-    int getStat(const std::string& skill){return stats_[skill];}
+    int getStat(const std::string& skill) { return stats_[skill]; }
+    void setStat(const std::string& skill, int level) { stats_[skill] = level; }
+    std::string getUsername() const { return username; }
+    void setUsername(const std::string& name) { username = name; }
     
-    // WikiSync & Gear
-    void fetchGearFromClient(); // Connects to WikiSync and saves wikisync_data.json
-    void loadGearStats(const std::string& itemDbPath); // Loads IDs from json and fetches stats
-    void loadGearStats(const json& itemDb); // Overload for pre-loaded DB
+    // Gear management
     void equip(const std::string& slot, const Item& item);
     void unequip(const std::string& slot);
+    void clearGear() { gear_.clear(); }
+    bool hasItem(const std::string& slot) const { return gear_.count(slot) > 0; }
+    Item getEquippedItem(const std::string& slot) const;
+    bool hasEquipped(const std::string& itemName) const;
     
     // Combat
     int getEffectiveStat(const std::string& stat); // Base stat + gear bonuses
     int getEquipmentBonus(const std::string& bonus); // Sum of gear bonuses
     const std::map<std::string, Item>& getGear() const { return gear_; }
+    
+    // State Management
+    void setSlayerTask(bool onTask) { onSlayerTask_ = onTask; }
+    bool isOnSlayerTask() const { return onSlayerTask_; }
+    
+    void setHP(int current, int max) { currentHP_ = current; maxHP_ = max; }
+    int getCurrentHP() const { return currentHP_; }
+    int getMaxHP() const { return maxHP_; }
+    
+    // Set Bonus Helper
+    std::string getActiveSet();
+    int countCrystalPieces();
+    
+#ifndef __EMSCRIPTEN__
+    // Network methods - only available in native builds
+    std::string fetchStats();
+    void fetchGearFromClient();
+    void loadGearStats(const std::string& itemDbPath);
+    void loadGearStats(const json& itemDb);
+#endif
 };
-
 
 std::map<std::string, int> parseCSV(std::string csv_str);
