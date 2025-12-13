@@ -56,22 +56,52 @@ void Battle::determineStyle() {
     int stab = player_.getEquipmentBonus("attack_stab");
     int slash = player_.getEquipmentBonus("attack_slash");
     int crush = player_.getEquipmentBonus("attack_crush");
+    int range = player_.getEquipmentBonus("attack_ranged");
     
     // Simple heuristic: pick highest bonus
-    if (stab >= slash && stab >= crush) style_ = "stab";
-    else if (slash >= stab && slash >= crush) style_ = "slash";
-    else style_ = "crush";
+    if (range > stab && range > slash && range > crush) {
+        style_ = "ranged";
+        isRanged_ = true;
+    } else {
+        isRanged_ = false;
+        if (stab >= slash && stab >= crush) style_ = "stab";
+        else if (slash >= stab && slash >= crush) style_ = "slash";
+        else style_ = "crush";
+    }
 }
 
 int Battle::effectiveStrength() {
+    if (isRanged_) {
+        // ((Ranged + Boost) * Prayer + 8 + Style)
+        int rng = player_.getEffectiveStat("Ranged");
+        return rng + 8 + stance_bonus_strength_;
+    }
+
     // ((Strength + Boost) * Prayer + 8 + Style)
     int str = player_.getEffectiveStat("Strength"); 
     return str + 8 + stance_bonus_strength_;
 }
 
 int Battle::maxHit() {
-    // ((EffStr * (EquipStr + 64) + 320) / 640)
     int effStr = effectiveStrength();
+    
+    if (isRanged_) {
+        // ((EffRangedStr * (RangedStrBonus + 64) + 320) / 640)
+        int equipStr = player_.getEquipmentBonus("ranged_strength");
+        int baseMax = ((effStr * (equipStr + 64) + 320) / 640);
+        
+        double multiplier = 1.0;
+        
+        // Salve Amulet (i) and (ei) boost Ranged
+        if (isUndead_) {
+            if (hasSalveEI_) multiplier *= 1.20;
+            else if (hasSalveI_) multiplier *= 1.1667;
+        }
+        
+        return static_cast<int>(baseMax * multiplier);
+    }
+
+    // ((EffStr * (EquipStr + 64) + 320) / 640)
     // Try strength_bonus, fallback to melee_strength if 0 (heuristic)
     int equipStr = player_.getEquipmentBonus("strength_bonus");
     if (equipStr == 0) equipStr = player_.getEquipmentBonus("melee_strength");
@@ -101,14 +131,32 @@ int Battle::maxHit() {
 }
 
 int Battle::effectiveAttack() {
+    if (isRanged_) {
+        int rng = player_.getEffectiveStat("Ranged");
+        return rng + 8 + stance_bonus_attack_;
+    }
+
     // ((Attack + Boost) * Prayer + 8 + Style)
     int att = player_.getEffectiveStat("Attack");
     return att + 8 + stance_bonus_attack_;
 }
 
 int Battle::attackRoll() {
-    // EffAtt * (EquipAtt + 64)
     int effAtt = effectiveAttack();
+    
+    if (isRanged_) {
+        int equipAtt = player_.getEquipmentBonus("attack_ranged");
+        int roll = effAtt * (equipAtt + 64);
+        
+        double multiplier = 1.0;
+        if (isUndead_) {
+            if (hasSalveEI_) multiplier *= 1.20;
+            else if (hasSalveI_) multiplier *= 1.1667;
+        }
+        return static_cast<int>(roll * multiplier);
+    }
+
+    // EffAtt * (EquipAtt + 64)
     int equipAtt = player_.getEquipmentBonus("attack_" + style_);
     int roll = effAtt * (equipAtt + 64);
     
@@ -134,7 +182,14 @@ int Battle::attackRoll() {
 int Battle::defenceRoll() {
     // (TargetDef + 9) * (TargetDefBonus + 64)
     int def = monster_.getInt("defence_level");
-    int defBonus = monster_.getInt("defence_" + style_);
+    int defBonus = 0;
+    
+    if (isRanged_) {
+        defBonus = monster_.getInt("defence_ranged");
+    } else {
+        defBonus = monster_.getInt("defence_" + style_);
+    }
+    
     return (def + 9) * (defBonus + 64);
 }
 
@@ -238,19 +293,10 @@ double Battle::solveOptimalDPS() {
         double dps;
     };
     
-    std::vector<Option> options = {
-        {"stab", "Accurate (+3 Att)", 3, 0, 0.0},
-        {"stab", "Aggressive (+3 Str)", 0, 3, 0.0},
-        {"slash", "Accurate (+3 Att)", 3, 0, 0.0},
-        {"slash", "Aggressive (+3 Str)", 0, 3, 0.0},
-        {"crush", "Accurate (+3 Att)", 3, 0, 0.0},
-        {"crush", "Aggressive (+3 Str)", 0, 3, 0.0}
-    };
+    // Refresh state
+    determineStyle();
     
-    Option bestOption = options[0];
-    bestOption.dps = -1.0;
-    
-    // Check weapon speed (it might change if weapon changed)
+    // Base speed check
     attack_speed_ = 4;
     auto gear = player_.getGear();
     if (gear.count("weapon")) {
@@ -259,17 +305,53 @@ double Battle::solveOptimalDPS() {
         if (speed > 0) attack_speed_ = speed;
     }
 
+    std::vector<Option> options;
+    if (isRanged_) {
+        // Ranged Options
+        // Accurate: +3 Range (Att & Str)
+        options.push_back({"ranged", "Accurate (+3 Range)", 3, 3, 0.0});
+        // Rapid: Speed -1, +0 stats
+        options.push_back({"ranged", "Rapid (Speed -1)", 0, 0, 0.0});
+        // Longrange: +3 Def (0 range stats)
+        options.push_back({"ranged", "Longrange (+3 Def)", 0, 0, 0.0});
+    } else {
+        options = {
+            {"stab", "Accurate (+3 Att)", 3, 0, 0.0},
+            {"stab", "Aggressive (+3 Str)", 0, 3, 0.0},
+            {"slash", "Accurate (+3 Att)", 3, 0, 0.0},
+            {"slash", "Aggressive (+3 Str)", 0, 3, 0.0},
+            {"crush", "Accurate (+3 Att)", 3, 0, 0.0},
+            {"crush", "Aggressive (+3 Str)", 0, 3, 0.0}
+        };
+    }
+    
+    Option bestOption = options[0];
+    bestOption.dps = -1.0;
+    
     for (auto& opt : options) {
+        int oldSpeed = attack_speed_;
+        if (opt.stanceName.find("Rapid") != std::string::npos) {
+            attack_speed_ -= 1;
+        }
+        
         opt.dps = calculateDPS(opt.style, opt.stanceAtt, opt.stanceStr);
+        
         if (opt.dps > bestOption.dps) {
             bestOption = opt;
         }
+        
+        // Restore speed
+        attack_speed_ = oldSpeed;
     }
     
     // Apply best
     style_ = bestOption.style;
     stance_bonus_attack_ = bestOption.stanceAtt;
     stance_bonus_strength_ = bestOption.stanceStr;
+    
+    if (bestOption.stanceName.find("Rapid") != std::string::npos) {
+        attack_speed_ -= 1;
+    }
     
     return bestOption.dps;
 }

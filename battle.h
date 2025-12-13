@@ -14,6 +14,7 @@ class Battle {
         int attack_speed_;
         bool isFang_ {false};
         bool isDHL_ {false};
+        bool isRanged_ {false};
         bool isDragon_ {false};
         bool isUndead_ {false};
         bool hasSalve_ {false};
