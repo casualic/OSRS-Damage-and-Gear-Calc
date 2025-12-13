@@ -92,6 +92,58 @@ void Battle::init() {
 
     stance_bonus_attack_ = 3;
     stance_bonus_strength_ = 0;
+
+    // Check Ammo Compatibility
+    invalid_ranged_str_ = 0;
+    invalid_ranged_att_ = 0;
+    
+    if (gear.count("ammo")) {
+        Item ammo = gear.at("ammo");
+        bool compatible = false;
+
+        if (gear.count("weapon")) {
+            Item weapon = gear.at("weapon");
+            std::string wType = weapon.getStr("weapon_type");
+            std::string wName = weapon.getName();
+            std::string aName = ammo.getName();
+            
+            auto toLower = [](std::string s) {
+                std::transform(s.begin(), s.end(), s.begin(), ::tolower);
+                return s;
+            };
+            std::string wNameL = toLower(wName);
+            std::string aNameL = toLower(aName);
+            
+            if (wType == "bow") {
+                 // Standard bows need arrows
+                 if (aNameL.find("arrow") != std::string::npos) compatible = true;
+                 // Crystal bow / BowFa (no ammo slot used for stats)
+                 if (wNameL.find("crystal bow") != std::string::npos || wNameL.find("faerdhinen") != std::string::npos) compatible = false;
+            } else if (wType == "crossbow") {
+                 if (wNameL.find("ballista") != std::string::npos) {
+                     if (aNameL.find("javelin") != std::string::npos) compatible = true;
+                 } else if (wNameL.find("karil") != std::string::npos) {
+                     if (aNameL.find("bolt rack") != std::string::npos) compatible = true;
+                 } else {
+                     if (aNameL.find("bolt") != std::string::npos) compatible = true;
+                 }
+            } else if (wType == "thrown") {
+                 // Thrown weapons ignore ammo slot stats
+                 compatible = false;
+            } else {
+                // Melee weapons don't use ammo stats
+                compatible = false; 
+            }
+        } else {
+            // No weapon, ammo equipped -> Incompatible
+            compatible = false;
+        }
+        
+        if (!compatible) {
+            invalid_ranged_str_ = ammo.getInt("ranged_strength");
+            invalid_ranged_att_ = ammo.getInt("attack_ranged");
+        }
+    }
 }
 
 void Battle::determineStyle() {
@@ -178,7 +230,7 @@ int Battle::maxHit() {
     
     if (isRanged_) {
         // ((EffRangedStr * (RangedStrBonus + 64) + 320) / 640)
-        int equipStr = player_.getEquipmentBonus("ranged_strength");
+        int equipStr = player_.getEquipmentBonus("ranged_strength") - invalid_ranged_str_;
         int baseMax = ((effStr * (equipStr + 64) + 320) / 640);
         
         double multiplier = 1.0;
@@ -310,7 +362,7 @@ int Battle::attackRoll() {
     int effAtt = effectiveAttack();
     
     if (isRanged_) {
-        int equipAtt = player_.getEquipmentBonus("attack_ranged");
+        int equipAtt = player_.getEquipmentBonus("attack_ranged") - invalid_ranged_att_;
         int roll = effAtt * (equipAtt + 64);
         
         double multiplier = 1.0;

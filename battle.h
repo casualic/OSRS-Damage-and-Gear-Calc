@@ -65,6 +65,9 @@ class Battle {
         
         int stance_bonus_attack_ {0};
         int stance_bonus_strength_ {0};
+        
+        int invalid_ranged_str_ {0};
+        int invalid_ranged_att_ {0};
 
         // Formulas
         void init();
