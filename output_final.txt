@@ -1,103 +1,0 @@
-=== OSRS DPS Calculator ===
-[0/6] Loading Databases...
-      Loading items-complete.json... Done (28747 items)
-      Loading latest_prices.json... Done
-[1/6] Initializing Player 'WolpiXD'...
-[2/6] Fetching Skills from HiScores...
-      Attack: 92 | Strength: 92
-[3/6] Fetching Gear from WikiSync...
-Connected to WikiSync on port 37767
-Sending: {"type":"REQUEST_PLAYER_DATA"}
-Sending: {"type":"GET_PLAYER"}
-Sending: {"type":"EQUIPMENT"}
-Sending: {"action":"get_equipment"}
-Sending: {"_wsType":"GetPlayer"}
-Listening for responses...
-✓ Found Player Data! Saving to file...
-Saved to wikisync_data.json
-      Loading Gear Stats from DB...
-Loaded Honourable blessing (ID: 20229) into slot ammo
-Loaded Bandos chestplate (ID: 11832) into slot body
-Loaded Fire cape (ID: 6570) into slot cape
-Loaded Boots of brimstone (ID: 22951) into slot feet
-Loaded Barrows gloves (ID: 7462) into slot hands
-Loaded Neitiznot faceguard (ID: 24271) into slot head
-Loaded Obsidian platelegs (ID: 21304) into slot legs
-Loaded Amulet of fury (ID: 6585) into slot neck
-Loaded Berserker ring (i) (ID: 11773) into slot ring
-Loaded Dragon defender (ID: 12954) into slot shield
-Loaded Osmumten's fang (ID: 26219) into slot weapon
-[4/6] Initializing Monster 'Vorkath'...
-      Not found in standard DB, checking bosses DB...
-Loaded stats for 'Vorkath (Dragon Slayer II)' from bosses_complete.json
-      Found Vorkath with 460 HP.
-[5/6] Starting Battle Simulation...
-
---- Optimizing Attack Style ---
->>> Selected Best: stab (Aggressive (+3 Str)) | DPS: 4.31063
-
-=== Battle Simulation (10000 runs) ===
-Player: 1876
-Target: Vorkath (Dragon Slayer II) (HP: 460)
-Combat Style: stab | Attack Speed: 5 ticks
-Max Hit: 35
-Hit Chance: 73.8965%
-Avg TTK: 112.141s (186.902 ticks)
-DPS: 4.10197
-=======================================
-
---- DEBUG: Salve Amulet (ei) Check ---
-Equipped: Salve amulet(ei)
-Base DPS (Fury?): 4.31063
-Salve (ei) DPS:   5.27989
--> Salve is BETTER (+ 0.969254)
-
-[6/6] Generating Next Best Item Suggestions...
-Calculating upgrades... (Current DPS: 4.31063)
-Scanning items: 1000/28747Scanning items: 2000/28747Scanning items: 3000/28747Scanning items: 4000/28747Scanning items: 5000/28747Scanning items: 6000/28747Scanning items: 7000/28747Scanning items: 8000/28747Scanning items: 9000/28747Scanning items: 10000/28747Scanning items: 11000/28747Scanning items: 12000/28747Scanning items: 13000/28747Scanning items: 14000/28747Scanning items: 15000/28747Scanning items: 16000/28747Scanning items: 17000/28747Scanning items: 18000/28747Scanning items: 19000/28747Scanning items: 20000/28747Scanning items: 21000/28747Scanning items: 22000/28747Scanning items: 23000/28747Scanning items: 24000/28747Scanning items: 25000/28747Scanning items: 26000/28747Scanning items: 27000/28747Scanning items: 28000/28747Scanning items: Done!              
-Analyzing single upgrades...
-Analyzing duo upgrades...
-
-=== Top 10 SINGLE Upgrades (Efficiency) ===
-Item Name                                          | Slot                 | Price      | +DPS       | DPS/1M GP
--------------------------------------------------------------------------------------------------------------------
-Salve amulet(ei)                                   | neck                 | 1          | 0.969      | 969254.335
-Mixed hide legs                                    | legs                 | 27124      | 0.039      | 1.456
-Primordial boots                                   | feet                 | 24977106   | 0.110      | 0.004
-Amulet of torture                                  | neck                 | 17965852   | 0.066      | 0.004
-Amulet of rancour                                  | neck                 | 60780555   | 0.187      | 0.003
-Avernic defender                                   | shield               | 45036816   | 0.066      | 0.001
-
-=== Top 10 DUO Upgrades (Efficiency) ===
-Item Name                                          | Slot                 | Price      | +DPS       | DPS/1M GP
--------------------------------------------------------------------------------------------------------------------
-Harralander tar + Salve amulet(ei)                 | ammo+neck            | 3          | 0.969      | 323084.778
-Marrentill tar + Salve amulet(ei)                  | ammo+neck            | 3          | 0.969      | 323084.778
-Bronze arrow + Salve amulet(ei)                    | ammo+neck            | 3          | 0.969      | 323084.778
-Tarromin tar + Salve amulet(ei)                    | ammo+neck            | 3          | 0.969      | 323084.778
-Bronze bolts + Salve amulet(ei)                    | ammo+neck            | 3          | 0.969      | 323084.778
-Iron javelin(p) + Salve amulet(ei)                 | ammo+neck            | 4          | 0.969      | 242313.584
-Steel javelin + Salve amulet(ei)                   | ammo+neck            | 5          | 0.969      | 193850.867
-Iron javelin + Salve amulet(ei)                    | ammo+neck            | 6          | 0.969      | 161542.389
-Bone bolts + Salve amulet(ei)                      | ammo+neck            | 7          | 0.969      | 138464.905
-Steel javelin(p+) + Salve amulet(ei)               | ammo+neck            | 7          | 0.969      | 138464.905
-
-=== Top 10 SINGLE Upgrades (Max DPS) ===
-Salve amulet(ei)                                   | neck                 | 1          | 0.969      | 969254.335
-Amulet of rancour                                  | neck                 | 60780555   | 0.187      | 0.003
-Primordial boots                                   | feet                 | 24977106   | 0.110      | 0.004
-Amulet of torture                                  | neck                 | 17965852   | 0.066      | 0.004
-Avernic defender                                   | shield               | 45036816   | 0.066      | 0.001
-Mixed hide legs                                    | legs                 | 27124      | 0.039      | 1.456
-
-=== Top 10 DUO Upgrades (Max DPS) ===
-Salve amulet(ei) + Avernic defender                | neck+shield          | 45036817   | 1.089      | 0.024
-Salve amulet(ei) + Ultor ring                      | neck+ring            | 116057649  | 1.028      | 0.009
-Torva full helm + Salve amulet(ei)                 | head+neck            | 231461051  | 1.028      | 0.004
-Blood moon tassets + Salve amulet(ei)              | legs+neck            | 6770001    | 1.028      | 0.152
-Bandos tassets + Salve amulet(ei)                  | legs+neck            | 16216519   | 1.028      | 0.063
-Torva full helm (damaged) + Salve amulet(ei)       | head+neck            | 217283001  | 1.028      | 0.005
-Torva platebody + Salve amulet(ei)                 | body+neck            | 204389999  | 1.028      | 0.005
-Torva platebody (damaged) + Salve amulet(ei)       | body+neck            | 180331065  | 1.028      | 0.006
-Torva platelegs + Salve amulet(ei)                 | legs+neck            | 153519573  | 1.028      | 0.007
-Oathplate legs + Salve amulet(ei)                  | legs+neck            | 91775000   | 1.028      | 0.011

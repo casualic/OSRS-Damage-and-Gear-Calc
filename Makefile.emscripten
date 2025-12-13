@@ -6,12 +6,12 @@ CC = emcc
 CXX = em++
 
 # Source files (excluding main.cpp and network-dependent code)
-SOURCES = wasm_bindings.cpp \
-          player.cpp \
-          monster.cpp \
-          item.cpp \
-          battle.cpp \
-          upgrade_advisor.cpp
+SOURCES = src/wasm_bindings.cpp \
+          src/player.cpp \
+          src/monster.cpp \
+          src/item.cpp \
+          src/battle.cpp \
+          src/upgrade_advisor.cpp
 
 # Output
 OUTPUT_DIR = web
@@ -30,7 +30,7 @@ EMFLAGS = --bind \
           -std=c++17
 
 # Include paths
-INCLUDES = -I.
+INCLUDES = -I./include
 
 # Build target
 all: $(OUTPUT_DIR) $(OUTPUT)
@@ -55,9 +55,9 @@ clean:
 
 # Copy data files to web directory
 copy-data:
-	cp items-complete.json $(OUTPUT_DIR)/data/
-	cp monsters-nodrops.json $(OUTPUT_DIR)/data/
-	cp bosses_complete.json $(OUTPUT_DIR)/data/
-	cp latest_prices.json $(OUTPUT_DIR)/data/
+	cp data/items-complete.json $(OUTPUT_DIR)/data/
+	cp data/monsters-nodrops.json $(OUTPUT_DIR)/data/
+	cp data/bosses_complete.json $(OUTPUT_DIR)/data/
+	cp data/latest_prices.json $(OUTPUT_DIR)/data/
 
 .PHONY: all clean debug copy-data
