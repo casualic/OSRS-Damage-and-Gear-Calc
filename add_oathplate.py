@@ -1,1 +1,0 @@
-# Temporary file restored to fix worktree sync error
