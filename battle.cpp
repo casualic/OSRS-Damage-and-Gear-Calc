@@ -1,55 +1,70 @@
+// battle.cpp
 #include "battle.h"
 #include <iostream>
 #include <numeric>
 #include <vector>
 #include <iomanip>
 
-Battle::Battle(Player& p, Monster& m) : player_(p), monster_(m) {
+// Helper to initialize battle from player/monster
+void initBattle(Battle* b, Player& p, Monster& m, std::mt19937& gen,
+                std::string& style, int& attack_speed,
+                bool& isFang, bool& isDHL, bool& isDragon, bool& isUndead,
+                bool& hasSalve, bool& hasSalveE, bool& hasSalveI, bool& hasSalveEI,
+                int& stance_bonus_attack, int& stance_bonus_strength) {
     std::random_device rd;
     gen = std::mt19937(rd());
     
-    // Determine speed first
-    attack_speed_ = 4; // Default Unarmed
-    isFang_ = false;
-    isDHL_ = false;
-    hasSalve_ = false;
-    hasSalveE_ = false;
-    hasSalveI_ = false;
-    hasSalveEI_ = false;
+    attack_speed = 4;
+    isFang = false;
+    isDHL = false;
+    hasSalve = false;
+    hasSalveE = false;
+    hasSalveI = false;
+    hasSalveEI = false;
     
-    // Check Monster Attributes
-    isDragon_ = monster_.hasAttribute("dragon");
-    isUndead_ = monster_.hasAttribute("undead");
+    isDragon = m.hasAttribute("dragon");
+    isUndead = m.hasAttribute("undead");
 
-    auto gear = player_.getGear();
+    auto gear = p.getGear();
     
-    // Check Weapon
     if (gear.count("weapon")) {
         Item weapon = gear.at("weapon");
         int speed = weapon.getInt("attack_speed");
-        if (speed > 0) attack_speed_ = speed;
+        if (speed > 0) attack_speed = speed;
         
         std::string name = weapon.getName();
-        if (name.find("Osmumten's fang") != std::string::npos) isFang_ = true;
-        if (name.find("Dragon hunter lance") != std::string::npos) isDHL_ = true;
+        if (name.find("Osmumten's fang") != std::string::npos) isFang = true;
+        if (name.find("Dragon hunter lance") != std::string::npos) isDHL = true;
     }
     
-    // Check Neck (Salve)
     if (gear.count("neck")) {
         std::string neck = gear.at("neck").getName();
         if (neck.find("Salve amulet") != std::string::npos) {
-            if (neck.find("(ei)") != std::string::npos) hasSalveEI_ = true;
-            else if (neck.find("(i)") != std::string::npos) hasSalveI_ = true;
-            else if (neck.find("(e)") != std::string::npos) hasSalveE_ = true;
-            else hasSalve_ = true;
+            if (neck.find("(ei)") != std::string::npos) hasSalveEI = true;
+            else if (neck.find("(i)") != std::string::npos) hasSalveI = true;
+            else if (neck.find("(e)") != std::string::npos) hasSalveE = true;
+            else hasSalve = true;
         }
     }
 
-    determineStyle(); // Initial guess
-    
-    // For now, defaulting to Accurate (+3 Attack)
-    stance_bonus_attack_ = 3;
-    stance_bonus_strength_ = 0;
+    stance_bonus_attack = 3;
+    stance_bonus_strength = 0;
+}
+
+Battle::Battle(Player& p, Monster& m) : player_(p), monster_(m) {
+    initBattle(this, player_, monster_, gen, style_, attack_speed_,
+               isFang_, isDHL_, isDragon_, isUndead_,
+               hasSalve_, hasSalveE_, hasSalveI_, hasSalveEI_,
+               stance_bonus_attack_, stance_bonus_strength_);
+    determineStyle();
+}
+
+Battle::Battle(const Player& p, const Monster& m) : player_(p), monster_(m) {
+    initBattle(this, player_, monster_, gen, style_, attack_speed_,
+               isFang_, isDHL_, isDragon_, isUndead_,
+               hasSalve_, hasSalveE_, hasSalveI_, hasSalveEI_,
+               stance_bonus_attack_, stance_bonus_strength_);
+    determineStyle();
 }
 
 void Battle::determineStyle() {
@@ -57,70 +72,55 @@ void Battle::determineStyle() {
     int slash = player_.getEquipmentBonus("attack_slash");
     int crush = player_.getEquipmentBonus("attack_crush");
     
-    // Simple heuristic: pick highest bonus
     if (stab >= slash && stab >= crush) style_ = "stab";
     else if (slash >= stab && slash >= crush) style_ = "slash";
     else style_ = "crush";
 }
 
 int Battle::effectiveStrength() {
-    // ((Strength + Boost) * Prayer + 8 + Style)
     int str = player_.getEffectiveStat("Strength"); 
     return str + 8 + stance_bonus_strength_;
 }
 
 int Battle::maxHit() {
-    // ((EffStr * (EquipStr + 64) + 320) / 640)
     int effStr = effectiveStrength();
-    // Try strength_bonus, fallback to melee_strength if 0 (heuristic)
     int equipStr = player_.getEquipmentBonus("strength_bonus");
     if (equipStr == 0) equipStr = player_.getEquipmentBonus("melee_strength");
     
     int baseMax = ((effStr * (equipStr + 64) + 320) / 640);
     
-    // Apply Multipliers
     double multiplier = 1.0;
     
-    // Dragon Hunter Lance: +20% Damage vs Dragons
     if (isDHL_ && isDragon_) {
         multiplier *= 1.20;
     }
     
-    // Salve Amulet: vs Undead
     if (isUndead_) {
         if (hasSalveEI_) multiplier *= 1.20;
-        else if (hasSalveE_) multiplier *= 1.20; // Salve (e) gives 20% to melee
-        else if (hasSalveI_) multiplier *= 1.1667; // Salve (i) gives 16.67%
-        else if (hasSalve_) multiplier *= 1.1667; // Salve gives 16.67%
+        else if (hasSalveE_) multiplier *= 1.20;
+        else if (hasSalveI_) multiplier *= 1.1667;
+        else if (hasSalve_) multiplier *= 1.1667;
     }
-    
-    // Note: Salve and Slayer Helm generally don't stack (except specific cases).
-    // Assuming if Salve is equipped, user wants to use it.
     
     return static_cast<int>(baseMax * multiplier);
 }
 
 int Battle::effectiveAttack() {
-    // ((Attack + Boost) * Prayer + 8 + Style)
     int att = player_.getEffectiveStat("Attack");
     return att + 8 + stance_bonus_attack_;
 }
 
 int Battle::attackRoll() {
-    // EffAtt * (EquipAtt + 64)
     int effAtt = effectiveAttack();
     int equipAtt = player_.getEquipmentBonus("attack_" + style_);
     int roll = effAtt * (equipAtt + 64);
     
-    // Apply Multipliers
     double multiplier = 1.0;
     
-    // Dragon Hunter Lance: +20% Accuracy vs Dragons
     if (isDHL_ && isDragon_) {
         multiplier *= 1.20;
     }
     
-    // Salve Amulet: vs Undead
     if (isUndead_) {
         if (hasSalveEI_) multiplier *= 1.20;
         else if (hasSalveE_) multiplier *= 1.20; 
@@ -132,7 +132,6 @@ int Battle::attackRoll() {
 }
 
 int Battle::defenceRoll() {
-    // (TargetDef + 9) * (TargetDefBonus + 64)
     int def = monster_.getInt("defence_level");
     int defBonus = monster_.getInt("defence_" + style_);
     return (def + 9) * (defBonus + 64);
@@ -142,7 +141,6 @@ double Battle::hitChance() {
     int a = attackRoll();
     int d = defenceRoll();
     
-    // 1. Calculate Standard Probability 'p'
     double p = 0.0;
     double A = static_cast<double>(a);
     double D = static_cast<double>(d);
@@ -153,12 +151,7 @@ double Battle::hitChance() {
         p = A / (2.0 * (D + 1.0));
     }
 
-    // 2. Apply Osmumten's Fang Passive (Double Roll on Stab)
-    // "Two independent accuracy rolls. If either succeeds, the hit lands."
     if (isFang_ && style_ == "stab") {
-        // P(at least one hit) = 1 - P(miss both)
-        // P(miss) = 1 - p
-        // P(miss both) = (1 - p)^2
         return 1.0 - (1.0 - p) * (1.0 - p);
     }
 
@@ -174,12 +167,9 @@ int Battle::randomDamage(int max) {
     int minHit = 0;
     int maxHit = max;
     
-    // Osmumten's Fang Passive: Damage Clamping (Always active)
     if (isFang_) {
         minHit = static_cast<int>(max * 0.15);
         maxHit = static_cast<int>(max * 0.85);
-        
-        // Safety: ensure min <= max
         if (minHit > maxHit) minHit = maxHit;
     }
 
@@ -204,7 +194,6 @@ int Battle::simulate() {
 }
 
 double Battle::calculateDPS(const std::string& style, int stanceAtt, int stanceStr) {
-    // Temporarily apply settings
     std::string oldStyle = style_;
     int oldStanceAtt = stance_bonus_attack_;
     int oldStanceStr = stance_bonus_strength_;
@@ -213,16 +202,13 @@ double Battle::calculateDPS(const std::string& style, int stanceAtt, int stanceS
     stance_bonus_attack_ = stanceAtt;
     stance_bonus_strength_ = stanceStr;
     
-    // Calc logic
     int mHit = maxHit();
     double chance = hitChance();
     
-    // Restore settings
     style_ = oldStyle;
     stance_bonus_attack_ = oldStanceAtt;
     stance_bonus_strength_ = oldStanceStr;
     
-    // Average damage per hit = MaxHit * 0.5 * HitChance
     double avgDmgPerHit = (double)mHit * 0.5 * chance;
     double secondsPerHit = (double)attack_speed_ * 0.6;
     
@@ -250,7 +236,6 @@ double Battle::solveOptimalDPS() {
     Option bestOption = options[0];
     bestOption.dps = -1.0;
     
-    // Check weapon speed (it might change if weapon changed)
     attack_speed_ = 4;
     auto gear = player_.getGear();
     if (gear.count("weapon")) {
@@ -266,7 +251,6 @@ double Battle::solveOptimalDPS() {
         }
     }
     
-    // Apply best
     style_ = bestOption.style;
     stance_bonus_attack_ = bestOption.stanceAtt;
     stance_bonus_strength_ = bestOption.stanceStr;
@@ -278,7 +262,6 @@ void Battle::optimizeAttackStyle() {
     std::cout << "\n--- Optimizing Attack Style ---\n";
     double dps = solveOptimalDPS();
     
-    // Reverse lookup for nice printing (optional, or just print current state)
     std::string stanceName = "Unknown";
     if (stance_bonus_attack_ == 3) stanceName = "Accurate (+3 Att)";
     else if (stance_bonus_strength_ == 3) stanceName = "Aggressive (+3 Str)";
@@ -286,23 +269,60 @@ void Battle::optimizeAttackStyle() {
     std::cout << ">>> Selected Best: " << style_ << " (" << stanceName << ") | DPS: " << dps << "\n";
 }
 
-void Battle::runSimulations(int n) {
+double Battle::runSimulations(int n) {
     long totalTicks = 0;
-    for (int i=0; i<n; ++i) {
+    for (int i = 0; i < n; ++i) {
         totalTicks += simulate();
     }
-    double avgTicks = static_cast<double>(totalTicks) / n;
-    double avgSeconds = avgTicks * 0.6;
-    
-    std::cout << "\n=== Battle Simulation (" << n << " runs) ===\n";
-    std::cout << "Player: " << player_.getEffectiveStat("Overall") << "\n"; 
-    
-    std::cout << "Target: " << monster_.getStr("name") << " (HP: " << monster_.getInt("hitpoints") << ")\n";
-    std::cout << "Combat Style: " << style_ << " | Attack Speed: " << attack_speed_ << " ticks\n";
-    std::cout << "Max Hit: " << maxHit() << "\n";
-    std::cout << "Hit Chance: " << (hitChance() * 100.0) << "%\n";
-    std::cout << "Avg TTK: " << avgSeconds << "s (" << avgTicks << " ticks)\n";
-    std::cout << "DPS: " << (monster_.getInt("hitpoints") / avgSeconds) << "\n";
-    std::cout << "=======================================\n";
+    return static_cast<double>(totalTicks) / n;
 }
 
+// New getter methods for UI
+int Battle::getMaxHit() {
+    return maxHit();
+}
+
+double Battle::getHitChance() {
+    return hitChance();
+}
+
+double Battle::getDPS() {
+    int mHit = maxHit();
+    double chance = hitChance();
+    double avgDmgPerHit = (double)mHit * 0.5 * chance;
+    double secondsPerHit = (double)attack_speed_ * 0.6;
+    return avgDmgPerHit / secondsPerHit;
+}
+
+BattleResult Battle::getResults() {
+    optimizeAttackStyle();
+    
+    BattleResult result;
+    result.dps = getDPS();
+    result.maxHit = maxHit();
+    result.hitChance = hitChance();
+    result.style = style_;
+    result.attackSpeed = attack_speed_;
+    result.isFang = isFang_;
+    result.isDHL = isDHL_;
+    result.hasSalve = hasSalve_ || hasSalveE_ || hasSalveI_ || hasSalveEI_;
+    
+    if (stance_bonus_attack_ > 0) {
+        result.stance = "Accurate";
+    } else if (stance_bonus_strength_ > 0) {
+        result.stance = "Aggressive";
+    } else {
+        result.stance = "Controlled";
+    }
+    
+    int monsterHP = monster_.getInt("hitpoints");
+    if (result.dps > 0 && monsterHP > 0) {
+        result.avgTTK = monsterHP / result.dps;
+        result.killsPerHour = 3600.0 / result.avgTTK;
+    } else {
+        result.avgTTK = 0;
+        result.killsPerHour = 0;
+    }
+    
+    return result;
+}
