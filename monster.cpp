@@ -1,6 +1,6 @@
 #include "monster.h"
 #include <iostream>
-#include "external/simdjson.h"
+#include <simdjson.h>
 #include <fstream>
 #include "json.hpp"
 
