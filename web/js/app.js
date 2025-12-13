@@ -10,7 +10,9 @@ const state = {
     bossDb: null,
     priceDb: null,
     equippedItems: {},
-    selectedSlot: null
+    selectedSlot: null,
+    rawSuggestions: [], // Store raw API response
+    activeTab: 'efficiency' // Track active sort tab
 };
 
 // Initialize the application
@@ -135,6 +137,9 @@ function initializeUI() {
     document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.addEventListener('click', () => switchUpgradeTab(btn.dataset.tab));
     });
+
+    // Upgrade filters
+    document.getElementById('exclude-duo').addEventListener('change', applyFiltersAndSort);
     
     // Modal close
     document.querySelector('.modal-close').addEventListener('click', closeItemModal);
@@ -687,9 +692,9 @@ function findUpgrades() {
             );
 
             const suggestionsJson = advisor.suggestUpgrades(maxBudget);
-            const suggestions = JSON.parse(suggestionsJson);
+            state.rawSuggestions = JSON.parse(suggestionsJson);
 
-            displayUpgrades(suggestions);
+            applyFiltersAndSort();
 
         } catch (error) {
             console.error('Error finding upgrades:', error);
@@ -701,12 +706,37 @@ function findUpgrades() {
     }, 10);
 }
 
-// Store suggestions for tab switching
-let currentSuggestions = [];
+// Apply filters and sort to suggestions
+function applyFiltersAndSort() {
+    if (!state.rawSuggestions || state.rawSuggestions.length === 0) {
+        displayUpgrades([]);
+        return;
+    }
+
+    // Filter
+    const excludeDuo = document.getElementById('exclude-duo').checked;
+    let filtered = [...state.rawSuggestions];
+
+    if (excludeDuo) {
+        filtered = filtered.filter(sug => {
+            const itemNames = sug.itemNames || [sug.itemName];
+            const isDuo = sug.isDuo || itemNames.length > 1;
+            return !isDuo;
+        });
+    }
+
+    // Sort
+    if (state.activeTab === 'efficiency') {
+        filtered.sort((a, b) => b.dpsPerMillionGP - a.dpsPerMillionGP);
+    } else {
+        filtered.sort((a, b) => b.dpsIncrease - a.dpsIncrease);
+    }
+
+    displayUpgrades(filtered);
+}
 
 // Display upgrades (supports both single and duo suggestions)
 function displayUpgrades(suggestions) {
-    currentSuggestions = suggestions;
     const tbody = document.getElementById('upgrade-table-body');
 
     if (suggestions.length === 0) {
@@ -746,15 +776,8 @@ function switchUpgradeTab(tab) {
         btn.classList.toggle('active', btn.dataset.tab === tab);
     });
 
-    if (currentSuggestions.length > 0) {
-        let sorted;
-        if (tab === 'efficiency') {
-            sorted = [...currentSuggestions].sort((a, b) => b.dpsPerMillionGP - a.dpsPerMillionGP);
-        } else {
-            sorted = [...currentSuggestions].sort((a, b) => b.dpsIncrease - a.dpsIncrease);
-        }
-        displayUpgrades(sorted);
-    }
+    state.activeTab = tab;
+    applyFiltersAndSort();
 }
 
 // Format price
