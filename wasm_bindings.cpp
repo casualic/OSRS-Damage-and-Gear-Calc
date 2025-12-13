@@ -220,7 +220,13 @@ EMSCRIPTEN_BINDINGS(osrs_calc) {
         .function("setHP", &Player::setHP)
         .function("getCurrentHP", &Player::getCurrentHP)
         .function("getMaxHP", &Player::getMaxHP)
-        .function("getActiveSet", &Player::getActiveSet);
+        .function("getActiveSet", &Player::getActiveSet)
+        .function("setPiety", &Player::setPiety)
+        .function("isPietyActive", &Player::isPietyActive)
+        .function("setRigour", &Player::setRigour)
+        .function("isRigourActive", &Player::isRigourActive)
+        .function("setSuperCombat", &Player::setSuperCombat)
+        .function("isSuperCombatActive", &Player::isSuperCombatActive);
     
     // Monster class
     class_<Monster>("Monster")

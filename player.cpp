@@ -59,6 +59,9 @@ Player::Player(std::string n) : username(std::move(n)) {
     }
     currentHP_ = 99;
     maxHP_ = 99;
+    piety_ = false;
+    rigour_ = false;
+    superCombat_ = false;
 }
 
 void Player::parseStats(std::string raw_stats_response) {
@@ -108,6 +111,18 @@ int Player::getEquipmentBonus(const std::string& bonus) {
         total += item.getInt(bonus);
     }
     return total;
+}
+
+int Player::getBoostedLevel(const std::string& skill) {
+    int base = getEffectiveStat(skill);
+    
+    if (superCombat_) {
+        if (skill == "Attack" || skill == "Strength" || skill == "Defence") {
+            return base + 5 + static_cast<int>(base * 0.15);
+        }
+    }
+    
+    return base;
 }
 
 std::string Player::getActiveSet() {

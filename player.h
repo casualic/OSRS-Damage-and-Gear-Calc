@@ -12,6 +12,9 @@ private:
     
     // State flags
     bool onSlayerTask_ {false};
+    bool piety_ {false};
+    bool rigour_ {false};
+    bool superCombat_ {false};
     int currentHP_ {99};
     int maxHP_ {99};
 
@@ -20,6 +23,18 @@ public:
     void parseStats(std::string csv_str);
     int getStat(const std::string& skill) { return stats_[skill]; }
     void setStat(const std::string& skill, int level) { stats_[skill] = level; }
+    
+    // Prayers & Potions
+    void setPiety(bool active) { piety_ = active; }
+    bool isPietyActive() const { return piety_; }
+    void setRigour(bool active) { rigour_ = active; }
+    bool isRigourActive() const { return rigour_; }
+    void setSuperCombat(bool active) { superCombat_ = active; }
+    bool isSuperCombatActive() const { return superCombat_; }
+    
+    // Helper to get level including potion boosts
+    int getBoostedLevel(const std::string& skill);
+
     std::string getUsername() const { return username; }
     void setUsername(const std::string& name) { username = name; }
     
