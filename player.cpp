@@ -57,12 +57,18 @@ Player::Player(std::string n) : username(std::move(n)) {
     for (const auto& skill : skills) {
         stats_[skill] = 1;
     }
+    currentHP_ = 99;
+    maxHP_ = 99;
 }
 
 void Player::parseStats(std::string raw_stats_response) {
     auto parsed = parseCSV(raw_stats_response);
     for (const auto& [key, value] : parsed) {
         stats_[key] = value;
+    }
+    if (stats_.count("Hitpoints")) {
+        maxHP_ = stats_["Hitpoints"];
+        currentHP_ = maxHP_;
     }
 }
 
@@ -82,6 +88,13 @@ Item Player::getEquippedItem(const std::string& slot) const {
     return Item();
 }
 
+bool Player::hasEquipped(const std::string& itemName) const {
+    for (const auto& [slot, item] : gear_) {
+        if (item.getName() == itemName) return true;
+    }
+    return false;
+}
+
 int Player::getEffectiveStat(const std::string& stat) {
     if (stats_.count(stat)) {
         return stats_.at(stat);
@@ -95,6 +108,85 @@ int Player::getEquipmentBonus(const std::string& bonus) {
         total += item.getInt(bonus);
     }
     return total;
+}
+
+std::string Player::getActiveSet() {
+    bool hasHead = gear_.count("head");
+    bool hasBody = gear_.count("body");
+    bool hasLegs = gear_.count("legs");
+    bool hasHands = gear_.count("hands");
+    
+    if (!hasHead || !hasBody || !hasLegs) return "";
+    
+    std::string head = gear_.at("head").getName();
+    std::string body = gear_.at("body").getName();
+    std::string legs = gear_.at("legs").getName();
+    std::string hands = hasHands ? gear_.at("hands").getName() : "";
+    
+    // Check Void
+    if (hasHands && hands.find("Void knight gloves") != std::string::npos) {
+        bool isEliteTop = body.find("Elite void top") != std::string::npos;
+        bool isEliteLegs = legs.find("Elite void robe") != std::string::npos;
+        bool isVoidTop = body.find("Void knight top") != std::string::npos;
+        bool isVoidLegs = legs.find("Void knight robe") != std::string::npos;
+        
+        if ((isVoidTop || isEliteTop) && (isVoidLegs || isEliteLegs)) {
+            bool isElite = isEliteTop && isEliteLegs;
+            
+            if (head.find("Void melee helm") != std::string::npos) {
+                return isElite ? "Elite Void Melee" : "Void Melee";
+            }
+            if (head.find("Void ranger helm") != std::string::npos) {
+                return isElite ? "Elite Void Range" : "Void Range";
+            }
+            if (head.find("Void mage helm") != std::string::npos) {
+                return isElite ? "Elite Void Mage" : "Void Mage";
+            }
+        }
+    }
+    
+    // Check Crystal
+    if (head.find("Crystal helm") != std::string::npos &&
+        body.find("Crystal body") != std::string::npos &&
+        legs.find("Crystal legs") != std::string::npos) {
+        return "Crystal";
+    }
+    
+    // Check Inquisitor
+    if (head.find("Inquisitor's great helm") != std::string::npos &&
+        body.find("Inquisitor's hauberk") != std::string::npos &&
+        legs.find("Inquisitor's plateskirt") != std::string::npos) {
+        return "Inquisitor";
+    }
+    
+    // Check Obsidian
+    if (head.find("Obsidian helmet") != std::string::npos &&
+        body.find("Obsidian platebody") != std::string::npos &&
+        legs.find("Obsidian platelegs") != std::string::npos) {
+        return "Obsidian";
+    }
+    
+    // Check Dharok
+    bool hasWeapon = gear_.count("weapon");
+    if (hasWeapon) {
+        std::string weapon = gear_.at("weapon").getName();
+        if (head.find("Dharok's helm") != std::string::npos &&
+            body.find("Dharok's platebody") != std::string::npos &&
+            legs.find("Dharok's platelegs") != std::string::npos &&
+            weapon.find("Dharok's greataxe") != std::string::npos) {
+            return "Dharok";
+        }
+    }
+    
+    return "";
+}
+
+int Player::countCrystalPieces() {
+    int count = 0;
+    if (gear_.count("head") && gear_.at("head").getName().find("Crystal helm") != std::string::npos) count++;
+    if (gear_.count("body") && gear_.at("body").getName().find("Crystal body") != std::string::npos) count++;
+    if (gear_.count("legs") && gear_.at("legs").getName().find("Crystal legs") != std::string::npos) count++;
+    return count;
 }
 
 #ifndef __EMSCRIPTEN__

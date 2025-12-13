@@ -1,3 +1,4 @@
+// battle.h
 #pragma once
 #include "player.h"
 #include "monster.h"
@@ -15,7 +16,14 @@ struct BattleResult {
     double killsPerHour;
     bool isFang;
     bool isDHL;
+    bool isDHCB;
+    bool isArclight;
+    bool isKeris;
+    bool isScythe;
+    bool isTbow;
     bool hasSalve;
+    bool onTask;
+    std::string activeSet;
 };
 
 class Battle {
@@ -28,18 +36,40 @@ class Battle {
         int attack_speed_;
         bool isFang_ {false};
         bool isDHL_ {false};
+        bool isDHCB_ {false};
+        bool isArclight_ {false};
+        bool isKeris_ {false};
+        bool isKerisBreaching_ {false};
+        bool isLeafBladed_ {false};
+        bool isScythe_ {false};
+        bool isTbow_ {false};
+        bool isDharok_ {false};
+        
         bool isDragon_ {false};
         bool isUndead_ {false};
+        bool isDemon_ {false};
+        bool isKalphite_ {false};
+        bool isLeafy_ {false};
+        bool isVampyre_ {false};
+        bool isShade_ {false};
+        bool isXerician_ {false};
+        
         bool hasSalve_ {false};
         bool hasSalveE_ {false};
         bool hasSalveI_ {false};
         bool hasSalveEI_ {false};
         
+        bool isOnTask_ {false};
+        std::string activeSet_;
+
+        
         int stance_bonus_attack_ {0};
         int stance_bonus_strength_ {0};
 
         // Formulas
+        void init();
         int effectiveStrength();
+
         int maxHit();
         int effectiveAttack();
         int attackRoll();
@@ -83,4 +113,3 @@ class Battle {
         bool hasDHL() const { return isDHL_; }
         bool hasAnySalve() const { return hasSalve_ || hasSalveE_ || hasSalveI_ || hasSalveEI_; }
 };
-

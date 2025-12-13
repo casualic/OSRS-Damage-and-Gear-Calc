@@ -13,6 +13,9 @@ void Monster::setInt(const std::string& key, int value) {
     if (key == "hitpoints") {
         current_hp_ = value;
     }
+    if (key == "size") {
+        size_ = value;
+    }
 }
 
 int Monster::getInt(const std::string& key) const {
@@ -63,6 +66,9 @@ void Monster::loadFromJSON(const std::string &filepath) {
                 stats_int_[key] = v;
                 if (key == "hitpoints") {
                     current_hp_ = v;
+                }
+                if (key == "size") {
+                    size_ = v;
                 }
             } else if (value.is_string()) {
                 stats_str_[key] = value.get<std::string>();

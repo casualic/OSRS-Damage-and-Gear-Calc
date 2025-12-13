@@ -113,6 +113,8 @@ void loadMonsterFromJson(Monster& monster, const std::string& name, const std::s
                             monster.addAttribute(attr.get<std::string>());
                         }
                     }
+                } else if (key == "size" && value.is_number_integer()) {
+                    monster.setSize(value.get<int>());
                 }
             }
         };
@@ -157,7 +159,14 @@ std::string getBattleResultsJson(Battle& battle) {
         {"killsPerHour", result.killsPerHour},
         {"isFang", result.isFang},
         {"isDHL", result.isDHL},
-        {"hasSalve", result.hasSalve}
+        {"isDHCB", result.isDHCB},
+        {"isArclight", result.isArclight},
+        {"isKeris", result.isKeris},
+        {"isScythe", result.isScythe},
+        {"isTbow", result.isTbow},
+        {"hasSalve", result.hasSalve},
+        {"onTask", result.onTask},
+        {"activeSet", result.activeSet}
     };
     
     return j.dump();
@@ -205,7 +214,13 @@ EMSCRIPTEN_BINDINGS(osrs_calc) {
         .function("hasItem", &Player::hasItem)
         .function("getEquippedItem", &Player::getEquippedItem)
         .function("getEffectiveStat", &Player::getEffectiveStat)
-        .function("getEquipmentBonus", &Player::getEquipmentBonus);
+        .function("getEquipmentBonus", &Player::getEquipmentBonus)
+        .function("setSlayerTask", &Player::setSlayerTask)
+        .function("isOnSlayerTask", &Player::isOnSlayerTask)
+        .function("setHP", &Player::setHP)
+        .function("getCurrentHP", &Player::getCurrentHP)
+        .function("getMaxHP", &Player::getMaxHP)
+        .function("getActiveSet", &Player::getActiveSet);
     
     // Monster class
     class_<Monster>("Monster")
@@ -224,7 +239,17 @@ EMSCRIPTEN_BINDINGS(osrs_calc) {
         .function("getCurrentHP", &Monster::getCurrentHP)
         .function("setCurrentHP", &Monster::setCurrentHP)
         .function("resetHP", &Monster::resetHP)
-        .function("hasInt", &Monster::hasInt);
+        .function("hasInt", &Monster::hasInt)
+        .function("setSize", &Monster::setSize)
+        .function("getSize", &Monster::getSize)
+        .function("isDemon", &Monster::isDemon)
+        .function("isDragon", &Monster::isDragon)
+        .function("isUndead", &Monster::isUndead)
+        .function("isKalphite", &Monster::isKalphite)
+        .function("isLeafy", &Monster::isLeafy)
+        .function("isVampyre", &Monster::isVampyre)
+        .function("isXerician", &Monster::isXerician)
+        .function("isShade", &Monster::isShade);
     
     // Battle class
     class_<Battle>("Battle")
