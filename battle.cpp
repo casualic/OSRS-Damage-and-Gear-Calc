@@ -4,73 +4,103 @@
 #include <numeric>
 #include <vector>
 #include <iomanip>
+#include <cmath>
+#include <algorithm>
 
-// Helper to initialize battle from player/monster
-void initBattle(Battle* b, Player& p, Monster& m, std::mt19937& gen,
-                std::string& style, int& attack_speed,
-                bool& isFang, bool& isDHL, bool& isDragon, bool& isUndead,
-                bool& hasSalve, bool& hasSalveE, bool& hasSalveI, bool& hasSalveEI,
-                int& stance_bonus_attack, int& stance_bonus_strength) {
+Battle::Battle(Player& p, Monster& m) : player_(p), monster_(m) {
+    init();
+    determineStyle();
+}
+
+Battle::Battle(const Player& p, const Monster& m) : player_(p), monster_(m) {
+    init();
+    determineStyle();
+}
+
+void Battle::init() {
     std::random_device rd;
     gen = std::mt19937(rd());
     
-    attack_speed = 4;
-    isFang = false;
-    isDHL = false;
-    hasSalve = false;
-    hasSalveE = false;
-    hasSalveI = false;
-    hasSalveEI = false;
+    // Default values
+    attack_speed_ = 4;
+    isFang_ = false;
+    isDHL_ = false;
+    isDHCB_ = false;
+    isArclight_ = false;
+    isKeris_ = false;
+    isKerisBreaching_ = false;
+    isLeafBladed_ = false;
+    isScythe_ = false;
+    isTbow_ = false;
+    isDharok_ = false;
     
-    isDragon = m.hasAttribute("dragon");
-    isUndead = m.hasAttribute("undead");
-
-    auto gear = p.getGear();
+    hasSalve_ = false;
+    hasSalveE_ = false;
+    hasSalveI_ = false;
+    hasSalveEI_ = false;
+    
+    // Monster Attributes
+    isDragon_ = monster_.isDragon();
+    isUndead_ = monster_.isUndead();
+    isDemon_ = monster_.isDemon();
+    isKalphite_ = monster_.isKalphite();
+    isLeafy_ = monster_.isLeafy();
+    isVampyre_ = monster_.isVampyre();
+    isShade_ = monster_.isShade();
+    isXerician_ = monster_.isXerician();
+    
+    // Player State
+    isOnTask_ = player_.isOnSlayerTask();
+    activeSet_ = player_.getActiveSet();
+    
+    // Parse Gear
+    auto gear = player_.getGear();
     
     if (gear.count("weapon")) {
         Item weapon = gear.at("weapon");
         int speed = weapon.getInt("attack_speed");
-        if (speed > 0) attack_speed = speed;
+        if (speed > 0) attack_speed_ = speed;
         
         std::string name = weapon.getName();
-        if (name.find("Osmumten's fang") != std::string::npos) isFang = true;
-        if (name.find("Dragon hunter lance") != std::string::npos) isDHL = true;
+        
+        if (name.find("Osmumten's fang") != std::string::npos) isFang_ = true;
+        if (name.find("Dragon hunter lance") != std::string::npos) isDHL_ = true;
+        if (name.find("Dragon hunter crossbow") != std::string::npos) isDHCB_ = true;
+        if (name.find("Arclight") != std::string::npos || name.find("Emberlight") != std::string::npos) isArclight_ = true;
+        if (name.find("Keris") != std::string::npos) {
+            isKeris_ = true;
+            if (name.find("breaching") != std::string::npos) isKerisBreaching_ = true;
+        }
+        if (name.find("Leaf-bladed") != std::string::npos) isLeafBladed_ = true;
+        if (name.find("Scythe of vitur") != std::string::npos) isScythe_ = true;
+        if (name.find("Twisted bow") != std::string::npos) isTbow_ = true;
+        
+        if (activeSet_ == "Dharok" && name.find("Dharok's greataxe") != std::string::npos) {
+            isDharok_ = true;
+        }
     }
     
     if (gear.count("neck")) {
         std::string neck = gear.at("neck").getName();
         if (neck.find("Salve amulet") != std::string::npos) {
-            if (neck.find("(ei)") != std::string::npos) hasSalveEI = true;
-            else if (neck.find("(i)") != std::string::npos) hasSalveI = true;
-            else if (neck.find("(e)") != std::string::npos) hasSalveE = true;
-            else hasSalve = true;
+            if (neck.find("(ei)") != std::string::npos) hasSalveEI_ = true;
+            else if (neck.find("(i)") != std::string::npos) hasSalveI_ = true;
+            else if (neck.find("(e)") != std::string::npos) hasSalveE_ = true;
+            else hasSalve_ = true;
         }
     }
 
-    stance_bonus_attack = 3;
-    stance_bonus_strength = 0;
-}
-
-Battle::Battle(Player& p, Monster& m) : player_(p), monster_(m) {
-    initBattle(this, player_, monster_, gen, style_, attack_speed_,
-               isFang_, isDHL_, isDragon_, isUndead_,
-               hasSalve_, hasSalveE_, hasSalveI_, hasSalveEI_,
-               stance_bonus_attack_, stance_bonus_strength_);
-    determineStyle();
-}
-
-Battle::Battle(const Player& p, const Monster& m) : player_(p), monster_(m) {
-    initBattle(this, player_, monster_, gen, style_, attack_speed_,
-               isFang_, isDHL_, isDragon_, isUndead_,
-               hasSalve_, hasSalveE_, hasSalveI_, hasSalveEI_,
-               stance_bonus_attack_, stance_bonus_strength_);
-    determineStyle();
+    stance_bonus_attack_ = 3;
+    stance_bonus_strength_ = 0;
 }
 
 void Battle::determineStyle() {
     int stab = player_.getEquipmentBonus("attack_stab");
     int slash = player_.getEquipmentBonus("attack_slash");
     int crush = player_.getEquipmentBonus("attack_crush");
+    
+    // TODO: Add support for Magic/Ranged styles logic if needed
+    // For now defaulting to melee styles unless weapon is specific
     
     if (stab >= slash && stab >= crush) style_ = "stab";
     else if (slash >= stab && slash >= crush) style_ = "slash";
@@ -79,7 +109,24 @@ void Battle::determineStyle() {
 
 int Battle::effectiveStrength() {
     int str = player_.getEffectiveStat("Strength"); 
+    
+    // Void Melee
+    if (activeSet_ == "Void Melee" || activeSet_ == "Elite Void Melee") {
+        str = static_cast<int>(str * 1.10);
+    }
+    
     return str + 8 + stance_bonus_strength_;
+}
+
+int Battle::effectiveAttack() {
+    int att = player_.getEffectiveStat("Attack");
+    
+    // Void Melee
+    if (activeSet_ == "Void Melee" || activeSet_ == "Elite Void Melee") {
+        att = static_cast<int>(att * 1.10);
+    }
+    
+    return att + 8 + stance_bonus_attack_;
 }
 
 int Battle::maxHit() {
@@ -91,23 +138,109 @@ int Battle::maxHit() {
     
     double multiplier = 1.0;
     
-    if (isDHL_ && isDragon_) {
-        multiplier *= 1.20;
+    // --- Slayer Helm / Black Mask ---
+    if (isOnTask_) {
+        // Simple check for Slayer Helm or Black Mask in gear
+        // Ideally checking item ID or name pattern
+        if (player_.hasEquipped("Slayer helmet") || 
+            player_.hasEquipped("Slayer helmet (i)") ||
+            player_.hasEquipped("Black mask") || 
+            player_.hasEquipped("Black mask (i)")) {
+             // Melee bonus
+             // Assuming (i) for now or handling both.
+             // Non (i) is 16.67% melee only. (i) covers range/mage too.
+             multiplier *= 1.1667;
+        }
     }
     
+    // --- Salve Amulet (Undead) ---
     if (isUndead_) {
-        if (hasSalveEI_) multiplier *= 1.20;
-        else if (hasSalveE_) multiplier *= 1.20;
-        else if (hasSalveI_) multiplier *= 1.1667;
-        else if (hasSalve_) multiplier *= 1.1667;
+        double salveMult = 1.0;
+        if (hasSalveEI_ || hasSalveE_) salveMult = 1.20;
+        else if (hasSalveI_ || hasSalve_) salveMult = 1.1667;
+        
+        if (salveMult > 1.0) {
+            // Rough check if Slayer was applied
+            // In a real scenario we'd track sources.
+            bool slayerApplied = (multiplier > 1.05); 
+            if (slayerApplied) {
+                // Remove slayer bonus to apply Salve instead
+                multiplier /= 1.1667; 
+            }
+            multiplier *= salveMult;
+        }
     }
     
-    return static_cast<int>(baseMax * multiplier);
-}
+    // --- Weapon Attributes ---
+    
+    if (isDragon_) {
+        if (isDHL_) multiplier *= 1.20;
+        if (isDHCB_) multiplier *= 1.30;
+    }
+    
+    if (isDemon_) {
+        if (isArclight_) multiplier *= 1.70;
+    }
+    
+    if (isKalphite_) {
+        if (isKeris_ || isKerisBreaching_) multiplier *= 1.33;
+    }
+    
+    if (isLeafy_ && isLeafBladed_) {
+        multiplier *= 1.175;
+    }
+    
+    // --- Sets ---
+    
+    // Obsidian (Melee)
+    if (activeSet_ == "Obsidian") {
+         auto weapon = player_.getEquippedItem("weapon").getName();
+         if (weapon.find("Toktz-xil") != std::string::npos || weapon.find("Tzhaar-ket") != std::string::npos) {
+             multiplier *= 1.10;
+         }
+    }
+    
+    // Inquisitor (Crush)
+    if (activeSet_ == "Inquisitor" && style_ == "crush") {
+        multiplier *= 1.025; // 2.5% total
+    } else if (style_ == "crush") {
+        // Individual pieces (0.5% each)
+        if (player_.getEquippedItem("head").getName().find("Inquisitor") != std::string::npos) multiplier *= 1.005;
+        if (player_.getEquippedItem("body").getName().find("Inquisitor") != std::string::npos) multiplier *= 1.005;
+        if (player_.getEquippedItem("legs").getName().find("Inquisitor") != std::string::npos) multiplier *= 1.005;
+    }
+    
+    // Crystal (Range Strength logic usually separate, but for simplicity:)
+    if (activeSet_ == "Crystal") {
+         // Placeholder for crystal bow logic if we supported Ranged Str prop
+    }
+    
+    // --- Specials ---
+    
+    // Twisted Bow
+    if (isTbow_) {
+        int magic = monster_.getInt("magic_level");
+        // Cap magic at 250 (350 for CoX outside this scope)
+        int cap = 250; 
+        if (magic > cap) magic = cap;
+        
+        // Damage multiplier based on magic level
+        double tbowMult = 0.25 + (magic * 3 - 14) / 100.0;
+        // Cap at 250%
+        if (tbowMult > 2.5) tbowMult = 2.5;
+        if (tbowMult < 1.0) tbowMult = 1.0; 
+        
+        multiplier *= tbowMult;
+    }
+    
+    // Dharok
+    if (isDharok_) {
+        double lostHP = (double)(player_.getMaxHP() - player_.getCurrentHP());
+        double hpMult = 1.0 + (lostHP / 100.0 * (player_.getMaxHP() / 100.0));
+        multiplier *= hpMult;
+    }
 
-int Battle::effectiveAttack() {
-    int att = player_.getEffectiveStat("Attack");
-    return att + 8 + stance_bonus_attack_;
+    return static_cast<int>(baseMax * multiplier);
 }
 
 int Battle::attackRoll() {
@@ -117,15 +250,69 @@ int Battle::attackRoll() {
     
     double multiplier = 1.0;
     
-    if (isDHL_ && isDragon_) {
-        multiplier *= 1.20;
+    // --- Slayer Helm ---
+    if (isOnTask_) {
+        if (player_.hasEquipped("Slayer helmet") || 
+            player_.hasEquipped("Slayer helmet (i)") ||
+            player_.hasEquipped("Black mask") || 
+            player_.hasEquipped("Black mask (i)")) {
+             multiplier *= 1.1667;
+        }
     }
     
+    // --- Salve (Undead) ---
     if (isUndead_) {
-        if (hasSalveEI_) multiplier *= 1.20;
-        else if (hasSalveE_) multiplier *= 1.20; 
-        else if (hasSalveI_) multiplier *= 1.1667; 
-        else if (hasSalve_) multiplier *= 1.1667; 
+        double salveMult = 1.0;
+        if (hasSalveEI_ || hasSalveE_) salveMult = 1.20;
+        else if (hasSalveI_ || hasSalve_) salveMult = 1.1667;
+        
+        if (salveMult > 1.0) {
+             bool slayerApplied = (multiplier > 1.05);
+             if (slayerApplied) multiplier /= 1.1667;
+             multiplier *= salveMult;
+        }
+    }
+    
+    // --- Weapon Attributes ---
+    if (isDragon_) {
+        if (isDHL_) multiplier *= 1.20;
+        if (isDHCB_) multiplier *= 1.30;
+    }
+    
+    if (isDemon_) {
+        if (isArclight_) multiplier *= 1.70;
+    }
+    
+    if (isKalphite_ && isKerisBreaching_) {
+        multiplier *= 1.33;
+    }
+    
+    // Obsidian
+    if (activeSet_ == "Obsidian") {
+         auto weapon = player_.getEquippedItem("weapon").getName();
+         if (weapon.find("Toktz-xil") != std::string::npos || weapon.find("Tzhaar-ket") != std::string::npos) {
+             multiplier *= 1.10;
+         }
+    }
+    
+    // Inquisitor (Crush)
+    if (activeSet_ == "Inquisitor" && style_ == "crush") {
+        multiplier *= 1.025;
+    } else if (style_ == "crush") {
+        if (player_.getEquippedItem("head").getName().find("Inquisitor") != std::string::npos) multiplier *= 1.005;
+        if (player_.getEquippedItem("body").getName().find("Inquisitor") != std::string::npos) multiplier *= 1.005;
+        if (player_.getEquippedItem("legs").getName().find("Inquisitor") != std::string::npos) multiplier *= 1.005;
+    }
+    
+    // Twisted Bow Accuracy
+    if (isTbow_) {
+         int magic = monster_.getInt("magic_level");
+         int cap = 250;
+         if (magic > cap) magic = cap;
+         // Accuracy formula: 140 + (30*magic - 10)/100 ... rough
+         double tbowAcc = 1.40 + (30 * magic - 10) / 100.0;
+         if (tbowAcc > 2.40) tbowAcc = 2.40; // Cap
+         multiplier *= tbowAcc;
     }
     
     return static_cast<int>(roll * multiplier);
@@ -183,11 +370,43 @@ int Battle::simulate() {
     double chance = hitChance();
     int ticks = 0;
     
+    // Scythe handling
+    int size = monster_.getSize();
+    int hits = 1;
+    if (isScythe_) {
+        if (size == 1) hits = 1;
+        else if (size == 2) hits = 2;
+        else hits = 3;
+    }
+    
     while (hp > 0) {
         ticks += attack_speed_;
+        
+        // Hit 1
         if (bernoulliTrial(chance)) {
             int dmg = randomDamage(max);
+            // Keris crit check
+            if (isKeris_ && isKalphite_) {
+                 std::uniform_int_distribution<int> crit(1, 51);
+                 if (crit(gen) == 1) dmg *= 3;
+            }
             hp -= dmg;
+        }
+        
+        // Scythe Hit 2 (50% dmg)
+        if (isScythe_ && hits >= 2 && hp > 0) {
+             if (bernoulliTrial(chance)) {
+                 int dmg = randomDamage(max / 2);
+                 hp -= dmg;
+             }
+        }
+        
+        // Scythe Hit 3 (25% dmg)
+        if (isScythe_ && hits >= 3 && hp > 0) {
+             if (bernoulliTrial(chance)) {
+                 int dmg = randomDamage(max / 4);
+                 hp -= dmg;
+             }
         }
     }
     return ticks;
@@ -205,14 +424,37 @@ double Battle::calculateDPS(const std::string& style, int stanceAtt, int stanceS
     int mHit = maxHit();
     double chance = hitChance();
     
+    // Calculate average damage per attack sequence
+    double avgDmg = 0.0;
+    
+    // Base Hit
+    double hit1 = (double)mHit * 0.5 * chance;
+
+    // Keris Crit
+    if (isKeris_ && isKalphite_) {
+        hit1 *= (53.0/51.0);
+    }
+    
+    avgDmg += hit1;
+    
+    // Scythe Extra Hits
+    if (isScythe_) {
+        int size = monster_.getSize();
+        if (size >= 2) {
+            avgDmg += (double)(mHit / 2) * 0.5 * chance;
+        }
+        if (size >= 3) {
+            avgDmg += (double)(mHit / 4) * 0.5 * chance;
+        }
+    }
+    
     style_ = oldStyle;
     stance_bonus_attack_ = oldStanceAtt;
     stance_bonus_strength_ = oldStanceStr;
     
-    double avgDmgPerHit = (double)mHit * 0.5 * chance;
     double secondsPerHit = (double)attack_speed_ * 0.6;
     
-    return avgDmgPerHit / secondsPerHit;
+    return avgDmg / secondsPerHit;
 }
 
 double Battle::solveOptimalDPS() {
@@ -236,6 +478,7 @@ double Battle::solveOptimalDPS() {
     Option bestOption = options[0];
     bestOption.dps = -1.0;
     
+    // Recalculate attack speed
     attack_speed_ = 4;
     auto gear = player_.getGear();
     if (gear.count("weapon")) {
@@ -259,14 +502,11 @@ double Battle::solveOptimalDPS() {
 }
 
 void Battle::optimizeAttackStyle() {
-    std::cout << "\n--- Optimizing Attack Style ---\n";
     double dps = solveOptimalDPS();
     
     std::string stanceName = "Unknown";
     if (stance_bonus_attack_ == 3) stanceName = "Accurate (+3 Att)";
     else if (stance_bonus_strength_ == 3) stanceName = "Aggressive (+3 Str)";
-    
-    std::cout << ">>> Selected Best: " << style_ << " (" << stanceName << ") | DPS: " << dps << "\n";
 }
 
 double Battle::runSimulations(int n) {
@@ -277,7 +517,6 @@ double Battle::runSimulations(int n) {
     return static_cast<double>(totalTicks) / n;
 }
 
-// New getter methods for UI
 int Battle::getMaxHit() {
     return maxHit();
 }
@@ -289,9 +528,20 @@ double Battle::getHitChance() {
 double Battle::getDPS() {
     int mHit = maxHit();
     double chance = hitChance();
-    double avgDmgPerHit = (double)mHit * 0.5 * chance;
+    double avgDmg = 0.0;
+    
+    double hit1 = (double)mHit * 0.5 * chance;
+    if (isKeris_ && isKalphite_) hit1 *= (53.0/51.0);
+    avgDmg += hit1;
+    
+    if (isScythe_) {
+        int size = monster_.getSize();
+        if (size >= 2) avgDmg += (double)(mHit / 2) * 0.5 * chance;
+        if (size >= 3) avgDmg += (double)(mHit / 4) * 0.5 * chance;
+    }
+
     double secondsPerHit = (double)attack_speed_ * 0.6;
-    return avgDmgPerHit / secondsPerHit;
+    return avgDmg / secondsPerHit;
 }
 
 BattleResult Battle::getResults() {
@@ -306,6 +556,14 @@ BattleResult Battle::getResults() {
     result.isFang = isFang_;
     result.isDHL = isDHL_;
     result.hasSalve = hasSalve_ || hasSalveE_ || hasSalveI_ || hasSalveEI_;
+    
+    result.isDHCB = isDHCB_;
+    result.isArclight = isArclight_;
+    result.isKeris = isKeris_;
+    result.isScythe = isScythe_;
+    result.isTbow = isTbow_;
+    result.onTask = isOnTask_;
+    result.activeSet = activeSet_;
     
     if (stance_bonus_attack_ > 0) {
         result.stance = "Accurate";

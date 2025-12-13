@@ -14,6 +14,7 @@ class Monster {
         std::map<std::string, bool> stats_bool_;
         std::vector<std::string> attributes_;
         int current_hp_ {0};
+        int size_ {1}; // Default to 1
     public:
         Monster(std::string n = "");
         void loadFromJSON(const std::string &filepath);
@@ -24,6 +25,7 @@ class Monster {
         void setBool(const std::string& key, bool value) { stats_bool_[key] = value; }
         void setName(const std::string& n) { name_ = n; }
         void addAttribute(const std::string& attr) { attributes_.push_back(attr); }
+        void setSize(int s) { size_ = s; }
         
         // Getters
         int getInt(const std::string& key) const;
@@ -36,4 +38,15 @@ class Monster {
         void setCurrentHP(int hp) { current_hp_ = hp; }
         void takeDMG(int a) { current_hp_ -= a; }
         void resetHP();
+        int getSize() const { return size_; }
+        
+        // Attribute helpers
+        bool isDemon() const { return hasAttribute("demon"); }
+        bool isDragon() const { return hasAttribute("dragon"); }
+        bool isKalphite() const { return hasAttribute("kalphite"); }
+        bool isLeafy() const { return hasAttribute("leafy"); }
+        bool isVampyre() const { return hasAttribute("vampyre") || hasAttribute("vampyre1") || hasAttribute("vampyre2") || hasAttribute("vampyre3"); }
+        bool isShade() const { return hasAttribute("shade"); }
+        bool isXerician() const { return hasAttribute("xerician"); }
+        bool isUndead() const { return hasAttribute("undead"); }
 };
