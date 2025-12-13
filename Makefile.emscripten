@@ -1,0 +1,63 @@
+# Makefile for Emscripten WASM build
+# Usage: emmake make -f Makefile.emscripten
+
+# Compiler
+CC = emcc
+CXX = em++
+
+# Source files (excluding main.cpp and network-dependent code)
+SOURCES = wasm_bindings.cpp \
+          player.cpp \
+          monster.cpp \
+          item.cpp \
+          battle.cpp \
+          upgrade_advisor.cpp
+
+# Output
+OUTPUT_DIR = web
+OUTPUT = $(OUTPUT_DIR)/osrs_calc.js
+
+# Emscripten flags
+EMFLAGS = --bind \
+          -O3 \
+          -s WASM=1 \
+          -s MODULARIZE=1 \
+          -s EXPORT_NAME="createOSRSCalc" \
+          -s ALLOW_MEMORY_GROWTH=1 \
+          -s NO_EXIT_RUNTIME=1 \
+          -s EXPORTED_RUNTIME_METHODS='["ccall","cwrap"]' \
+          -s ENVIRONMENT='web' \
+          -std=c++17
+
+# Include paths
+INCLUDES = -I.
+
+# Build target
+all: $(OUTPUT_DIR) $(OUTPUT)
+
+$(OUTPUT_DIR):
+	mkdir -p $(OUTPUT_DIR)
+	mkdir -p $(OUTPUT_DIR)/css
+	mkdir -p $(OUTPUT_DIR)/js
+	mkdir -p $(OUTPUT_DIR)/data
+
+$(OUTPUT): $(SOURCES)
+	$(CXX) $(SOURCES) $(EMFLAGS) $(INCLUDES) -o $(OUTPUT)
+	@echo "Build complete! Output: $(OUTPUT)"
+
+# Debug build
+debug: EMFLAGS += -g -s ASSERTIONS=2 -s SAFE_HEAP=1
+debug: $(OUTPUT_DIR) $(OUTPUT)
+
+# Clean
+clean:
+	rm -f $(OUTPUT_DIR)/osrs_calc.js $(OUTPUT_DIR)/osrs_calc.wasm
+
+# Copy data files to web directory
+copy-data:
+	cp items-complete.json $(OUTPUT_DIR)/data/
+	cp monsters-nodrops.json $(OUTPUT_DIR)/data/
+	cp bosses_complete.json $(OUTPUT_DIR)/data/
+	cp latest_prices.json $(OUTPUT_DIR)/data/
+
+.PHONY: all clean debug copy-data
