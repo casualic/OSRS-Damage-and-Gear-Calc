@@ -3,6 +3,7 @@
 #include "monster.h"
 #include <random>
 #include <string>
+#include <vector>
 
 struct BattleResult {
     double dps;
@@ -118,6 +119,9 @@ class Battle {
         
         // Runs n simulations and returns avg ticks
         double runSimulations(int n);
+
+        // Runs n simulations and returns all TTK values (sorted)
+        std::vector<int> getSimulatedTTKs(int n);
         
         // Tests styles and sets the best one
         void optimizeAttackStyle(); 

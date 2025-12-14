@@ -802,6 +802,16 @@ double Battle::runSimulations(int n) {
     return static_cast<double>(totalTicks) / n;
 }
 
+std::vector<int> Battle::getSimulatedTTKs(int n) {
+    std::vector<int> results;
+    results.reserve(n);
+    for (int i = 0; i < n; ++i) {
+        results.push_back(simulate());
+    }
+    std::sort(results.begin(), results.end());
+    return results;
+}
+
 int Battle::getMaxHit() {
     return maxHit();
 }

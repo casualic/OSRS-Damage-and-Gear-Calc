@@ -172,6 +172,20 @@ std::string getBattleResultsJson(Battle& battle) {
     return j.dump();
 }
 
+// Get TTK distribution as JSON string
+std::string getTTKDistribution(Battle& battle, int n) {
+    std::vector<int> ttks = battle.getSimulatedTTKs(n);
+    // Convert to seconds (0.6s per tick)
+    std::vector<double> times;
+    times.reserve(ttks.size());
+    for(int ticks : ttks) {
+        times.push_back(ticks * 0.6);
+    }
+    json j = times;
+    return j.dump();
+}
+
+
 // Helper factory functions for Item constructors
 Item createItemFromString(const std::string& name) {
     return Item(name);
@@ -284,6 +298,7 @@ EMSCRIPTEN_BINDINGS(osrs_calc) {
     function("loadItemFromJson", &loadItemFromJson);
     function("loadMonsterFromJson", &loadMonsterFromJson);
     function("getBattleResultsJson", &getBattleResultsJson);
+    function("getTTKDistribution", &getTTKDistribution);
 }
 
 #endif // __EMSCRIPTEN__

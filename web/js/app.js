@@ -12,7 +12,8 @@ const state = {
     equippedItems: {},
     selectedSlot: null,
     rawSuggestions: [], // Store raw API response
-    activeTab: 'efficiency' // Track active sort tab
+    activeTab: 'efficiency', // Track active sort tab
+    ttkChart: null // Chart.js instance
 };
 
 // Initialize the application
@@ -179,12 +180,14 @@ function updateBuff(buff, active) {
     } catch (e) {
         console.error('Error updating buff:', e);
     }
+    calculateDPS();
 }
 
 // Update player stat
 function updateStat(stat, value) {
     if (!state.player) return;
     state.player.setStat(stat, parseInt(value) || 1);
+    calculateDPS();
 }
 
 // Fetch hiscores from OSRS API
@@ -479,6 +482,7 @@ function equipItem(slot, itemId) {
 
     updateEquipmentDisplay();
     updateBonuses();
+    calculateDPS();
 }
 
 // Update equipment display
@@ -551,6 +555,7 @@ function selectMonster(monsterData) {
     document.getElementById('monster-hp').textContent = monsterData.hitpoints || state.monster.getInt('hitpoints');
     document.getElementById('monster-combat').textContent = monsterData.combat_level || state.monster.getInt('combat_level') || '-';
     document.getElementById('monster-def-level').textContent = monsterData.defence_level || state.monster.getInt('defence_level') || '-';
+    calculateDPS();
 }
 
 // Open item modal for a slot
@@ -612,7 +617,8 @@ function searchItemsForSlot(query) {
 // Calculate DPS
 function calculateDPS() {
     if (!state.wasmModule || !state.player || !state.monster) {
-        alert('Please select a monster first');
+        // Silent return if not ready
+        if (!state.monster || !state.monster.getName()) return;
         return;
     }
 
@@ -630,11 +636,87 @@ function calculateDPS() {
         document.getElementById('avg-ttk').textContent = results.avgTTK.toFixed(1) + 's';
         document.getElementById('kills-per-hour').textContent = results.killsPerHour.toFixed(1);
 
+        // Calculate and Render CDF
+        const ttkJson = state.wasmModule.getTTKDistribution(battle, 1000);
+        const ttks = JSON.parse(ttkJson);
+        renderTTKChart(ttks);
+
     } catch (error) {
         console.error('Error calculating DPS:', error);
-        alert('Error calculating DPS. Check console for details.');
     }
 }
+
+function renderTTKChart(ttks) {
+    const ctx = document.getElementById('ttk-chart').getContext('2d');
+    
+    // Process data for CDF
+    const uniqueTimes = [];
+    const probabilities = [];
+    const total = ttks.length;
+    
+    // ttks is sorted
+    let currentCount = 0;
+    
+    // Add 0 point
+    uniqueTimes.push(0);
+    probabilities.push(0);
+
+    for (let i = 0; i < total; i++) {
+        currentCount++;
+        // If next value is different or end of array
+        if (i === total - 1 || ttks[i] !== ttks[i+1]) {
+            uniqueTimes.push(ttks[i]);
+            probabilities.push((currentCount / total) * 100);
+        }
+    }
+    
+    if (state.ttkChart) {
+        state.ttkChart.destroy();
+    }
+    
+    state.ttkChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: uniqueTimes,
+            datasets: [{
+                label: 'Cumulative Probability of Kill (%)',
+                data: probabilities,
+                borderColor: 'rgb(75, 192, 192)',
+                backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                tension: 0.1,
+                fill: true,
+                pointRadius: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    title: { display: true, text: 'Time (seconds)' },
+                    type: 'linear'
+                },
+                y: {
+                    title: { display: true, text: 'Probability (%)' },
+                    min: 0,
+                    max: 100
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.parsed.y.toFixed(1) + '% chance to kill by ' + context.parsed.x.toFixed(1) + 's';
+                        }
+                    },
+                    intersect: false,
+                    mode: 'index'
+                }
+            }
+        }
+    });
+}
+
 
 // Run simulation
 function runSimulation() {

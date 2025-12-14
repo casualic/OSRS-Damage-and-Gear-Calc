@@ -35,3 +35,4 @@ if(APPLE)
     target_link_libraries(osrscalc PRIVATE OpenSSL::SSL OpenSSL::Crypto)
 endif()
 
+
