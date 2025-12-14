@@ -141,6 +141,9 @@ function initializeUI() {
 
     // Upgrade filters
     document.getElementById('exclude-duo').addEventListener('change', applyFiltersAndSort);
+
+    // Fetch prices button
+    document.getElementById('fetch-prices-btn').addEventListener('click', fetchLatestPrices);
     
     // Modal close
     document.querySelector('.modal-close').addEventListener('click', closeItemModal);
@@ -749,6 +752,44 @@ function runSimulation() {
             btn.textContent = 'Run Simulation';
         }
     }, 10);
+}
+
+// Fetch latest prices from Wiki API
+async function fetchLatestPrices() {
+    const btn = document.getElementById('fetch-prices-btn');
+    const originalText = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'Updating Prices...';
+
+    try {
+        // Use CORS proxy to fetch from Wiki API
+        const proxyUrl = 'https://corsproxy.io/?';
+        const apiUrl = 'https://prices.runescape.wiki/api/v1/osrs/latest';
+        
+        const response = await fetch(proxyUrl + encodeURIComponent(apiUrl));
+        if (!response.ok) throw new Error('Failed to fetch prices');
+        
+        const data = await response.json();
+        
+        // Update state
+        state.priceDb = data;
+        console.log('Prices updated via API');
+        
+        btn.textContent = '✓ Prices Updated!';
+        setTimeout(() => {
+            btn.textContent = originalText;
+            btn.disabled = false;
+        }, 2000);
+        
+    } catch (error) {
+        console.error('Error fetching prices:', error);
+        alert('Failed to update prices from Wiki API.');
+        btn.textContent = 'Error!';
+        setTimeout(() => {
+            btn.textContent = originalText;
+            btn.disabled = false;
+        }, 2000);
+    }
 }
 
 // Find upgrades
