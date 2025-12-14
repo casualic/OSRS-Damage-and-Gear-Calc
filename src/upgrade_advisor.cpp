@@ -110,7 +110,8 @@ std::vector<UpgradeSuggestion> UpgradeAdvisor::suggestUpgrades(bool excludeThrow
                 lowerName.find("dart") != std::string::npos ||
                 lowerName.find("javelin") != std::string::npos ||
                 lowerName.find("thrownaxe") != std::string::npos ||
-                lowerName.find("chinchompa") != std::string::npos) {
+                lowerName.find("chinchompa") != std::string::npos ||
+                lowerName.find("toktz-xil-ul") != std::string::npos) {
                 continue;
             }
         }

@@ -94,6 +94,23 @@ void loadItemFromJson(Item& item, int id, const std::string& allItemsJson) {
     }
 }
 
+// Helper to load single item from its own JSON data
+void loadSingleItemFromJson(Item& item, const std::string& itemJson) {
+    try {
+        json itemData = json::parse(itemJson);
+        // Ensure ID is set if present in the JSON (though usually passed separately or already set)
+        if (itemData.contains("id")) {
+             item.setID(itemData["id"].get<int>());
+        }
+        if (itemData.contains("name")) {
+             item.setName(itemData["name"].get<std::string>());
+        }
+        item.loadFromJSON(itemData);
+    } catch (const std::exception& e) {
+        std::cerr << "Error loading single item: " << e.what() << "\n";
+    }
+}
+
 // Helper to load monster from JSON string (for bosses array format)
 void loadMonsterFromJson(Monster& monster, const std::string& name, const std::string& jsonData) {
     try {
@@ -296,6 +313,7 @@ EMSCRIPTEN_BINDINGS(osrs_calc) {
     
     // Helper functions
     function("loadItemFromJson", &loadItemFromJson);
+    function("loadSingleItemFromJson", &loadSingleItemFromJson);
     function("loadMonsterFromJson", &loadMonsterFromJson);
     function("getBattleResultsJson", &getBattleResultsJson);
     function("getTTKDistribution", &getTTKDistribution);

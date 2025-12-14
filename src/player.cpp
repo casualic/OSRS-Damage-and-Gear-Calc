@@ -271,10 +271,10 @@ void Player::fetchGearFromClient() {
     ws.handshake("localhost", "/");
 
     std::vector<std::string> requests = {
-        "{\"type\":\"REQUEST_PLAYER_DATA\"}", 
-        "{\"type\":\"GET_PLAYER\"}",
-        "{\"type\":\"EQUIPMENT\"}",
-        "{\"action\":\"get_equipment\"}",
+        // "{\"type\":\"REQUEST_PLAYER_DATA\"}", 
+        // "{\"type\":\"GET_PLAYER\"}",
+        // "{\"type\":\"EQUIPMENT\"}",
+        // "{\"action\":\"get_equipment\"}",
         "{\"_wsType\":\"GetPlayer\"}"
     };
 

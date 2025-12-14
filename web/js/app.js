@@ -270,6 +270,13 @@ async function connectWikiSync() {
     const btn = document.getElementById('wikisync-btn');
     btn.disabled = true;
     btn.textContent = 'Connecting...';
+    
+    // Show loading overlay
+    const overlay = document.getElementById('loading-overlay');
+    const overlayText = overlay.querySelector('p');
+    const originalText = "Loading OSRS Calculator..."; // Default text
+    overlayText.textContent = 'Connecting to WikiSync...';
+    overlay.classList.remove('hidden');
 
     // Try ports 37767-37776
     for (let port = 37767; port <= 37776; port++) {
@@ -290,10 +297,18 @@ async function connectWikiSync() {
                 try {
                     const data = JSON.parse(event.data);
                     if (data._wsType === 'GetPlayer' && data.payload) {
-                        loadWikiSyncData(data.payload);
+                        overlayText.textContent = 'Importing Gear...';
+                        // Force a repaint before processing data
+                        setTimeout(() => {
+                            loadWikiSyncData(data.payload);
+                            overlay.classList.add('hidden');
+                            overlayText.textContent = originalText;
+                        }, 50);
                     }
                 } catch (e) {
                     console.error('Error parsing WikiSync data:', e);
+                    overlay.classList.add('hidden');
+                    overlayText.textContent = originalText;
                 }
             };
 
@@ -311,6 +326,8 @@ async function connectWikiSync() {
 
     btn.disabled = false;
     btn.textContent = '🔄 Sync from WikiSync';
+    overlay.classList.add('hidden');
+    overlayText.textContent = originalText;
     alert('Could not connect to WikiSync. Make sure RuneLite is running with the WikiSync plugin enabled.');
 }
 
@@ -464,7 +481,9 @@ function equipItem(slot, itemId) {
 
     // Create WASM Item and load stats
     const item = new state.wasmModule.Item(itemId);
-    state.wasmModule.loadItemFromJson(item, itemId, JSON.stringify(state.itemDb));
+    // Use optimized single item loading to avoid freezing the UI
+    const dataWithId = { ...itemData, id: parseInt(itemId) };
+    state.wasmModule.loadSingleItemFromJson(item, JSON.stringify(dataWithId));
     
     // Normalize slot name
     let normalizedSlot = slot;
