@@ -15,6 +15,7 @@ private:
     bool piety_ {false};
     bool rigour_ {false};
     bool superCombat_ {false};
+    bool kandarinHard_ {true};
     int currentHP_ {99};
     int maxHP_ {99};
 
@@ -31,6 +32,10 @@ public:
     bool isRigourActive() const { return rigour_; }
     void setSuperCombat(bool active) { superCombat_ = active; }
     bool isSuperCombatActive() const { return superCombat_; }
+    
+    // Diaries
+    void setKandarinHard(bool completed) { kandarinHard_ = completed; }
+    bool hasKandarinHard() const { return kandarinHard_; }
     
     // Helper to get level including potion boosts
     int getBoostedLevel(const std::string& skill);

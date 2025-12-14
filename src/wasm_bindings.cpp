@@ -33,10 +33,10 @@ public:
         }
     }
     
-    std::string suggestUpgrades(int maxPrice) {
+    std::string suggestUpgrades(int maxPrice, bool excludeThrowables, bool excludeAmmo) {
         try {
             UpgradeAdvisor advisor(player_, monster_, itemDb_, priceDb_);
-            auto suggestions = advisor.suggestUpgrades();
+            auto suggestions = advisor.suggestUpgrades(excludeThrowables, excludeAmmo);
             
             json result = json::array();
             for (const auto& sug : suggestions) {
@@ -91,6 +91,23 @@ void loadItemFromJson(Item& item, int id, const std::string& allItemsJson) {
         item.fetchStats(id, allItems);
     } catch (const std::exception& e) {
         std::cerr << "Error loading item: " << e.what() << "\n";
+    }
+}
+
+// Helper to load single item from its own JSON data
+void loadSingleItemFromJson(Item& item, const std::string& itemJson) {
+    try {
+        json itemData = json::parse(itemJson);
+        // Ensure ID is set if present in the JSON (though usually passed separately or already set)
+        if (itemData.contains("id")) {
+             item.setID(itemData["id"].get<int>());
+        }
+        if (itemData.contains("name")) {
+             item.setName(itemData["name"].get<std::string>());
+        }
+        item.loadFromJSON(itemData);
+    } catch (const std::exception& e) {
+        std::cerr << "Error loading single item: " << e.what() << "\n";
     }
 }
 
@@ -171,6 +188,20 @@ std::string getBattleResultsJson(Battle& battle) {
     
     return j.dump();
 }
+
+// Get TTK distribution as JSON string
+std::string getTTKDistribution(Battle& battle, int n) {
+    std::vector<int> ttks = battle.getSimulatedTTKs(n);
+    // Convert to seconds (0.6s per tick)
+    std::vector<double> times;
+    times.reserve(ttks.size());
+    for(int ticks : ttks) {
+        times.push_back(ticks * 0.6);
+    }
+    json j = times;
+    return j.dump();
+}
+
 
 // Helper factory functions for Item constructors
 Item createItemFromString(const std::string& name) {
@@ -282,8 +313,10 @@ EMSCRIPTEN_BINDINGS(osrs_calc) {
     
     // Helper functions
     function("loadItemFromJson", &loadItemFromJson);
+    function("loadSingleItemFromJson", &loadSingleItemFromJson);
     function("loadMonsterFromJson", &loadMonsterFromJson);
     function("getBattleResultsJson", &getBattleResultsJson);
+    function("getTTKDistribution", &getTTKDistribution);
 }
 
 #endif // __EMSCRIPTEN__

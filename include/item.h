@@ -25,6 +25,7 @@ class Item {
         
         void fetchStats(const std::string &filepath);
         void fetchStats(int id, const json& allItems);
+        void loadFromJSON(const json& itemData);
         
         // Setters for WASM
         void setInt(const std::string& key, int value) { stats_int_[key] = value; }

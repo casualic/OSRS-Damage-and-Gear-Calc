@@ -35,6 +35,10 @@ void Item::parseItemJSON(const json& item) {
     }
 }
 
+void Item::loadFromJSON(const json& itemData) {
+    parseItemJSON(itemData);
+}
+
 void Item::fetchStats(int id, const json& allItems) {
     std::string id_str = std::to_string(id);
     if (allItems.contains(id_str)) {

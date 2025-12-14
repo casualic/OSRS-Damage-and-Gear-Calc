@@ -12,7 +12,8 @@ const state = {
     equippedItems: {},
     selectedSlot: null,
     rawSuggestions: [], // Store raw API response
-    activeTab: 'efficiency' // Track active sort tab
+    activeTab: 'efficiency', // Track active sort tab
+    ttkChart: null // Chart.js instance
 };
 
 // Initialize the application
@@ -140,6 +141,9 @@ function initializeUI() {
 
     // Upgrade filters
     document.getElementById('exclude-duo').addEventListener('change', applyFiltersAndSort);
+
+    // Fetch prices button
+    document.getElementById('fetch-prices-btn').addEventListener('click', fetchLatestPrices);
     
     // Modal close
     document.querySelector('.modal-close').addEventListener('click', closeItemModal);
@@ -179,12 +183,14 @@ function updateBuff(buff, active) {
     } catch (e) {
         console.error('Error updating buff:', e);
     }
+    calculateDPS();
 }
 
 // Update player stat
 function updateStat(stat, value) {
     if (!state.player) return;
     state.player.setStat(stat, parseInt(value) || 1);
+    calculateDPS();
 }
 
 // Fetch hiscores from OSRS API
@@ -264,6 +270,13 @@ async function connectWikiSync() {
     const btn = document.getElementById('wikisync-btn');
     btn.disabled = true;
     btn.textContent = 'Connecting...';
+    
+    // Show loading overlay
+    const overlay = document.getElementById('loading-overlay');
+    const overlayText = overlay.querySelector('p');
+    const originalText = "Loading OSRS Calculator..."; // Default text
+    overlayText.textContent = 'Connecting to WikiSync...';
+    overlay.classList.remove('hidden');
 
     // Try ports 37767-37776
     for (let port = 37767; port <= 37776; port++) {
@@ -284,10 +297,18 @@ async function connectWikiSync() {
                 try {
                     const data = JSON.parse(event.data);
                     if (data._wsType === 'GetPlayer' && data.payload) {
-                        loadWikiSyncData(data.payload);
+                        overlayText.textContent = 'Importing Gear...';
+                        // Force a repaint before processing data
+                        setTimeout(() => {
+                            loadWikiSyncData(data.payload);
+                            overlay.classList.add('hidden');
+                            overlayText.textContent = originalText;
+                        }, 50);
                     }
                 } catch (e) {
                     console.error('Error parsing WikiSync data:', e);
+                    overlay.classList.add('hidden');
+                    overlayText.textContent = originalText;
                 }
             };
 
@@ -305,6 +326,8 @@ async function connectWikiSync() {
 
     btn.disabled = false;
     btn.textContent = '🔄 Sync from WikiSync';
+    overlay.classList.add('hidden');
+    overlayText.textContent = originalText;
     alert('Could not connect to WikiSync. Make sure RuneLite is running with the WikiSync plugin enabled.');
 }
 
@@ -458,7 +481,9 @@ function equipItem(slot, itemId) {
 
     // Create WASM Item and load stats
     const item = new state.wasmModule.Item(itemId);
-    state.wasmModule.loadItemFromJson(item, itemId, JSON.stringify(state.itemDb));
+    // Use optimized single item loading to avoid freezing the UI
+    const dataWithId = { ...itemData, id: parseInt(itemId) };
+    state.wasmModule.loadSingleItemFromJson(item, JSON.stringify(dataWithId));
     
     // Normalize slot name
     let normalizedSlot = slot;
@@ -479,6 +504,7 @@ function equipItem(slot, itemId) {
 
     updateEquipmentDisplay();
     updateBonuses();
+    calculateDPS();
 }
 
 // Update equipment display
@@ -551,6 +577,7 @@ function selectMonster(monsterData) {
     document.getElementById('monster-hp').textContent = monsterData.hitpoints || state.monster.getInt('hitpoints');
     document.getElementById('monster-combat').textContent = monsterData.combat_level || state.monster.getInt('combat_level') || '-';
     document.getElementById('monster-def-level').textContent = monsterData.defence_level || state.monster.getInt('defence_level') || '-';
+    calculateDPS();
 }
 
 // Open item modal for a slot
@@ -612,7 +639,8 @@ function searchItemsForSlot(query) {
 // Calculate DPS
 function calculateDPS() {
     if (!state.wasmModule || !state.player || !state.monster) {
-        alert('Please select a monster first');
+        // Silent return if not ready
+        if (!state.monster || !state.monster.getName()) return;
         return;
     }
 
@@ -630,11 +658,87 @@ function calculateDPS() {
         document.getElementById('avg-ttk').textContent = results.avgTTK.toFixed(1) + 's';
         document.getElementById('kills-per-hour').textContent = results.killsPerHour.toFixed(1);
 
+        // Calculate and Render CDF
+        const ttkJson = state.wasmModule.getTTKDistribution(battle, 1000);
+        const ttks = JSON.parse(ttkJson);
+        renderTTKChart(ttks);
+
     } catch (error) {
         console.error('Error calculating DPS:', error);
-        alert('Error calculating DPS. Check console for details.');
     }
 }
+
+function renderTTKChart(ttks) {
+    const ctx = document.getElementById('ttk-chart').getContext('2d');
+    
+    // Process data for CDF
+    const uniqueTimes = [];
+    const probabilities = [];
+    const total = ttks.length;
+    
+    // ttks is sorted
+    let currentCount = 0;
+    
+    // Add 0 point
+    uniqueTimes.push(0);
+    probabilities.push(0);
+
+    for (let i = 0; i < total; i++) {
+        currentCount++;
+        // If next value is different or end of array
+        if (i === total - 1 || ttks[i] !== ttks[i+1]) {
+            uniqueTimes.push(ttks[i]);
+            probabilities.push((currentCount / total) * 100);
+        }
+    }
+    
+    if (state.ttkChart) {
+        state.ttkChart.destroy();
+    }
+    
+    state.ttkChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: uniqueTimes,
+            datasets: [{
+                label: 'Cumulative Probability of Kill (%)',
+                data: probabilities,
+                borderColor: 'rgb(75, 192, 192)',
+                backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                tension: 0.1,
+                fill: true,
+                pointRadius: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    title: { display: true, text: 'Time (seconds)' },
+                    type: 'linear'
+                },
+                y: {
+                    title: { display: true, text: 'Probability (%)' },
+                    min: 0,
+                    max: 100
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.parsed.y.toFixed(1) + '% chance to kill by ' + context.parsed.x.toFixed(1) + 's';
+                        }
+                    },
+                    intersect: false,
+                    mode: 'index'
+                }
+            }
+        }
+    });
+}
+
 
 // Run simulation
 function runSimulation() {
@@ -669,6 +773,44 @@ function runSimulation() {
     }, 10);
 }
 
+// Fetch latest prices from Wiki API
+async function fetchLatestPrices() {
+    const btn = document.getElementById('fetch-prices-btn');
+    const originalText = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'Updating Prices...';
+
+    try {
+        // Use CORS proxy to fetch from Wiki API
+        const proxyUrl = 'https://corsproxy.io/?';
+        const apiUrl = 'https://prices.runescape.wiki/api/v1/osrs/latest';
+        
+        const response = await fetch(proxyUrl + encodeURIComponent(apiUrl));
+        if (!response.ok) throw new Error('Failed to fetch prices');
+        
+        const data = await response.json();
+        
+        // Update state
+        state.priceDb = data;
+        console.log('Prices updated via API');
+        
+        btn.textContent = '✓ Prices Updated!';
+        setTimeout(() => {
+            btn.textContent = originalText;
+            btn.disabled = false;
+        }, 2000);
+        
+    } catch (error) {
+        console.error('Error fetching prices:', error);
+        alert('Failed to update prices from Wiki API.');
+        btn.textContent = 'Error!';
+        setTimeout(() => {
+            btn.textContent = originalText;
+            btn.disabled = false;
+        }, 2000);
+    }
+}
+
 // Find upgrades
 function findUpgrades() {
     if (!state.wasmModule || !state.player || !state.monster) {
@@ -691,7 +833,10 @@ function findUpgrades() {
                 JSON.stringify(state.priceDb)
             );
 
-            const suggestionsJson = advisor.suggestUpgrades(maxBudget);
+            const excludeThrowables = document.getElementById('exclude-throwables').checked;
+            const excludeAmmo = document.getElementById('exclude-ammo').checked;
+            
+            const suggestionsJson = advisor.suggestUpgrades(maxBudget, excludeThrowables, excludeAmmo);
             state.rawSuggestions = JSON.parse(suggestionsJson);
 
             applyFiltersAndSort();

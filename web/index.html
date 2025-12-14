@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OSRS DPS Calculator</title>
+    <title>OSRS Gear Recommender / DPS Calculator</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>⚔️ OSRS DPS Calculator</h1>
-            <p class="subtitle">Calculate your damage per second against any monster</p>
+            <h1>⚔️ OSRS Gear Recommender and DPS Calculator</h1>
+            <p class="subtitle">Get your next upgrade recommendation and Calculate your damage per second against any monster</p>
         </header>
 
         <main class="main-grid">
@@ -241,6 +241,12 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <!-- TTK CDF Chart -->
+                    <div class="chart-container" style="margin-top: 20px; height: 300px;">
+                        <canvas id="ttk-chart"></canvas>
+                    </div>
+
                     <button id="calculate-btn" class="btn btn-primary btn-full">⚔️ Calculate DPS</button>
                 </div>
 
@@ -272,14 +278,21 @@
             <div class="upgrade-controls">
                 <div class="input-group">
                     <label for="max-budget">Max Budget (GP)</label>
-                    <input type="number" id="max-budget" value="10000000" min="0" step="1000000">
+                    <input type="number" id="max-budget" value="100000000" min="0" step="1000000">
                 </div>
                 <div class="input-group checkbox-group">
                     <label class="checkbox-label" style="display: flex; align-items: center; gap: 8px; margin-top: 28px;">
                         <input type="checkbox" id="exclude-duo"> Exclude Duo Items
                     </label>
+                    <label class="checkbox-label" style="display: flex; align-items: center; gap: 8px; margin-top: 10px;">
+                        <input type="checkbox" id="exclude-throwables"> Exclude Throwables
+                    </label>
+                    <label class="checkbox-label" style="display: flex; align-items: center; gap: 8px; margin-top: 10px;">
+                        <input type="checkbox" id="exclude-ammo"> Exclude Ammo
+                    </label>
                 </div>
                 <button id="suggest-upgrades-btn" class="btn btn-primary">Find Upgrades</button>
+                <button id="fetch-prices-btn" class="btn btn-secondary" style="margin-top: 10px;">Fetch Latest Prices</button>
             </div>
             
             <div class="upgrade-tabs">
@@ -329,6 +342,7 @@
     </div>
 
     <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="osrs_calc.js"></script>
     <script src="js/app.js" type="module"></script>
 </body>

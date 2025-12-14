@@ -62,6 +62,7 @@ Player::Player(std::string n) : username(std::move(n)) {
     piety_ = false;
     rigour_ = false;
     superCombat_ = false;
+    kandarinHard_ = true;
 }
 
 void Player::parseStats(std::string raw_stats_response) {
@@ -270,10 +271,10 @@ void Player::fetchGearFromClient() {
     ws.handshake("localhost", "/");
 
     std::vector<std::string> requests = {
-        "{\"type\":\"REQUEST_PLAYER_DATA\"}", 
-        "{\"type\":\"GET_PLAYER\"}",
-        "{\"type\":\"EQUIPMENT\"}",
-        "{\"action\":\"get_equipment\"}",
+        // "{\"type\":\"REQUEST_PLAYER_DATA\"}", 
+        // "{\"type\":\"GET_PLAYER\"}",
+        // "{\"type\":\"EQUIPMENT\"}",
+        // "{\"action\":\"get_equipment\"}",
         "{\"_wsType\":\"GetPlayer\"}"
     };
 
