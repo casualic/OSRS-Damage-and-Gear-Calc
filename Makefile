@@ -27,3 +27,4 @@ $(TARGET): $(OBJS)
 
 clean:
 	rm -f src/*.o $(TARGET)
+

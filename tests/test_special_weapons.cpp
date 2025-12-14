@@ -1,7 +1,7 @@
 // test/test_special_weapons.cpp
-#include "../battle.h"
-#include "../player.h"
-#include "../monster.h"
+#include "battle.h"
+#include "player.h"
+#include "monster.h"
 #include <iostream>
 #include <cassert>
 #include <cmath>
@@ -186,12 +186,52 @@ void testDharok() {
     std::cout << "PASS\n";
 }
 
+void testBolts() {
+    std::cout << "Testing Ruby Bolts...\n";
+    Player p("TestPlayer");
+    p.setStat("Ranged", 99);
+    
+    Item rcb("Rune crossbow");
+    rcb.setStr("weapon_type", "crossbow");
+    rcb.setInt("attack_speed", 5); 
+    rcb.setInt("ranged_strength", 90); 
+    rcb.setInt("attack_ranged", 90);
+    p.equip("weapon", rcb);
+    
+    Item bolts("Ruby bolts (e)");
+    bolts.setInt("ranged_strength", 49);
+    p.equip("ammo", bolts);
+    
+    Monster m("Big Boss");
+    m.setInt("hitpoints", 500);
+    m.setInt("defence_level", 50); 
+    
+    Battle b(p, m);
+    double dps1 = b.getDPS();
+    
+    // Test Zaryte
+    Item zcb("Zaryte crossbow");
+    zcb.setStr("weapon_type", "crossbow");
+    zcb.setInt("attack_speed", 5);
+    zcb.setInt("ranged_strength", 90);
+    zcb.setInt("attack_ranged", 90);
+    p.equip("weapon", zcb);
+    
+    Battle b2(p, m);
+    double dps2 = b2.getDPS();
+    
+    std::cout << "RCB DPS: " << dps1 << ", ZCB DPS: " << dps2 << "\n";
+    assert(dps2 > dps1); // Zaryte should boost ruby damage/effect
+    std::cout << "PASS\n";
+}
+
 int main() {
     testDragonbane();
     testSlayerHelm();
     testVoid();
     testScythe();
     testDharok();
+    testBolts();
     
     std::cout << "All tests passed!\n";
     return 0;

@@ -62,6 +62,7 @@ Player::Player(std::string n) : username(std::move(n)) {
     piety_ = false;
     rigour_ = false;
     superCombat_ = false;
+    kandarinHard_ = true;
 }
 
 void Player::parseStats(std::string raw_stats_response) {

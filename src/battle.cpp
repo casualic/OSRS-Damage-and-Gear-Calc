@@ -33,7 +33,10 @@ void Battle::init() {
     isScythe_ = false;
     isTbow_ = false;
     isDharok_ = false;
-    
+    isZaryte_ = false;
+    boltType_ = BoltType::NONE;
+    isFiery_ = monster_.hasAttribute("fiery"); // Ensure data has this or it defaults false
+
     hasSalve_ = false;
     hasSalveE_ = false;
     hasSalveI_ = false;
@@ -74,6 +77,7 @@ void Battle::init() {
         if (name.find("Leaf-bladed") != std::string::npos) isLeafBladed_ = true;
         if (name.find("Scythe of vitur") != std::string::npos) isScythe_ = true;
         if (name.find("Twisted bow") != std::string::npos) isTbow_ = true;
+        if (name.find("Zaryte crossbow") != std::string::npos) isZaryte_ = true;
         
         if (activeSet_ == "Dharok" && name.find("Dharok's greataxe") != std::string::npos) {
             isDharok_ = true;
@@ -101,16 +105,17 @@ void Battle::init() {
         Item ammo = gear.at("ammo");
         bool compatible = false;
 
+        auto toLower = [](std::string s) {
+            std::transform(s.begin(), s.end(), s.begin(), ::tolower);
+            return s;
+        };
+
         if (gear.count("weapon")) {
             Item weapon = gear.at("weapon");
             std::string wType = weapon.getStr("weapon_type");
             std::string wName = weapon.getName();
             std::string aName = ammo.getName();
             
-            auto toLower = [](std::string s) {
-                std::transform(s.begin(), s.end(), s.begin(), ::tolower);
-                return s;
-            };
             std::string wNameL = toLower(wName);
             std::string aNameL = toLower(aName);
             
@@ -143,6 +148,19 @@ void Battle::init() {
             invalid_ranged_str_ = ammo.getInt("ranged_strength");
             invalid_ranged_att_ = ammo.getInt("attack_ranged");
         }
+        
+        // Determine Bolt Type
+        std::string aNameL = toLower(ammo.getName());
+        if (aNameL.find("opal bolts (e)") != std::string::npos) boltType_ = BoltType::OPAL;
+        else if (aNameL.find("jade bolts (e)") != std::string::npos) boltType_ = BoltType::JADE;
+        else if (aNameL.find("pearl bolts (e)") != std::string::npos) boltType_ = BoltType::PEARL;
+        else if (aNameL.find("topaz bolts (e)") != std::string::npos) boltType_ = BoltType::TOPAZ;
+        else if (aNameL.find("sapphire bolts (e)") != std::string::npos) boltType_ = BoltType::SAPPHIRE;
+        else if (aNameL.find("emerald bolts (e)") != std::string::npos) boltType_ = BoltType::EMERALD;
+        else if (aNameL.find("ruby bolts (e)") != std::string::npos) boltType_ = BoltType::RUBY;
+        else if (aNameL.find("diamond bolts (e)") != std::string::npos) boltType_ = BoltType::DIAMOND;
+        else if (aNameL.find("dragonstone bolts (e)") != std::string::npos) boltType_ = BoltType::DRAGONSTONE;
+        else if (aNameL.find("onyx bolts (e)") != std::string::npos) boltType_ = BoltType::ONYX;
     }
 }
 
@@ -531,15 +549,106 @@ int Battle::simulate() {
     while (hp > 0) {
         ticks += attack_speed_;
         
-        // Hit 1
-        if (bernoulliTrial(chance)) {
-            int dmg = randomDamage(max);
-            // Keris crit check
-            if (isKeris_ && isKalphite_) {
-                 std::uniform_int_distribution<int> crit(1, 51);
-                 if (crit(gen) == 1) dmg *= 3;
+        bool boltProc = false;
+        double procChance = 0.0;
+        
+        // Base Probabilities
+        switch (boltType_) {
+            case BoltType::OPAL: procChance = 0.05; break;
+            case BoltType::JADE: procChance = 0.05; break;
+            case BoltType::PEARL: procChance = 0.06; break;
+            case BoltType::TOPAZ: procChance = 0.04; break;
+            case BoltType::SAPPHIRE: procChance = 0.05; break;
+            case BoltType::EMERALD: procChance = 0.55; break;
+            case BoltType::RUBY: procChance = 0.06; break;
+            case BoltType::DIAMOND: procChance = 0.10; break;
+            case BoltType::DRAGONSTONE: procChance = 0.06; break;
+            case BoltType::ONYX: procChance = 0.10; break; // 10% base (11% w/ diary)
+            default: procChance = 0.0; break;
+        }
+        
+        // Modifiers
+        if (boltType_ != BoltType::NONE) {
+            if (isKandarinHard_) procChance *= 1.10;
+        }
+        
+        if (bernoulliTrial(procChance)) boltProc = true;
+        
+        // Handle "Bypass" Bolts (Ruby, Diamond, Dragonstone, Onyx)
+        bool handled = false;
+        
+        if (boltProc) {
+            if (boltType_ == BoltType::RUBY) {
+                // 20% of current HP, capped at 100
+                double ratio = 0.20;
+                int cap = 100;
+                if (isZaryte_) { ratio = 0.22; cap = 110; }
+                
+                int dmg = static_cast<int>(hp * ratio);
+                if (dmg > cap) dmg = cap;
+                hp -= dmg;
+                handled = true;
+            } else if (boltType_ == BoltType::DIAMOND) {
+                // 15% increased max hit, ignores defence
+                int boostMax = static_cast<int>(max * 1.15);
+                if (isZaryte_) boostMax = static_cast<int>(max * 1.25); // Zaryte adds 10% to effect? Wiki: "increases damage of bolt effects by 10%".
+                // Actually for Diamond, Zaryte just buffs the damage? 
+                // Wiki: "Zaryte crossbow: ... effects are 10% stronger".
+                // For Diamond "increases max hit by 15%". 15% * 1.1 = 16.5%? Or just flat damage mod?
+                // Let's assume it boosts the damage roll itself? 
+                // "The effect increases your max hit by 15%". Zaryte likely makes it 1.1 * (Max * 1.15)? Or (Max * 1.15) * 1.1?
+                // Let's stick to standard max * 1.15 for now, maybe standard damage + 10% for zaryte if applicable.
+                
+                int dmg = randomDamage(boostMax); 
+                hp -= dmg;
+                handled = true;
+            } else if (boltType_ == BoltType::DRAGONSTONE) {
+                // Ranged Level * 0.2 extra
+                int rng = player_.getBoostedLevel("Ranged");
+                int extra = static_cast<int>(rng * 0.20);
+                if (isZaryte_) extra = static_cast<int>(extra * 1.10);
+                
+                int dmg = randomDamage(max) + extra;
+                hp -= dmg;
+                handled = true;
+            } else if (boltType_ == BoltType::ONYX) {
+                // 1.20 multiplier
+                int dmg = randomDamage(static_cast<int>(max * 1.20));
+                // Zaryte?
+                 if (isZaryte_) dmg = static_cast<int>(dmg * 1.10);
+                hp -= dmg;
+                handled = true;
             }
-            hp -= dmg;
+        }
+        
+        // Hit 1 (Standard)
+        if (!handled) {
+            if (bernoulliTrial(chance)) {
+                int dmg = randomDamage(max);
+                // Keris crit check
+                if (isKeris_ && isKalphite_) {
+                     std::uniform_int_distribution<int> crit(1, 51);
+                     if (crit(gen) == 1) dmg *= 3;
+                }
+                
+                // On-hit Bolt Effects (Opal, Pearl)
+                if (boltProc) {
+                    if (boltType_ == BoltType::OPAL) {
+                         int rng = player_.getBoostedLevel("Ranged");
+                         int extra = static_cast<int>(rng * 0.10);
+                         if (isZaryte_) extra = static_cast<int>(extra * 1.10);
+                         dmg += extra;
+                    } else if (boltType_ == BoltType::PEARL) {
+                         int rng = player_.getBoostedLevel("Ranged");
+                         double ratio = isFiery_ ? (1.0/15.0) : (1.0/20.0);
+                         int extra = static_cast<int>(rng * ratio);
+                         if (isZaryte_) extra = static_cast<int>(extra * 1.10);
+                         dmg += extra;
+                    }
+                }
+                
+                hp -= dmg;
+            }
         }
         
         // Scythe Hit 2 (50% dmg)
@@ -706,8 +815,76 @@ double Battle::getDPS() {
     double chance = hitChance();
     double avgDmg = 0.0;
     
-    double hit1 = (double)mHit * 0.5 * chance;
-    if (isKeris_ && isKalphite_) hit1 *= (53.0/51.0);
+    double hit1 = 0.0;
+    
+    bool boltApplied = false;
+    if (isRanged_ && boltType_ != BoltType::NONE) {
+         double procChance = 0.0;
+         switch (boltType_) {
+            case BoltType::OPAL: procChance = 0.05; break;
+            case BoltType::JADE: procChance = 0.05; break;
+            case BoltType::PEARL: procChance = 0.06; break;
+            case BoltType::TOPAZ: procChance = 0.04; break;
+            case BoltType::SAPPHIRE: procChance = 0.05; break;
+            case BoltType::EMERALD: procChance = 0.55; break;
+            case BoltType::RUBY: procChance = 0.06; break;
+            case BoltType::DIAMOND: procChance = 0.10; break;
+            case BoltType::DRAGONSTONE: procChance = 0.06; break;
+            case BoltType::ONYX: procChance = 0.10; break;
+            default: procChance = 0.0; break;
+         }
+         if (isKandarinHard_) procChance *= 1.10;
+         
+         // Bypass Bolts
+         if (boltType_ == BoltType::RUBY || boltType_ == BoltType::DIAMOND || boltType_ == BoltType::DRAGONSTONE || boltType_ == BoltType::ONYX) {
+             double normalExp = chance * (mHit * 0.5);
+             double procExp = 0.0;
+             
+             if (boltType_ == BoltType::RUBY) {
+                 int currentHP = monster_.getCurrentHP(); 
+                 // If HP is full, this is accurate for start. If simulating, avgTTK uses simulate().
+                 double ratio = 0.20; int cap = 100;
+                 if (isZaryte_) { ratio = 0.22; cap = 110; }
+                 double rHit = std::min((double)cap, (double)currentHP * ratio);
+                 procExp = rHit; // 100% accuracy on proc
+             } else if (boltType_ == BoltType::DIAMOND) {
+                 double bMax = mHit * 1.15;
+                 procExp = bMax * 0.5; // 100% acc on proc
+             } else if (boltType_ == BoltType::DRAGONSTONE) {
+                 int rng = player_.getBoostedLevel("Ranged");
+                 double extra = rng * 0.20;
+                 if (isZaryte_) extra *= 1.10;
+                 procExp = (mHit * 0.5) + extra; // 100% acc? Wiki: "The attack ignores... Defence"
+             } else if (boltType_ == BoltType::ONYX) {
+                 double bMax = mHit * 1.20;
+                 procExp = bMax * 0.5;
+             }
+             
+             hit1 = (1.0 - procChance) * normalExp + (procChance * procExp);
+             boltApplied = true;
+         } else if (boltType_ == BoltType::OPAL || boltType_ == BoltType::PEARL) {
+             // On-hit Bolts
+             double baseAvg = mHit * 0.5;
+             if (boltType_ == BoltType::OPAL) {
+                 double extra = player_.getBoostedLevel("Ranged") * 0.10;
+                 if (isZaryte_) extra *= 1.10;
+                 baseAvg += (procChance * extra);
+             } else if (boltType_ == BoltType::PEARL) {
+                 double ratio = isFiery_ ? (1.0/15.0) : (1.0/20.0);
+                 double extra = player_.getBoostedLevel("Ranged") * ratio;
+                 if (isZaryte_) extra *= 1.10;
+                 baseAvg += (procChance * extra);
+             }
+             hit1 = chance * baseAvg;
+             boltApplied = true;
+         }
+    }
+    
+    if (!boltApplied) {
+        hit1 = (double)mHit * 0.5 * chance;
+        if (isKeris_ && isKalphite_) hit1 *= (53.0/51.0);
+    }
+    
     avgDmg += hit1;
     
     if (isScythe_) {

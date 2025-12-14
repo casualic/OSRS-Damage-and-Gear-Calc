@@ -25,6 +25,20 @@ struct BattleResult {
     std::string activeSet;
 };
 
+enum class BoltType {
+    NONE,
+    OPAL,
+    JADE,
+    PEARL,
+    TOPAZ,
+    SAPPHIRE,
+    EMERALD,
+    RUBY,
+    DIAMOND,
+    DRAGONSTONE,
+    ONYX
+};
+
 class Battle {
     private:
         Player player_;  // Copy for WASM compatibility
@@ -44,6 +58,12 @@ class Battle {
         bool isScythe_ {false};
         bool isTbow_ {false};
         bool isDharok_ {false};
+        
+        // Bolt effects
+        BoltType boltType_ {BoltType::NONE};
+        bool isZaryte_ {false};
+        bool isFiery_ {false};
+        bool isKandarinHard_ {true};
         
         bool isDragon_ {false};
         bool isUndead_ {false};
@@ -79,6 +99,8 @@ class Battle {
         int defenceRoll();
         double hitChance();
         
+        bool checkBoltProc(double chance);
+
         int bernoulliTrial(double p);
         int randomDamage(int max);
 
