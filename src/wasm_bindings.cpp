@@ -33,10 +33,10 @@ public:
         }
     }
     
-    std::string suggestUpgrades(int maxPrice) {
+    std::string suggestUpgrades(int maxPrice, bool excludeThrowables, bool excludeAmmo) {
         try {
             UpgradeAdvisor advisor(player_, monster_, itemDb_, priceDb_);
-            auto suggestions = advisor.suggestUpgrades();
+            auto suggestions = advisor.suggestUpgrades(excludeThrowables, excludeAmmo);
             
             json result = json::array();
             for (const auto& sug : suggestions) {

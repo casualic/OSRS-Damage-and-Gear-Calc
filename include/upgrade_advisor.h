@@ -38,5 +38,5 @@ private:
 public:
     UpgradeAdvisor(Player& p, Monster& m, const json& items, const json& prices);
     
-    std::vector<UpgradeSuggestion> suggestUpgrades();
+    std::vector<UpgradeSuggestion> suggestUpgrades(bool excludeThrowables = false, bool excludeAmmo = false);
 };

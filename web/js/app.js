@@ -773,7 +773,10 @@ function findUpgrades() {
                 JSON.stringify(state.priceDb)
             );
 
-            const suggestionsJson = advisor.suggestUpgrades(maxBudget);
+            const excludeThrowables = document.getElementById('exclude-throwables').checked;
+            const excludeAmmo = document.getElementById('exclude-ammo').checked;
+            
+            const suggestionsJson = advisor.suggestUpgrades(maxBudget, excludeThrowables, excludeAmmo);
             state.rawSuggestions = JSON.parse(suggestionsJson);
 
             applyFiltersAndSort();

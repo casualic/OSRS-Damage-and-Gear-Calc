@@ -5,6 +5,7 @@
 #include <cmath>
 #include <map>
 #include <set>
+#include <cctype>
 
 // Helper struct for internal use
 struct Candidate {
@@ -62,7 +63,7 @@ bool UpgradeAdvisor::isPotentialUpgrade(const Item& candidate, const Item& curre
     return false;
 }
 
-std::vector<UpgradeSuggestion> UpgradeAdvisor::suggestUpgrades() {
+std::vector<UpgradeSuggestion> UpgradeAdvisor::suggestUpgrades(bool excludeThrowables, bool excludeAmmo) {
     std::vector<UpgradeSuggestion> suggestions;
     
     // 1. Baseline DPS
@@ -96,6 +97,31 @@ std::vector<UpgradeSuggestion> UpgradeAdvisor::suggestUpgrades() {
         
         if (!isTradeable && !hasProxy && !hasFixedProxy) continue;
         if (!itemData.value("equipable_by_player", false)) continue;
+        
+        std::string itemName = itemData.value("name", "");
+        std::string lowerName = itemName;
+        std::transform(lowerName.begin(), lowerName.end(), lowerName.begin(),
+                       [](unsigned char c){ return std::tolower(c); });
+
+        if (excludeThrowables) {
+            // User requested: "Thrrowables should excude knives and javellins"
+            // We also include darts, thrownaxes, chinchompas as they are throwables.
+            if (lowerName.find("knife") != std::string::npos || 
+                lowerName.find("dart") != std::string::npos ||
+                lowerName.find("javelin") != std::string::npos ||
+                lowerName.find("thrownaxe") != std::string::npos ||
+                lowerName.find("chinchompa") != std::string::npos) {
+                continue;
+            }
+        }
+        
+        if (excludeAmmo) {
+            // User requested: "Exclude ammo should exclude bolt and arrows"
+            if (lowerName.find("bolt") != std::string::npos || 
+                lowerName.find("arrow") != std::string::npos) {
+                continue;
+            }
+        }
         
         // Create Item object
         Item candidate(id);
