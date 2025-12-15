@@ -1,89 +1,94 @@
-/* OSRS DPS Calculator - Dark Theme */
+/* OSRS DPS Calculator - OSRS Theme */
 
 :root {
-    /* OSRS-inspired color palette */
-    --bg-dark: #1a1a2e;
-    --bg-panel: #252542;
-    --bg-input: #1e1e35;
-    --bg-hover: #2d2d4a;
+    /* OSRS Color Palette */
+    --osrs-bg-stone: #1e1e1e; /* Fallback */
+    --osrs-panel-bg: #5b4a3c;
+    --osrs-panel-border-light: #8b7561;
+    --osrs-panel-border-dark: #3a2e24;
+    --osrs-inset-bg: #362e25;
+    --osrs-text-gold: #ffb83f; /* Yellow/Gold text */
+    --osrs-text-orange: #ff981f; /* Stat names */
+    --osrs-text-white: #ffffff;
+    --osrs-text-shadow: 1px 1px 0 #000;
     
-    --text-primary: #e8e8e8;
-    --text-secondary: #a0a0b0;
-    --text-muted: #6a6a7a;
+    --osrs-red: #800000; /* DPS Splat */
+    --osrs-green: #005f00;
     
-    --accent-gold: #ffd700;
-    --accent-orange: #ff9800;
-    --accent-green: #4caf50;
-    --accent-red: #f44336;
-    --accent-blue: #2196f3;
-    
-    --border-color: #3a3a5c;
-    --border-light: #4a4a6c;
-    
-    /* Spacing */
-    --spacing-xs: 4px;
     --spacing-sm: 8px;
-    --spacing-md: 16px;
-    --spacing-lg: 24px;
-    --spacing-xl: 32px;
-    
-    /* Border radius */
-    --radius-sm: 4px;
-    --radius-md: 8px;
-    --radius-lg: 12px;
+    --spacing-md: 12px;
+    --spacing-lg: 20px;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+
 * {
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    background: var(--bg-dark);
-    color: var(--text-primary);
-    line-height: 1.6;
-    min-height: 100vh;
+    font-family: 'VT323', monospace; /* Pixel font for body */
+    font-size: 20px; /* Slightly larger base size for pixel fonts */
+    color: var(--osrs-text-white);
+    background-color: #0b0b0b;
+    margin: 0;
+    padding: 0;
+    line-height: 1.2;
+    background-image: 
+        radial-gradient(circle at 50% 50%, #2a2a2a 0%, #1a1a1a 100%);
+}
+
+/* Background Texture Pattern (Simulated Stone) */
+.osrs-bg {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='64' height='64' viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8 16c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm0 0v-8h8m32 0v-8h-8m-32 32v8h8m32 0v8h-8zM8 0h48v48H8V0z' fill='%23222' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+    z-index: -1;
+    pointer-events: none;
 }
 
 .container {
-    max-width: 1600px;
+    max-width: 1400px;
     margin: 0 auto;
-    padding: var(--spacing-lg);
+    padding: 20px;
 }
 
 /* Header */
 header {
     text-align: center;
-    margin-bottom: var(--spacing-xl);
+    margin-bottom: 30px;
 }
 
 header h1 {
-    font-size: 2.5rem;
-    color: var(--accent-gold);
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    margin-bottom: var(--spacing-xs);
+    font-family: 'Press Start 2P', cursive;
+    color: var(--osrs-text-gold);
+    text-shadow: 2px 2px 0 #000;
+    font-size: 24px;
+    margin-bottom: 10px;
+    line-height: 1.5;
 }
 
 .subtitle {
-    color: var(--text-secondary);
-    font-size: 1.1rem;
+    color: #ccc;
+    font-size: 18px;
+    text-shadow: 1px 1px 0 #000;
 }
 
-/* Main Grid Layout */
+/* Layout Grid */
 .main-grid {
     display: grid;
-    grid-template-columns: 1fr 1.2fr 1fr;
-    gap: var(--spacing-lg);
-    margin-bottom: var(--spacing-lg);
+    grid-template-columns: 300px 1fr 300px; /* Fixed sidebars, flexible middle */
+    gap: 20px;
+    align-items: stretch; /* Stretch to make panels equal height */
+    margin-bottom: 20px;
 }
 
 @media (max-width: 1200px) {
     .main-grid {
         grid-template-columns: 1fr 1fr;
     }
-    .results-panel {
+    .gear-panel {
+        order: -1; /* Gear on top or first */
         grid-column: span 2;
     }
 }
@@ -92,106 +97,120 @@ header h1 {
     .main-grid {
         grid-template-columns: 1fr;
     }
-    .results-panel {
+    .gear-panel {
         grid-column: span 1;
     }
 }
 
-/* Panels */
-.panel {
-    background: var(--bg-panel);
-    border-radius: var(--radius-lg);
-    padding: var(--spacing-lg);
-    border: 1px solid var(--border-color);
+/* OSRS Panel Styling */
+.osrs-panel {
+    background-color: var(--osrs-panel-bg);
+    border: 2px solid;
+    border-color: var(--osrs-panel-border-light) var(--osrs-panel-border-dark) var(--osrs-panel-border-dark) var(--osrs-panel-border-light);
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+    padding: 4px; /* Inner padding for the border effect */
+    display: flex;
+    flex-direction: column;
 }
 
-.panel h2 {
-    color: var(--accent-gold);
-    font-size: 1.3rem;
-    margin-bottom: var(--spacing-md);
-    padding-bottom: var(--spacing-sm);
-    border-bottom: 2px solid var(--border-color);
+.panel-header {
+    background: #2b2b2b;
+    border: 1px solid;
+    border-color: #555 #111 #111 #555;
+    padding: 8px;
+    text-align: center;
+    margin-bottom: 8px;
 }
 
-.panel h3 {
-    color: var(--text-primary);
-    font-size: 1.1rem;
-    margin: var(--spacing-md) 0 var(--spacing-sm);
+.panel-header h2 {
+    font-family: 'Press Start 2P', cursive;
+    color: var(--osrs-text-orange);
+    font-size: 14px;
+    margin: 0;
+    text-shadow: 1px 1px 0 #000;
 }
 
-/* Input Groups */
+.panel-content {
+    padding: 10px;
+    flex: 1; /* Content expands */
+}
+
+/* Inset Boxes (for content areas) */
+.osrs-box {
+    background-color: var(--osrs-inset-bg);
+    border: 1px solid;
+    border-color: #222 #555 #555 #222; /* Inset border */
+    padding: 10px;
+    border-radius: 2px;
+    margin-bottom: 10px;
+}
+
+/* Inputs & Buttons */
 .input-group {
-    margin-bottom: var(--spacing-md);
+    margin-bottom: 15px;
 }
 
 .input-group label {
     display: block;
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    margin-bottom: var(--spacing-xs);
+    color: var(--osrs-text-orange);
+    text-shadow: 1px 1px 0 #000;
+    margin-bottom: 4px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
 }
 
 .input-row {
     display: flex;
-    gap: var(--spacing-sm);
+    gap: 5px;
 }
 
 input[type="text"],
 input[type="number"] {
-    background: var(--bg-input);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-sm);
-    padding: var(--spacing-sm) var(--spacing-md);
-    color: var(--text-primary);
-    font-size: 1rem;
+    background: #1a1a1a;
+    border: 1px solid #555;
+    color: var(--osrs-text-white);
+    padding: 8px;
+    font-family: 'VT323', monospace;
+    font-size: 18px;
     width: 100%;
-    transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-input:focus {
-    outline: none;
-    border-color: var(--accent-gold);
-    box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2);
 }
 
 .help-text {
+    font-size: 10px;
+    color: #999;
+    font-style: italic;
     display: block;
-    color: var(--text-muted);
-    font-size: 0.8rem;
-    margin-top: var(--spacing-xs);
+    margin-top: 4px;
 }
 
-/* Buttons */
 .btn {
-    padding: var(--spacing-sm) var(--spacing-md);
-    border: none;
-    border-radius: var(--radius-sm);
-    font-size: 1rem;
-    font-weight: 600;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+    padding: 10px;
+    border: 2px solid;
     cursor: pointer;
-    transition: all 0.2s;
-    white-space: nowrap;
+    text-transform: uppercase;
+    text-shadow: 1px 1px 0 #000;
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, var(--accent-gold), var(--accent-orange));
-    color: #1a1a1a;
+    background: #7d2918; /* Reddish brown */
+    color: #fff;
+    border-color: #a84e3a #4a190f #4a190f #a84e3a;
 }
 
 .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+    background: #8f311e;
 }
 
 .btn-secondary {
-    background: var(--bg-input);
-    color: var(--text-primary);
-    border: 1px solid var(--border-color);
+    background: #4a4a4a;
+    color: #fff;
+    border-color: #666 #222 #222 #666;
 }
 
 .btn-secondary:hover {
-    background: var(--bg-hover);
-    border-color: var(--accent-gold);
+    background: #5a5a5a;
 }
 
 .btn-full {
@@ -201,101 +220,124 @@ input:focus {
 /* Stats Grid */
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--spacing-sm);
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
 }
 
 .stat-input {
+    background: var(--osrs-inset-bg);
+    padding: 5px;
+    border: 1px solid #222;
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .stat-input label {
-    color: var(--text-secondary);
-    font-size: 0.85rem;
-    margin-bottom: 2px;
+    margin: 0;
+    font-size: 10px; /* Smaller for fitting */
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
 .stat-input input {
+    width: 50px;
     text-align: center;
-    padding: var(--spacing-xs) var(--spacing-sm);
+    padding: 2px;
+    height: 24px;
 }
 
-/* Equipment Grid */
-.equipment-grid {
+/* Checkboxes */
+.buff-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+}
+
+.checkbox-label {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: var(--spacing-sm);
-    margin-bottom: var(--spacing-md);
+    gap: 10px;
+    cursor: pointer;
+    font-size: 18px;
 }
 
-.equip-row {
-    display: flex;
-    gap: var(--spacing-sm);
-    justify-content: center;
+input[type="checkbox"] {
+    accent-color: var(--osrs-text-gold);
+    width: 16px;
+    height: 16px;
+}
+
+/* Equipment Layout (Character Silhouette) */
+.equipment-layout {
+    position: relative;
+    width: 240px;
+    height: 340px;
+    margin: 0 auto 20px;
+    background-color: #1a1a1a; /* Placeholder for silhouette bg */
+    border-radius: 8px;
+    /* Define grid for slots */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    gap: 4px;
+    padding: 10px;
+    background-image: radial-gradient(#2a2a2a 20%, #111 80%); /* Subtle glow */
 }
 
 .equip-slot {
-    width: 70px;
-    height: 70px;
-    background: var(--bg-input);
-    border: 2px solid var(--border-color);
-    border-radius: var(--radius-md);
+    width: 48px;
+    height: 48px;
+    background: #383023;
+    border: 2px solid;
+    border-color: #222 #555 #555 #222; /* Inset look */
+    margin: auto;
+    cursor: pointer;
+    position: relative;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s;
-    position: relative;
 }
 
 .equip-slot:hover {
-    border-color: var(--accent-gold);
-    background: var(--bg-hover);
+    border-color: var(--osrs-text-gold);
 }
 
 .equip-slot.equipped {
-    border-color: var(--accent-green);
-}
-
-.equip-slot .slot-label {
-    font-size: 0.7rem;
-    color: var(--text-muted);
-    position: absolute;
-    bottom: 2px;
+    border-color: var(--osrs-green);
 }
 
 .equip-slot .slot-icon {
-    width: 40px;
-    height: 40px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+    font-size: 10px;
+    text-align: center;
+    word-break: break-word;
+    color: #fff;
+    padding: 2px;
 }
 
-.equip-slot .item-name {
-    font-size: 0.65rem;
-    color: var(--text-primary);
-    text-align: center;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 60px;
-}
+/* Slot Positioning */
+.head-slot { grid-area: 1 / 2 / 2 / 3; }
+.cape-slot { grid-area: 2 / 1 / 3 / 2; }
+.neck-slot { grid-area: 2 / 2 / 3 / 3; }
+.ammo-slot { grid-area: 2 / 3 / 3 / 4; }
+.weapon-slot { grid-area: 3 / 1 / 4 / 2; }
+.body-slot { grid-area: 3 / 2 / 4 / 3; }
+.shield-slot { grid-area: 3 / 3 / 4 / 4; }
+.legs-slot { grid-area: 4 / 2 / 5 / 3; }
+.hands-slot { grid-area: 5 / 1 / 6 / 2; }
+.feet-slot { grid-area: 5 / 2 / 6 / 3; }
+.ring-slot { grid-area: 5 / 3 / 6 / 4; }
 
 /* Item Search */
-.item-search {
-    margin-bottom: var(--spacing-md);
-}
-
 .search-results {
-    background: var(--bg-input);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-sm);
+    background: #1a1a1a;
+    border: 1px solid var(--osrs-text-gold);
     max-height: 200px;
     overflow-y: auto;
+    position: absolute;
+    width: 90%;
+    z-index: 100;
     display: none;
 }
 
@@ -304,321 +346,204 @@ input:focus {
 }
 
 .search-result-item {
-    padding: var(--spacing-sm) var(--spacing-md);
+    padding: 8px;
+    border-bottom: 1px solid #333;
     cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.search-result-item:last-child {
-    border-bottom: none;
 }
 
 .search-result-item:hover {
-    background: var(--bg-hover);
+    background: #333;
 }
 
-.search-result-item .item-name {
-    color: var(--text-primary);
-}
-
-.search-result-item .item-slot {
-    color: var(--text-muted);
-    font-size: 0.85rem;
-}
-
-/* Equipment Bonuses Summary */
-.equipment-summary {
-    background: var(--bg-input);
-    border-radius: var(--radius-md);
-    padding: var(--spacing-md);
+/* Bonuses */
+.equipment-summary h3 {
+    font-family: 'Press Start 2P';
+    font-size: 12px;
+    color: var(--osrs-text-gold);
+    margin-top: 0;
 }
 
 .bonus-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--spacing-md);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
 }
 
-@media (max-width: 1400px) {
-    .bonus-grid {
-        grid-template-columns: 1fr;
-    }
+.bonus-section {
+    flex: 1;
+    min-width: 120px;
 }
 
 .bonus-section h4 {
-    color: var(--accent-gold);
-    font-size: 0.9rem;
-    margin-bottom: var(--spacing-xs);
+    color: var(--osrs-text-orange);
+    margin: 5px 0;
+    font-size: 16px;
+    border-bottom: 1px solid #444;
 }
 
 .bonus-row {
     display: flex;
     justify-content: space-between;
-    font-size: 0.85rem;
-    padding: 2px 0;
+    font-size: 16px;
 }
 
-.bonus-row span:first-child {
-    color: var(--text-secondary);
-}
-
-.bonus-row span:last-child {
-    color: var(--text-primary);
-    font-weight: 500;
-}
-
-/* Monster Section */
-.monster-section {
-    margin-bottom: var(--spacing-lg);
-}
-
-.monster-info {
-    background: var(--bg-input);
-    border-radius: var(--radius-md);
-    padding: var(--spacing-md);
-    margin-top: var(--spacing-md);
-}
-
+/* Monster Info */
 .monster-name {
-    font-size: 1.2rem;
-    color: var(--accent-orange);
-    margin-bottom: var(--spacing-sm);
+    color: var(--osrs-text-gold);
+    font-family: 'Press Start 2P';
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 10px;
 }
 
 .monster-stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--spacing-sm);
+    display: flex;
+    justify-content: space-around;
+    font-size: 18px;
 }
 
 .monster-stat {
-    display: flex;
-    flex-direction: column;
-}
-
-.monster-stat .stat-label {
-    color: var(--text-muted);
-    font-size: 0.8rem;
-}
-
-.monster-stat span:last-child {
-    color: var(--text-primary);
-    font-size: 1.1rem;
-    font-weight: 600;
-}
-
-/* DPS Section */
-.dps-section {
-    margin-bottom: var(--spacing-lg);
-}
-
-.dps-display {
-    background: var(--bg-input);
-    border-radius: var(--radius-md);
-    padding: var(--spacing-lg);
-    margin-bottom: var(--spacing-md);
     text-align: center;
 }
 
-.dps-main {
-    margin-bottom: var(--spacing-md);
-}
-
-.dps-value {
-    font-size: 3rem;
-    font-weight: 700;
-    color: var(--accent-green);
+.monster-stat .stat-label {
+    color: var(--osrs-text-orange);
+    font-size: 14px;
     display: block;
 }
 
+/* DPS Section (Splat) */
+.dps-display-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.dps-splat {
+    width: 120px;
+    height: 120px;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 0 C60 20 75 10 90 25 C80 40 95 55 85 75 C65 70 55 90 40 85 C30 95 10 80 15 60 C0 50 15 35 10 15 C30 20 40 0 50 0' fill='%23900000' stroke='%23300' stroke-width='2'/%3E%3C/svg%3E") no-repeat center center;
+    background-size: contain;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    text-shadow: 1px 1px 0 #000;
+}
+
+.dps-value {
+    font-family: 'Press Start 2P';
+    font-size: 24px;
+    line-height: 1.2;
+}
+
 .dps-label {
-    color: var(--text-secondary);
-    font-size: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
+    font-size: 12px;
 }
 
-.dps-details {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--spacing-sm);
-    text-align: left;
-}
-
+/* DPS Details */
 .detail-row {
     display: flex;
     justify-content: space-between;
-    padding: var(--spacing-xs) var(--spacing-sm);
-    background: var(--bg-panel);
-    border-radius: var(--radius-sm);
+    padding: 4px 0;
+    border-bottom: 1px dashed #444;
 }
 
-.detail-row span:first-child {
-    color: var(--text-secondary);
-}
-
-.detail-row span:last-child {
-    color: var(--text-primary);
-    font-weight: 500;
-}
-
-/* Simulation Section */
-.simulation-section {
-    border-top: 1px solid var(--border-color);
-    padding-top: var(--spacing-md);
-}
-
-.simulation-results {
-    margin-top: var(--spacing-md);
-    padding: var(--spacing-md);
-    background: var(--bg-input);
-    border-radius: var(--radius-md);
-}
-
-.sim-result {
-    display: flex;
-    justify-content: space-between;
-    padding: var(--spacing-xs) 0;
-}
-
-.sim-result span:first-child {
-    color: var(--text-secondary);
-}
-
-.sim-result span:last-child {
-    color: var(--accent-gold);
-    font-weight: 600;
-}
-
-/* Upgrade Panel */
-.upgrade-panel {
-    margin-top: var(--spacing-lg);
-}
-
+/* Upgrade Advisor Controls */
 .upgrade-controls {
     display: flex;
-    gap: var(--spacing-md);
     align-items: flex-end;
-    margin-bottom: var(--spacing-md);
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
 }
 
-.upgrade-controls .input-group {
-    flex: 1;
-    margin-bottom: 0;
-}
-
+/* Tab Styling */
 .upgrade-tabs {
+    margin-bottom: 10px;
     display: flex;
-    gap: var(--spacing-sm);
-    margin-bottom: var(--spacing-md);
+    gap: 10px;
 }
 
 .tab-btn {
-    padding: var(--spacing-sm) var(--spacing-md);
-    background: var(--bg-input);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-sm);
-    color: var(--text-secondary);
+    background: #4a4a4a;
+    border: 2px solid #222;
+    color: #ccc;
+    font-family: 'Press Start 2P';
+    font-size: 10px;
+    padding: 10px 15px;
     cursor: pointer;
-    transition: all 0.2s;
+    text-shadow: 1px 1px 0 #000;
 }
 
 .tab-btn:hover {
-    border-color: var(--accent-gold);
+    background: #5a5a5a;
 }
 
 .tab-btn.active {
-    background: var(--accent-gold);
-    color: #1a1a1a;
-    border-color: var(--accent-gold);
+    background: #7d2918;
+    color: var(--osrs-text-gold);
+    border-color: #a84e3a;
 }
 
-.upgrade-table-container {
-    overflow-x: auto;
-}
-
+/* Upgrade Table */
 .upgrade-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.upgrade-table th,
-.upgrade-table td {
-    padding: var(--spacing-sm) var(--spacing-md);
-    text-align: left;
-    border-bottom: 1px solid var(--border-color);
-}
-
 .upgrade-table th {
-    background: var(--bg-input);
-    color: var(--accent-gold);
-    font-weight: 600;
-    position: sticky;
-    top: 0;
+    background: #2b2b2b;
+    color: var(--osrs-text-orange);
+    font-family: 'Press Start 2P';
+    font-size: 10px;
+    padding: 8px;
+    text-align: left;
 }
 
-.upgrade-table tbody tr:hover {
-    background: var(--bg-hover);
+.upgrade-table td {
+    padding: 8px;
+    border-bottom: 1px solid #444;
+    font-size: 16px;
 }
 
-.upgrade-table .empty-message {
-    text-align: center;
-    color: var(--text-muted);
-    padding: var(--spacing-xl);
+.upgrade-table tr:hover {
+    background: #333;
 }
 
-/* Loading Overlay */
-.loading-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(26, 26, 46, 0.95);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
+.text-green { color: #00ff00; }
+
+/* Duo Highlight */
+.duo-badge {
+    background: #333;
+    color: var(--osrs-text-gold);
+    border: 1px solid var(--osrs-text-gold);
+    padding: 2px 4px;
+    font-size: 12px;
+    margin-right: 5px;
+    font-family: 'Press Start 2P';
+    font-size: 8px;
 }
 
-.loading-overlay.hidden {
-    display: none;
+.duo-row {
+    background-color: rgba(255, 184, 63, 0.1); /* Gold tint */
+    border-left: 3px solid var(--osrs-text-gold);
 }
 
-.loading-spinner {
-    width: 50px;
-    height: 50px;
-    border: 4px solid var(--border-color);
-    border-top-color: var(--accent-gold);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
-
-.loading-overlay p {
-    margin-top: var(--spacing-md);
-    color: var(--text-secondary);
+.duo-row:hover {
+    background-color: rgba(255, 184, 63, 0.2);
 }
 
 /* Modal */
 .modal {
-    display: none;
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.7);
-    z-index: 1001;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.8);
+    display: none;
     align-items: center;
     justify-content: center;
+    z-index: 1000;
 }
 
 .modal.active {
@@ -626,173 +551,46 @@ input:focus {
 }
 
 .modal-content {
-    background: var(--bg-panel);
-    border-radius: var(--radius-lg);
     width: 90%;
     max-width: 500px;
     max-height: 80vh;
-    overflow: hidden;
-    border: 1px solid var(--border-color);
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: var(--spacing-md);
-    border-bottom: 1px solid var(--border-color);
-}
-
-.modal-header h3 {
-    color: var(--accent-gold);
+    overflow-y: auto;
 }
 
 .modal-close {
+    float: right;
     background: none;
     border: none;
-    color: var(--text-secondary);
-    font-size: 1.5rem;
+    color: #fff;
+    font-size: 24px;
     cursor: pointer;
 }
 
-.modal-close:hover {
-    color: var(--text-primary);
+/* Loading Overlay */
+.loading-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: #111;
+    color: var(--osrs-text-gold);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
 }
 
-.modal-body {
-    padding: var(--spacing-md);
-}
-
-.modal-results {
-    max-height: 400px;
-    overflow-y: auto;
-    margin-top: var(--spacing-md);
-}
-
-.modal-result-item {
-    padding: var(--spacing-sm) var(--spacing-md);
-    cursor: pointer;
-    border-bottom: 1px solid var(--border-color);
-    transition: background 0.2s;
-}
-
-.modal-result-item:hover {
-    background: var(--bg-hover);
+.loading-overlay.hidden {
+    display: none;
 }
 
 /* Scrollbar */
 ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 10px;
 }
-
 ::-webkit-scrollbar-track {
-    background: var(--bg-input);
+    background: #1a1a1a;
 }
-
 ::-webkit-scrollbar-thumb {
-    background: var(--border-color);
-    border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: var(--border-light);
-}
-
-/* Utility Classes */
-.text-gold { color: var(--accent-gold); }
-.text-green { color: var(--accent-green); }
-.text-red { color: var(--accent-red); }
-.text-muted { color: var(--text-muted); }
-
-/* Duo Upgrade Styles */
-.duo-badge {
-    display: inline-block;
-    background: linear-gradient(135deg, var(--accent-blue), #1976d2);
-    color: white;
-    font-size: 0.65rem;
-    font-weight: 700;
-    padding: 2px 6px;
-    border-radius: 3px;
-    margin-right: var(--spacing-xs);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    vertical-align: middle;
-}
-
-.duo-row {
-    background: rgba(33, 150, 243, 0.08);
-}
-
-.duo-row:hover {
-    background: rgba(33, 150, 243, 0.15);
-}
-
-.item-cell {
-    max-width: 300px;
-    word-wrap: break-word;
-}
-
-/* Monster Attribute Badges */
-.monster-attributes {
-    display: flex;
-    gap: var(--spacing-xs);
-    margin-top: var(--spacing-sm);
-    flex-wrap: wrap;
-}
-
-.attribute-badge {
-    display: inline-block;
-    font-size: 0.7rem;
-    font-weight: 600;
-    padding: 2px 8px;
-    border-radius: 3px;
-    text-transform: uppercase;
-}
-
-.attribute-badge.dragon {
-    background: linear-gradient(135deg, #ff5722, #e64a19);
-    color: white;
-}
-
-.attribute-badge.undead {
-    background: linear-gradient(135deg, #9c27b0, #7b1fa2);
-    color: white;
-}
-
-.attribute-badge.demon {
-    background: linear-gradient(135deg, #f44336, #c62828);
-    color: white;
-}
-
-/* Special Effect Indicators */
-.effect-indicator {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 0.75rem;
-    color: var(--accent-gold);
-    margin-left: var(--spacing-sm);
-}
-
-.effect-indicator::before {
-    content: '★';
-}
-
-/* Responsive adjustments for upgrade table */
-@media (max-width: 768px) {
-    .upgrade-table {
-        font-size: 0.85rem;
-    }
-    
-    .upgrade-table th,
-    .upgrade-table td {
-        padding: var(--spacing-xs) var(--spacing-sm);
-    }
-    
-    .duo-badge {
-        display: block;
-        margin-bottom: 4px;
-        width: fit-content;
-    }
+    background: #5b4a3c;
+    border: 1px solid #3a2e24;
 }

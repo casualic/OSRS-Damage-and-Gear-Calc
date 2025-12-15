@@ -220,16 +220,20 @@ std::vector<UpgradeSuggestion> UpgradeAdvisor::suggestUpgrades(bool excludeThrow
             
             double newDps = simulate({cand});
             
-             // Threshold for "significant" increase to avoid floating point noise with useless items
-             // Also filters out items that don't increase DPS at all (like ammo when meleeing)
-             if (newDps > currentDps + 0.001) {
+            // Threshold for "significant" increase to avoid floating point noise with useless items
+            // Also filters out items that don't increase DPS at all (like ammo when meleeing)
+            bool isUpgrade = (newDps > currentDps + 0.001);
+
+            // KEY FIX: Even if it doesn't increase DPS individually (e.g. +1 str bonus that doesn't give max hit),
+            // we still want to keep it for Duo analysis because (Item A + Item B) might give a max hit.
+            // We trust isPotentialUpgrade() from Phase 1 to have filtered out complete junk.
+            usefulCandidatesBySlot[slot].push_back(cand);
+
+            if (isUpgrade) {
                 double increase = newDps - currentDps;
                 double efficiency = (increase / cand.price) * 1000000.0; // DPS increase per 1M GP
                 
                 singleUpgradeDps[cand.item.getID()] = newDps;
-
-                // Add to useful candidates for Duo check
-                usefulCandidatesBySlot[slot].push_back(cand);
                 usefulCount++;
 
                 suggestions.push_back({

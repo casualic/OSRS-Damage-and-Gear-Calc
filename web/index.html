@@ -4,225 +4,225 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OSRS Gear Recommender / DPS Calculator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <div class="osrs-bg"></div>
     <div class="container">
         <header>
-            <h1>⚔️ OSRS Gear Recommender and DPS Calculator</h1>
+            <h1>OSRS Gear Recommender and DPS Calculator</h1>
             <p class="subtitle">Get your next upgrade recommendation and Calculate your damage per second against any monster</p>
         </header>
 
         <main class="main-grid">
             <!-- Left Column: Player Setup -->
-            <section class="panel player-panel">
-                <h2>👤 Player</h2>
+            <section class="panel player-panel osrs-panel">
+                <div class="panel-header">
+                    <h2>Player</h2>
+                </div>
                 
-                <!-- Username & Fetch -->
-                <div class="input-group">
-                    <label for="username">Username</label>
-                    <div class="input-row">
-                        <input type="text" id="username" placeholder="Enter RSN...">
-                        <button id="fetch-stats-btn" class="btn btn-primary">Fetch Stats</button>
+                <div class="panel-content">
+                    <!-- Username & Fetch -->
+                    <div class="input-group">
+                        <label for="username">Username</label>
+                        <div class="input-row">
+                            <input type="text" id="username" placeholder="Enter RSN...">
+                            <button id="fetch-stats-btn" class="btn btn-primary">Fetch Stats</button>
+                        </div>
                     </div>
-                </div>
 
-                <!-- WikiSync Button -->
-                <div class="input-group">
-                    <button id="wikisync-btn" class="btn btn-secondary btn-full">
-                        🔄 Sync from WikiSync
-                    </button>
-                    <span class="help-text">Requires RuneLite WikiSync plugin</span>
-                </div>
+                    <!-- WikiSync Button -->
+                    <div class="input-group">
+                        <button id="wikisync-btn" class="btn btn-secondary btn-full">
+                            🔄 Sync from WikiSync
+                        </button>
+                        <span class="help-text">Requires RuneLite WikiSync plugin</span>
+                    </div>
 
-                <!-- Combat Stats -->
-                <div class="stats-grid">
-                    <div class="stat-input">
-                        <label for="stat-attack">Attack</label>
-                        <input type="number" id="stat-attack" value="99" min="1" max="99">
+                    <!-- Combat Stats -->
+                    <div class="stats-grid">
+                        <div class="stat-input">
+                            <label for="stat-attack">⚔️ Attack</label>
+                            <input type="number" id="stat-attack" value="99" min="1" max="99">
+                        </div>
+                        <div class="stat-input">
+                            <label for="stat-strength">✊ Strength</label>
+                            <input type="number" id="stat-strength" value="99" min="1" max="99">
+                        </div>
+                        <div class="stat-input">
+                            <label for="stat-defence">🛡️ Defence</label>
+                            <input type="number" id="stat-defence" value="99" min="1" max="99">
+                        </div>
+                        <div class="stat-input">
+                            <label for="stat-ranged">🏹 Ranged</label>
+                            <input type="number" id="stat-ranged" value="99" min="1" max="99">
+                        </div>
+                        <div class="stat-input">
+                            <label for="stat-magic">✨ Magic</label>
+                            <input type="number" id="stat-magic" value="99" min="1" max="99">
+                        </div>
+                        <div class="stat-input">
+                            <label for="stat-hitpoints">❤️ Hitpoints</label>
+                            <input type="number" id="stat-hitpoints" value="99" min="1" max="99">
+                        </div>
+                        <div class="stat-input">
+                            <label for="stat-prayer">🙏 Prayer</label>
+                            <input type="number" id="stat-prayer" value="99" min="1" max="99">
+                        </div>
                     </div>
-                    <div class="stat-input">
-                        <label for="stat-strength">Strength</label>
-                        <input type="number" id="stat-strength" value="99" min="1" max="99">
-                    </div>
-                    <div class="stat-input">
-                        <label for="stat-defence">Defence</label>
-                        <input type="number" id="stat-defence" value="99" min="1" max="99">
-                    </div>
-                    <div class="stat-input">
-                        <label for="stat-ranged">Ranged</label>
-                        <input type="number" id="stat-ranged" value="99" min="1" max="99">
-                    </div>
-                    <div class="stat-input">
-                        <label for="stat-magic">Magic</label>
-                        <input type="number" id="stat-magic" value="99" min="1" max="99">
-                    </div>
-                    <div class="stat-input">
-                        <label for="stat-hitpoints">Hitpoints</label>
-                        <input type="number" id="stat-hitpoints" value="99" min="1" max="99">
-                    </div>
-                    <div class="stat-input">
-                        <label for="stat-prayer">Prayer</label>
-                        <input type="number" id="stat-prayer" value="99" min="1" max="99">
-                    </div>
-                </div>
 
-                <!-- Buffs -->
-                <div class="buffs-section" style="margin-top: 20px;">
-                    <h3>Prayers & Potions</h3>
-                    <div class="buff-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                        <label class="checkbox-label" style="display: flex; align-items: center; gap: 8px;">
-                            <input type="checkbox" id="prayer-piety"> Piety
-                        </label>
-                        <label class="checkbox-label" style="display: flex; align-items: center; gap: 8px;">
-                            <input type="checkbox" id="prayer-rigour"> Rigour
-                        </label>
-                        <label class="checkbox-label" style="display: flex; align-items: center; gap: 8px;">
-                            <input type="checkbox" id="potion-super-combat"> Super Combat
-                        </label>
+                    <!-- Buffs -->
+                    <div class="buffs-section" style="margin-top: 20px;">
+                        <h3>Prayers & Potions</h3>
+                        <div class="buff-grid">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="prayer-piety"> Piety
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="prayer-rigour"> Rigour
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="potion-super-combat"> Super Combat
+                            </label>
+                        </div>
                     </div>
                 </div>
             </section>
 
             <!-- Center Column: Gear Editor -->
-            <section class="panel gear-panel">
-                <h2>🛡️ Equipment</h2>
+            <section class="panel gear-panel osrs-panel">
+                <div class="panel-header">
+                    <h2>Equipment</h2>
+                </div>
                 
-                <!-- Equipment Grid (OSRS-style layout) -->
-                <div class="equipment-grid">
-                    <div class="equip-row row-1">
-                        <div class="equip-slot" data-slot="head">
-                            <span class="slot-label">Head</span>
+                <div class="panel-content">
+                    <!-- Equipment Layout (Character Silhouette) -->
+                    <div class="equipment-layout">
+                        <div class="equip-slot head-slot" data-slot="head" title="Head">
                             <div class="slot-icon"></div>
                         </div>
+                        <div class="equip-slot cape-slot" data-slot="cape" title="Cape">
+                            <div class="slot-icon"></div>
+                        </div>
+                        <div class="equip-slot neck-slot" data-slot="neck" title="Neck">
+                            <div class="slot-icon"></div>
+                        </div>
+                        <div class="equip-slot ammo-slot" data-slot="ammo" title="Ammo">
+                            <div class="slot-icon"></div>
+                        </div>
+                        <div class="equip-slot weapon-slot" data-slot="weapon" title="Weapon">
+                            <div class="slot-icon"></div>
+                        </div>
+                        <div class="equip-slot body-slot" data-slot="body" title="Body">
+                            <div class="slot-icon"></div>
+                        </div>
+                        <div class="equip-slot shield-slot" data-slot="shield" title="Shield">
+                            <div class="slot-icon"></div>
+                        </div>
+                        <div class="equip-slot legs-slot" data-slot="legs" title="Legs">
+                            <div class="slot-icon"></div>
+                        </div>
+                        <div class="equip-slot hands-slot" data-slot="hands" title="Hands">
+                            <div class="slot-icon"></div>
+                        </div>
+                        <div class="equip-slot feet-slot" data-slot="feet" title="Feet">
+                            <div class="slot-icon"></div>
+                        </div>
+                        <div class="equip-slot ring-slot" data-slot="ring" title="Ring">
+                            <div class="slot-icon"></div>
+                        </div>
+                        
+                        <!-- Silhouette Background (handled in CSS) -->
+                        <div class="character-silhouette"></div>
                     </div>
-                    <div class="equip-row row-2">
-                        <div class="equip-slot" data-slot="cape">
-                            <span class="slot-label">Cape</span>
-                            <div class="slot-icon"></div>
-                        </div>
-                        <div class="equip-slot" data-slot="neck">
-                            <span class="slot-label">Neck</span>
-                            <div class="slot-icon"></div>
-                        </div>
-                        <div class="equip-slot" data-slot="ammo">
-                            <span class="slot-label">Ammo</span>
-                            <div class="slot-icon"></div>
-                        </div>
-                    </div>
-                    <div class="equip-row row-3">
-                        <div class="equip-slot" data-slot="weapon">
-                            <span class="slot-label">Weapon</span>
-                            <div class="slot-icon"></div>
-                        </div>
-                        <div class="equip-slot" data-slot="body">
-                            <span class="slot-label">Body</span>
-                            <div class="slot-icon"></div>
-                        </div>
-                        <div class="equip-slot" data-slot="shield">
-                            <span class="slot-label">Shield</span>
-                            <div class="slot-icon"></div>
-                        </div>
-                    </div>
-                    <div class="equip-row row-4">
-                        <div class="equip-slot" data-slot="legs">
-                            <span class="slot-label">Legs</span>
-                            <div class="slot-icon"></div>
-                        </div>
-                    </div>
-                    <div class="equip-row row-5">
-                        <div class="equip-slot" data-slot="hands">
-                            <span class="slot-label">Hands</span>
-                            <div class="slot-icon"></div>
-                        </div>
-                        <div class="equip-slot" data-slot="feet">
-                            <span class="slot-label">Feet</span>
-                            <div class="slot-icon"></div>
-                        </div>
-                        <div class="equip-slot" data-slot="ring">
-                            <span class="slot-label">Ring</span>
-                            <div class="slot-icon"></div>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Item Search -->
-                <div class="item-search">
-                    <label for="item-search-input">Search Items</label>
-                    <input type="text" id="item-search-input" placeholder="Type to search...">
-                    <div id="item-search-results" class="search-results"></div>
-                </div>
+                    <!-- Item Search -->
+                    <div class="item-search">
+                        <label for="item-search-input">Search Items</label>
+                        <input type="text" id="item-search-input" placeholder="Type to search...">
+                        <div id="item-search-results" class="search-results"></div>
+                    </div>
 
-                <!-- Equipment Bonuses Summary -->
-                <div class="equipment-summary">
-                    <h3>Equipment Bonuses</h3>
-                    <div class="bonus-grid">
-                        <div class="bonus-section">
-                            <h4>Attack</h4>
-                            <div class="bonus-row"><span>Stab:</span><span id="bonus-attack-stab">0</span></div>
-                            <div class="bonus-row"><span>Slash:</span><span id="bonus-attack-slash">0</span></div>
-                            <div class="bonus-row"><span>Crush:</span><span id="bonus-attack-crush">0</span></div>
-                            <div class="bonus-row"><span>Magic:</span><span id="bonus-attack-magic">0</span></div>
-                            <div class="bonus-row"><span>Ranged:</span><span id="bonus-attack-ranged">0</span></div>
-                        </div>
-                        <div class="bonus-section">
-                            <h4>Defence</h4>
-                            <div class="bonus-row"><span>Stab:</span><span id="bonus-defence-stab">0</span></div>
-                            <div class="bonus-row"><span>Slash:</span><span id="bonus-defence-slash">0</span></div>
-                            <div class="bonus-row"><span>Crush:</span><span id="bonus-defence-crush">0</span></div>
-                            <div class="bonus-row"><span>Magic:</span><span id="bonus-defence-magic">0</span></div>
-                            <div class="bonus-row"><span>Ranged:</span><span id="bonus-defence-ranged">0</span></div>
-                        </div>
-                        <div class="bonus-section">
-                            <h4>Other</h4>
-                            <div class="bonus-row"><span>Melee Str:</span><span id="bonus-melee-strength">0</span></div>
-                            <div class="bonus-row"><span>Ranged Str:</span><span id="bonus-ranged-strength">0</span></div>
-                            <div class="bonus-row"><span>Magic Dmg:</span><span id="bonus-magic-damage">0%</span></div>
-                            <div class="bonus-row"><span>Prayer:</span><span id="bonus-prayer">0</span></div>
+                    <!-- Equipment Bonuses Summary -->
+                    <div class="equipment-summary osrs-box">
+                        <h3>Equipment Bonuses</h3>
+                        <div class="bonus-grid">
+                            <div class="bonus-section">
+                                <h4>Attack</h4>
+                                <div class="bonus-row"><span>Stab:</span><span id="bonus-attack-stab">0</span></div>
+                                <div class="bonus-row"><span>Slash:</span><span id="bonus-attack-slash">0</span></div>
+                                <div class="bonus-row"><span>Crush:</span><span id="bonus-attack-crush">0</span></div>
+                                <div class="bonus-row"><span>Magic:</span><span id="bonus-attack-magic">0</span></div>
+                                <div class="bonus-row"><span>Ranged:</span><span id="bonus-attack-ranged">0</span></div>
+                            </div>
+                            <div class="bonus-section">
+                                <h4>Defence</h4>
+                                <div class="bonus-row"><span>Stab:</span><span id="bonus-defence-stab">0</span></div>
+                                <div class="bonus-row"><span>Slash:</span><span id="bonus-defence-slash">0</span></div>
+                                <div class="bonus-row"><span>Crush:</span><span id="bonus-defence-crush">0</span></div>
+                                <div class="bonus-row"><span>Magic:</span><span id="bonus-defence-magic">0</span></div>
+                                <div class="bonus-row"><span>Ranged:</span><span id="bonus-defence-ranged">0</span></div>
+                            </div>
+                            <div class="bonus-section">
+                                <h4>Other</h4>
+                                <div class="bonus-row"><span>Melee Str:</span><span id="bonus-melee-strength">0</span></div>
+                                <div class="bonus-row"><span>Ranged Str:</span><span id="bonus-ranged-strength">0</span></div>
+                                <div class="bonus-row"><span>Magic Dmg:</span><span id="bonus-magic-damage">0%</span></div>
+                                <div class="bonus-row"><span>Prayer:</span><span id="bonus-prayer">0</span></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
 
             <!-- Right Column: Monster & Results -->
-            <section class="panel results-panel">
-                <!-- Monster Selector -->
-                <div class="monster-section">
-                    <h2>👹 Monster</h2>
-                    <div class="input-group">
-                        <label for="monster-search">Search Monster</label>
-                        <input type="text" id="monster-search" placeholder="Type to search...">
-                        <div id="monster-search-results" class="search-results"></div>
-                    </div>
-                    
-                    <div class="monster-info" id="monster-info">
-                        <div class="monster-name" id="selected-monster-name">No monster selected</div>
-                        <div class="monster-stats">
-                            <div class="monster-stat">
-                                <span class="stat-label">HP:</span>
-                                <span id="monster-hp">-</span>
-                            </div>
-                            <div class="monster-stat">
-                                <span class="stat-label">Combat:</span>
-                                <span id="monster-combat">-</span>
-                            </div>
-                            <div class="monster-stat">
-                                <span class="stat-label">Def Level:</span>
-                                <span id="monster-def-level">-</span>
-                            </div>
-                        </div>
-                    </div>
+            <section class="panel results-panel osrs-panel">
+                <div class="panel-header">
+                    <h2>Monster</h2>
                 </div>
-
-                <!-- DPS Results -->
-                <div class="dps-section">
-                    <h2>📊 DPS Results</h2>
-                    <div class="dps-display">
-                        <div class="dps-main">
-                            <span class="dps-value" id="dps-value">0.00</span>
-                            <span class="dps-label">DPS</span>
+                
+                <div class="panel-content">
+                    <!-- Monster Selector -->
+                    <div class="monster-section">
+                        <div class="input-group">
+                            <label for="monster-search">Search Monster</label>
+                            <input type="text" id="monster-search" placeholder="Type to search...">
+                            <div id="monster-search-results" class="search-results"></div>
                         </div>
-                        <div class="dps-details">
+                        
+                        <div class="monster-info osrs-box" id="monster-info">
+                            <div class="monster-name" id="selected-monster-name">No monster selected</div>
+                            <div class="monster-stats">
+                                <div class="monster-stat">
+                                    <span class="stat-label">HP:</span>
+                                    <span id="monster-hp">-</span>
+                                </div>
+                                <div class="monster-stat">
+                                    <span class="stat-label">Combat:</span>
+                                    <span id="monster-combat">-</span>
+                                </div>
+                                <div class="monster-stat">
+                                    <span class="stat-label">Def Level:</span>
+                                    <span id="monster-def-level">-</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DPS Results -->
+                    <div class="dps-section">
+                        <h2>DPS Results</h2>
+                        <div class="dps-display-container">
+                            <div class="dps-splat">
+                                <span class="dps-value" id="dps-value">0.00</span>
+                                <span class="dps-label">DPS</span>
+                            </div>
+                        </div>
+                        
+                        <div class="dps-details osrs-box">
                             <div class="detail-row">
                                 <span>Max Hit:</span>
                                 <span id="max-hit">0</span>
@@ -240,83 +240,93 @@
                                 <span id="attack-speed">-</span>
                             </div>
                         </div>
-                    </div>
-                    
-                    <!-- TTK CDF Chart -->
-                    <div class="chart-container" style="margin-top: 20px; height: 300px;">
-                        <canvas id="ttk-chart"></canvas>
-                    </div>
 
-                    <button id="calculate-btn" class="btn btn-primary btn-full">⚔️ Calculate DPS</button>
-                </div>
-
-                <!-- Battle Simulation -->
-                <div class="simulation-section">
-                    <h2>🎲 Battle Simulation</h2>
-                    <div class="input-group">
-                        <label for="sim-count">Number of Simulations</label>
-                        <input type="number" id="sim-count" value="1000" min="100" max="100000">
-                    </div>
-                    <button id="simulate-btn" class="btn btn-secondary btn-full">Run Simulation</button>
-                    <div class="simulation-results" id="simulation-results">
-                        <div class="sim-result">
-                            <span>Avg. Time to Kill:</span>
-                            <span id="avg-ttk">-</span>
-                        </div>
-                        <div class="sim-result">
-                            <span>Kills per Hour:</span>
-                            <span id="kills-per-hour">-</span>
-                        </div>
+                        <button id="calculate-btn" class="btn btn-primary btn-full" style="display: none;">⚔️ Calculate DPS</button> <!-- Hidden as calc is automatic usually, but keeping for logic -->
                     </div>
                 </div>
             </section>
         </main>
 
+        <!-- Battle Simulation (Full Width) -->
+        <section class="panel simulation-panel osrs-panel" style="margin-bottom: 20px;">
+            <div class="panel-header">
+                <h2>Battle Simulation</h2>
+            </div>
+            <div class="panel-content">
+                <div class="simulation-controls" style="display: flex; gap: 20px; align-items: flex-end;">
+                    <div class="input-group" style="margin-bottom: 0; flex: 1;">
+                        <label for="sim-count">Number of Simulations</label>
+                        <input type="number" id="sim-count" value="1000" min="100" max="100000">
+                    </div>
+                    <button id="simulate-btn" class="btn btn-secondary" style="flex: 1;">Run Simulation</button>
+                    <div class="simulation-results osrs-box" id="simulation-results" style="margin-bottom: 0; flex: 2; display: flex; justify-content: space-around; padding: 10px;">
+                        <div class="sim-result">
+                            <span>Avg. Time to Kill:</span>
+                            <span id="avg-ttk" style="color: var(--osrs-text-gold);">-</span>
+                        </div>
+                        <div class="sim-result">
+                            <span>Kills per Hour:</span>
+                            <span id="kills-per-hour" style="color: var(--osrs-text-gold);">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TTK CDF Chart -->
+                <div class="chart-container" style="margin-top: 20px; height: 300px;">
+                    <canvas id="ttk-chart"></canvas>
+                </div>
+            </div>
+        </section>
+
         <!-- Upgrade Advisor (Full Width) -->
-        <section class="panel upgrade-panel">
-            <h2>💰 Upgrade Advisor</h2>
-            <div class="upgrade-controls">
-                <div class="input-group">
-                    <label for="max-budget">Max Budget (GP)</label>
-                    <input type="number" id="max-budget" value="100000000" min="0" step="1000000">
-                </div>
-                <div class="input-group checkbox-group">
-                    <label class="checkbox-label" style="display: flex; align-items: center; gap: 8px; margin-top: 28px;">
-                        <input type="checkbox" id="exclude-duo"> Exclude Duo Items
-                    </label>
-                    <label class="checkbox-label" style="display: flex; align-items: center; gap: 8px; margin-top: 10px;">
-                        <input type="checkbox" id="exclude-throwables"> Exclude Throwables
-                    </label>
-                    <label class="checkbox-label" style="display: flex; align-items: center; gap: 8px; margin-top: 10px;">
-                        <input type="checkbox" id="exclude-ammo"> Exclude Ammo
-                    </label>
-                </div>
-                <button id="suggest-upgrades-btn" class="btn btn-primary">Find Upgrades</button>
-                <button id="fetch-prices-btn" class="btn btn-secondary" style="margin-top: 10px;">Fetch Latest Prices</button>
+        <section class="panel upgrade-panel osrs-panel">
+            <div class="panel-header">
+                <h2>Upgrade Advisor</h2>
             </div>
-            
-            <div class="upgrade-tabs">
-                <button class="tab-btn active" data-tab="efficiency">Most Efficient</button>
-                <button class="tab-btn" data-tab="dps">Highest DPS</button>
-            </div>
-            
-            <div class="upgrade-table-container">
-                <table class="upgrade-table" id="upgrade-table">
-                    <thead>
-                        <tr>
-                            <th>Item</th>
-                            <th>Slot</th>
-                            <th>Price</th>
-                            <th>+DPS</th>
-                            <th>DPS/M GP</th>
-                        </tr>
-                    </thead>
-                    <tbody id="upgrade-table-body">
-                        <tr>
-                            <td colspan="5" class="empty-message">Click "Find Upgrades" to see suggestions</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="panel-content">
+                <div class="upgrade-controls">
+                    <div class="input-group">
+                        <label for="max-budget">Max Budget (GP)</label>
+                        <input type="text" id="max-budget" value="100 000 000">
+                    </div>
+                    <div class="input-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="exclude-duo"> Exclude Duo Items
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="exclude-throwables"> Exclude Throwables
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="exclude-ammo"> Exclude Ammo
+                        </label>
+                    </div>
+                    <button id="suggest-upgrades-btn" class="btn btn-primary">Find Upgrades</button>
+                    <button id="fetch-prices-btn" class="btn btn-secondary" style="margin-top: 10px;">Fetch Latest Prices</button>
+                </div>
+                
+                <div class="upgrade-tabs">
+                    <button class="tab-btn active" data-tab="efficiency">Most Efficient</button>
+                    <button class="tab-btn" data-tab="dps">Highest DPS</button>
+                </div>
+                
+                <div class="upgrade-table-container osrs-box">
+                    <table class="upgrade-table" id="upgrade-table">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Slot</th>
+                                <th>Price</th>
+                                <th>+DPS</th>
+                                <th>DPS/M GP</th>
+                            </tr>
+                        </thead>
+                        <tbody id="upgrade-table-body">
+                            <tr>
+                                <td colspan="5" class="empty-message">Click "Find Upgrades" to see suggestions</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </section>
 
@@ -329,14 +339,14 @@
 
     <!-- Item Selection Modal -->
     <div id="item-modal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content osrs-panel">
             <div class="modal-header">
                 <h3>Select Item for <span id="modal-slot-name">Slot</span></h3>
                 <button class="modal-close">&times;</button>
             </div>
             <div class="modal-body">
                 <input type="text" id="modal-item-search" placeholder="Search items...">
-                <div id="modal-item-results" class="modal-results"></div>
+                <div id="modal-item-results" class="modal-results osrs-box"></div>
             </div>
         </div>
     </div>

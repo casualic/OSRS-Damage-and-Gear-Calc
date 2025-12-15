@@ -145,6 +145,22 @@ function initializeUI() {
     // Fetch prices button
     document.getElementById('fetch-prices-btn').addEventListener('click', fetchLatestPrices);
     
+    // Budget formatting
+    const budgetInput = document.getElementById('max-budget');
+    if (budgetInput) {
+        // Initial format
+        budgetInput.value = formatNumberWithSpaces(budgetInput.value.replace(/\s/g, ''));
+        
+        budgetInput.addEventListener('input', (e) => {
+            const rawValue = e.target.value.replace(/\s/g, '').replace(/[^0-9]/g, '');
+            if (rawValue) {
+                e.target.value = formatNumberWithSpaces(rawValue);
+            } else {
+                e.target.value = '';
+            }
+        });
+    }
+
     // Modal close
     document.querySelector('.modal-close').addEventListener('click', closeItemModal);
     document.getElementById('item-modal').addEventListener('click', (e) => {
@@ -811,6 +827,11 @@ async function fetchLatestPrices() {
     }
 }
 
+// Format number with spaces
+function formatNumberWithSpaces(numStr) {
+    return numStr.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+}
+
 // Find upgrades
 function findUpgrades() {
     if (!state.wasmModule || !state.player || !state.monster) {
@@ -818,7 +839,10 @@ function findUpgrades() {
         return;
     }
 
-    const maxBudget = parseInt(document.getElementById('max-budget').value) || 0;
+    // Remove spaces from budget input
+    const rawBudget = document.getElementById('max-budget').value.replace(/\s/g, '');
+    const maxBudget = parseInt(rawBudget) || 0;
+    
     const btn = document.getElementById('suggest-upgrades-btn');
     btn.disabled = true;
     btn.textContent = 'Analyzing...';
